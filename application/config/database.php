@@ -70,27 +70,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
+
+$ci =& get_instance();  
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => '',
-	'password' => '',
-	'database' => '',
-	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
+if(file_exists("application/config/config-database.php")){
+	$db['default'] = array(
+		'dsn'	=> 'mysql:host='.$ci->config->item('host').';dbname='.$ci->config->item('dbname').';port=3306;',
+		'hostname' => $ci->config->item('host'),
+		'username' => $ci->config->item('dbuser'),
+		'password' => $ci->config->item('dbpass'),
+		'database' => $ci->config->item('dbname'),
+		'dbdriver' => 'pdo',
+		'dbprefix' => $ci->config->item('prefix'),
+		'pconnect' => FALSE,
+		'db_debug' => (ENVIRONMENT !== 'production'),
+		'cache_on' => FALSE,
+		'cachedir' => '',
+		'char_set' => 'utf8',
+		'dbcollat' => 'utf8_general_ci',
+		'swap_pre' => '',
+		'encrypt' => FALSE,
+		'compress' => FALSE,
+		'stricton' => FALSE,
+		'failover' => array(),
+		'autoinit' => FALSE,
+		'save_queries' => TRUE
+	);
+}else{
+	$db['default'] = array(
+		'dsn'	=> '',
+		'hostname' => '',
+		'username' => '',
+		'password' => '',
+		'database' => '',
+		'dbdriver' => 'pdo',
+		'dbprefix' => '',
+		'pconnect' => FALSE,
+		'db_debug' => (ENVIRONMENT !== 'production'),
+		'cache_on' => FALSE,
+		'cachedir' => '',
+		'char_set' => 'utf8',
+		'dbcollat' => 'utf8_general_ci',
+		'swap_pre' => '',
+		'encrypt' => FALSE,
+		'compress' => FALSE,
+		'stricton' => FALSE,
+		'failover' => array(),
+		'autoinit' => FALSE,
+		'save_queries' => TRUE
+	);
+}
