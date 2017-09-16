@@ -5,11 +5,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Plataforma LED</title>
-
+    <title>
+        <?php echo "Plataforma LED | $title";?>
+    </title>
+    <link rel="shortcut icon" href="<?= base_url("assets/img/favicon.ico"); ?>">
     <link href="<?= base_url("assets/css/bootstrap.css");?>" rel="stylesheet">
     <link href="<?= base_url("assets/css/style.css");?>" rel="stylesheet">
     <link href="<?= base_url("assets/css/style.scss");?>" rel="stylesheet">
+    <?php if(isset($css)){
+        foreach ($css as $key => $value) {
+            echo $value;
+        }
+    } ?>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -28,21 +35,26 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                <a class="navbar-brand" href="#">
-                    <img src="<?= base_url("assets/img/favicon2.png");?>" class="img img-responsive logo">
+                <a class="navbar-brand" href="<?php echo base_url('painel');?>">
+                    <img src="<?= base_url("assets/img/logo-header.png");?>" class="img img-responsive logo">
                 </a>
             </div>
             <nav class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-home"></span> Home</a>
+                        <a href="<?php echo base_url('painel');?>"><span class="glyphicon glyphicon-home"></span> Home</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-bell"></span><span class="badge badge-navbar" >2</span> Notificações</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-bell"></span>
+                            <?php if($qtdnotificacoes !== 0) {
+                                echo "<span class='badge badge-navbar'> 
+                                    $qtdnotificacoes
+                                </span>";
+                             } ?>Notificações</a>
                     </li>
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-user"></span> Perfil</a>
+                       <a href="<?php echo base_url("perfil");?>"><span class="glyphicon glyphicon-user"></span> Perfil</a>
                     </li>
                 </ul>
                 <div class="col-sm-4 col-md-4">
@@ -60,9 +72,9 @@
                     <li class="dropdown">
                         <a href="#" id="nbAcctDD" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i><i class="glyphicon glyphicon-chevron-down"></i></a>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="#"><span class="glyphicon glyphicon-flag"></span> Ajuda</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Configurações</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
+                            <li><a href="<?php echo base_url("ajuda");?>"><span class="fa fa-question"></span> Ajuda</a></li>
+                            <li><a href="<?php echo base_url("configuracoes");?>"><span class="glyphicon glyphicon-cog"></span> Configurações</a></li>
+                            <li><a href="<?php echo base_url("logout");?>"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -70,18 +82,4 @@
         </div>
     </div>
         
-    <div class="row">
-        <div id="wrapper">
-            <div id="sidebar-wrapper" class="col-md-3">
-                <div class="mini-submenu">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </div>
-                <?php $this->load->view('commons/led_sidebar'); ?>
-            </div>
-                        
-                        <div id="main-wrapper" class="col-md-9 pull-right">
-                <div id="main">
-                        <div class="container-fluid">
-                            <div class="row">
+        

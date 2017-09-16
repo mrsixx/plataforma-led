@@ -1,73 +1,43 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-    $this->load->view('commons/header_install');
+    $this->load->view('install/commons/header_install');
 ?>
 
                     <div class="col-md-8 col-md-offset-2">
-                        <span>Preencha os campos abaixo com as informações da sua escola.<br/> Campos sinalizados com <span class="required">*</span> são obrigatórios.</span>
+                        <span>Preencha os campos abaixo com as informações de conexão com a base de dados.</span><br/><br/>
+                        <small>Campos sinalizados com <span class="required">*</span> são obrigatórios</small>
                         <!--FORMULARIO-->
                         <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="<?php echo base_url('instalacao'); ?>">
                             <br/>
                             <div class="form-group">
-                                <label for="textUrl" class="control-label pull-left">Nome da escola <span class="required">*</span></label>
-                                <input id="txtUrl" name="txtUrl" class="form-control" type="text" placeholder="Insira o nome da escola" required>
+                                <label for="textUrl" class="control-label pull-left">Url de hospedagem <span class="required">*</span></label>
+                                <input id="txtUrl" name="txtUrl" class="form-control" type="text" value="" placeholder="Insira o link URL de acesso a plataforma" required>
                             </div>
                             <div class="form-group">
-                                <label for="txtHost" class="control-label pull-left">Data de fundação</label>
-                                <input id="txtHost" name="txtHost" class="form-control" type="date"  placeholder="Insira a data em que a escola foi fundada">
+                                <label for="txtHost" class="control-label pull-left">Servidor do banco de dados <span class="required">*</span></label>
+                                <input id="txtHost" name="txtHost" class="form-control" type="text" value="localhost" placeholder="Insira o host fornecido pelo serviço de hospedagem" required>
                             </div>
-							
-							<div class="form-group">
-                                <label for="txtSenha" class="control-label pull-left">Cep <span class="required">*</span></label>
-                                <input id="txtSenha" name="txtSenha" class="form-control" type="password"  >
+                            <div class="form-group">
+                                <label for="txtBanco" class="control-label pull-left">Nome do banco de dados <span class="required">*</span></label>
+                                <input id="txtBanco" name="txtBanco" class="form-control" type="text" value="plataformaLed" placeholder="Insira o nome fornecido pelo serviço de hospedagem" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="cmbEstado" class="control-label pull-left">Estado <span class="required">*</span></label>
-								<select name="cmbEstado" class="form-control" required>
-									<option selected disabled >Selecione um estado</option>
-									<option value="AC">Acre</option>
-									<option value="AL">Alagoas</option>
-									<option value="AP">Amapá</option>
-									<option value="AM">Amazonas</option>
-									<option value="BA">Bahia</option>
-									<option value="CE">Ceará</option>
-									<option value="DF">Distrito Federal</option>
-									<option value="ES">Espírito Santo</option>
-									<option value="GO">Goiás</option>
-									<option value="MA">Maranhão</option>
-									<option value="MT">Mato Grosso</option>
-									<option value="MS">Mato Grosso do Sul</option>
-									<option value="MG">Minas Gerais</option>
-									<option value="PA">Pará</option>
-									<option value="PB">Paraíba</option>
-									<option value="PR">Paraná</option>
-									<option value="PE">Pernambuco</option>
-									<option value="PI">Piauí</option>
-									<option value="RJ">Rio de Janeiro</option>
-									<option value="RN">Rio Grande do Norte</option>
-									<option value="RS">Rio Grande do Sul</option>
-									<option value="RO">Rondônia</option>
-									<option value="RR">Roraima</option>
-									<option value="SC">Santa Catarina</option>
-									<option value="SP">São Paulo</option>
-									<option value="SE">Sergipe</option>
-									<option value="TO">Tocantins</option>
-								</select>
-                            </div>
-							
-                            <div class="form-group">
-                                <label for="txtUsuario" class="control-label pull-left">Cidade <span class="required">*</span></label>
-                                <input id="txtUsuario" name="txtUsuario" class="form-control" type="text" placeholder="Cidade em que a escola se situa" required>
+                                <label for="txtUsuario" class="control-label pull-left">Nome de usuário do banco de dados <span class="required">*</span></label>
+                                <input id="txtUsuario" name="txtUsuario" class="form-control" type="text" value="root" placeholder="Insira o nome de usuário fornecido pelo serviço de hospedagem" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="txtBanco" class="control-label pull-left">Rua <span class="required">*</span></label>
-                                <input id="txtBanco" name="txtBanco" class="form-control" type="text"  placeholder="ex.: Rua José Alencar" required>
+                                <label for="txtSenha" class="control-label pull-left">Senha do banco de dados</label>
+                                <input id="txtSenha" name="txtSenha" class="form-control" type="password" value="" placeholder="Indicamos que insira uma senha :) ">
                             </div>
-							
-                            <button type="submit" id="btnEnviar" class="btn btn-primary pull-right">Próximo</button>
+
+                            <div class="form-group">
+                                <label for="txtPrefixo" class="control-label pull-left">Prefixo das tabelas&nbsp;<small>(Deverá terminar com underline e possuir 3 caracteres)</small></label>
+                                <input id="txtPrefixo" name="txtPrefixo" class="form-control" type="text" value="led_" placeholder="Altere apenas se for rodar mais de um LED no mesmo servidor" maxlength="4" pattern="[a-zA-Z\s]+_">
+                            </div>
+                            <button type="submit" id="btnEnviar" class="btn btn-primary pull-right">Prosseguir instalação</button>
                             <br/>
                         </form>
                         <!--\FORMULARIO-->
@@ -108,4 +78,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 });
             });
         </script>
-<?php $this->load->view('commons/footer_install'); 
+<?php $this->load->view('install/commons/footer_install'); 

@@ -11,6 +11,17 @@ class Install extends CI_Model
 	{
 		parent::__construct();
 	}
+	function verificaDatabase(){
+		try{
+			$this->load->database();
+			$query = $this->db->query("SHOW TABLES");
+			return $query->num_rows();
+			
+		}catch(PDOException $e){
+			return $e;
+		}
+	}
+
 	function verificaConexao($data){
 		//aqui testo a conexao com o banco 
 		//retorno verdadeiro se conectar e false se não conectar
@@ -21,5 +32,57 @@ class Install extends CI_Model
 			$con = null;
 		}
 		return $con;
+	}
+	function criaEstrutura($data){
+		$con = $this->verificaConexao($data);
+		if($con){
+			try{
+				//carregando helper com funções com os comandos sql do banco de dados
+				$this->load->helper('sqlcommand');
+				//rodando comandos para criar as tabelas do banco 
+				$cmdCria = cria($data['prefixo']);
+				foreach ($cmdCria as $tabela => $comando) {
+					$stm = $con->prepare($comando);
+					if(!$stm->execute()){
+						return false;
+					}
+				}
+				//rodando comandos para criar relacionamentos entre as tabelas do banco 
+				$cmdRelaciona = relaciona($data['prefixo']);
+				foreach ($cmdRelaciona as $tabela => $comando) {
+					$stm = $con->prepare($comando);
+					if(!$stm->execute()){
+						return false;
+					}
+				}
+				//rodando comandos para fazer as inserções iniciais no bnaco de dados
+				$cmdInsere = insere($data['prefixo']);
+				foreach ($cmdInsere as $tabela => $comando) {
+					$stm = $con->prepare($comando);
+					if(!$stm->execute()){
+						return false;
+					}
+				}
+
+				return true;
+
+			}catch(PDOException $e){
+				$e;
+			}
+		}else{
+			return false;
+		}
+	}
+	function verificaAdm(){
+		$db = $this->load->database();
+		$where = array('CodTipoUsuario' => 1 );
+		$query = $this->db->get_where("usuario", $where);
+		return $query->row_array();
+	}
+
+	function verficaEscola(){
+		$db = $this->load->database();
+		$query = $this->db->get("escola");
+		return $query->row_array();
 	}
 }

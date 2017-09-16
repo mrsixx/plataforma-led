@@ -106,9 +106,10 @@ $autoload['helper'] = array('url', 'form');
 $config = "application/config/config-database.php";
 if(file_exists($config)){
 $autoload['config'] = array('config-database');
+}else{
+	$autoload['config'] = array();
 }
 
-$autoload['config'] = array();
 /*
 | -------------------------------------------------------------------
 |  Auto-load Language files

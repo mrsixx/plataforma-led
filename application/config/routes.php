@@ -53,5 +53,31 @@ $route['default_controller'] = 'led';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-
+//instalação e configuração da plataforma
 $route['instalacao'] = 'led/install';
+$route['configuracao'] = 'config';
+	$route['configuracao/cadastro-admin'] = 'config/cadastraAdm';
+	$route['configuracao/cadastro-admin/reenviar'] = 'config/reenviarEmail';
+	$route['configuracao/confirmacao'] = 'config/confirmaEmail';
+	$route['configuracao/cadastro-escola'] = 'config/cadastraEscola';
+$route['login'] = 'led/login';
+$route['logout'] = 'panel/logout';
+$route['configuracao-ambiente'] = 'panel/configEscola';
+
+
+//links da interface
+
+//links navbar
+$route['painel'] = 'panel';
+$route['perfil'] = 'panel/profile';
+$route['ajuda'] = 'panel/help';
+$route['configuracoes'] = 'panel/settings';
+
+//links sidebar
+$route['mural'] = 'panel/mural';
+$route['chat'] = 'panel/chat';
+$route['tasks'] = 'panel/tasks';
+$route['biblioteca'] = 'panel/biblioteca';
+$route['calendario'] = 'panel/calendario';
+$route['ferramentas'] = 'panel/tools';
+$route['denuncias'] = 'panel/reports';
