@@ -20,8 +20,9 @@
         </div>
     </div>
     <div class="progress">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $xp;?>%;"><?php echo $xp;?>%</div>
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $xp;?>%;" ></div>
     </div>
+    <div align="center" style="margin-top: -22px;font-size:1em"><?php echo $xp;?>%</div>
     <!--aqui acaba-->
     </span>
     <div id="sidebarled">

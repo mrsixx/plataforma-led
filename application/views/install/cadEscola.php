@@ -15,7 +15,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                             <div class="form-group">
                                 <label for="dtFundacao" class="control-label pull-left">Data de fundação</label>
-                                <input id="dtFundacao" name="dtFundacao" class="form-control" type="date"  placeholder="Insira a data em que a instituição foi fundada" required>
+                                <input id="dtFundacao" name="dtFundacao" class="form-control" type="date"  placeholder="Insira a data em que a instituição foi fundada" max="<?php echo date('Y-m-d');?>" required oninvalid="this.setCustomValidity('Viagens no tempo ainda não são possíveis :D')" oninput="setCustomValidity('')">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="txtWebsite" class="control-label pull-left">Website <span class="required">*</span></label>
+                                <input id="txtWebsite" name="txtWebsite" class="form-control" type="text" placeholder="Insira o website da instituição de ensino">
                             </div>
 							
 							<div class="form-group">
@@ -26,6 +31,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="form-group">
                                 <label for="txtRua" class="control-label pull-left">Rua <span class="required">*</span></label>
                                 <input id="txtRua" name="txtRua" class="form-control" type="text"  placeholder="Insira a rua da instituição" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="txtBairro" class="control-label pull-left">Bairro <span class="required">*</span></label>
+                                <input id="txtBairro" name="txtBairro" class="form-control" type="text"  placeholder="Insira o bairro da instituição" required>
                             </div>
 							
                             <div class="form-group">

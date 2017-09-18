@@ -213,6 +213,7 @@ class Config extends CI_Controller {
 							'remetente' => null,
 							'destinatario' => $usuario['CodUsuario']
 			));
+			$this->interface_led->startRpg($usuario['CodUsuario']);
 			redirect(base_url());
 		}
 	}
@@ -242,6 +243,11 @@ class Config extends CI_Controller {
 				'rules' => 'required'
 			),
 			array(
+				'field' => 'txtBairro',
+				'label' => 'Bairro',
+				'rules' => 'required'
+			),
+			array(
 				'field' => 'cmbEstado',
 				'label' => 'Estado',
 				'rules' => 'required'
@@ -263,8 +269,10 @@ class Config extends CI_Controller {
 				$data['dtfundacao'] = $this->input->post('dtFundacao');
 				$data['cep'] = $this->input->post('txtCep');
 				$data['rua'] = $this->input->post('txtRua');
+				$data['bairro'] = $this->input->post('txtBairro');
 				$data['cidade'] = $this->input->post('txtCidade');
 				$data['estado'] = $this->input->post('cmbEstado');
+				$data['website'] = $this->input->post('txtWebsite');
 				$this->load->model('escola');
 				$data['title'] = "Plataforma LED | Configuração de ambiente";
 				if($this->escola->cadastraEscola($data)){

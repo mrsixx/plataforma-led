@@ -27,6 +27,15 @@ class Interface_led extends CI_Model
 		return $query->num_rows();
 	}
 
+	function statusNotificacao($data){
+		$array = array('CodDestinatario' => $data['usuario'], 'CodNotificacao' => $data['notificacao']);
+		$this->db->where($array);
+		$this->db->set('Status', 1);
+		if($this->db->update("notificacao")){
+			return true;
+		}
+	}
+
 	function notificacoes($data){
 		$where = array('CodDestinatario' => $data['cod']);
 		$this->db->where($where)->or_where('CodDestinatario', null);
@@ -50,6 +59,10 @@ class Interface_led extends CI_Model
 			'CodDestinatario' => $destinatario 
 		);
 		$this->db->insert("notificacao", $array);
+	}
+
+	function startRpg($usuario){
+		$this->db->insert("experiencia", array('CodUsuario' => $usuario['CodUsuario']));
 	}
 
 	function retornaLvl($usuario){

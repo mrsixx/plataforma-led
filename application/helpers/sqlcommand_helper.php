@@ -138,7 +138,8 @@ if(!function_exists('cria')){
 						`Bairro` varchar(50) NOT NULL,
 						`Cep` varchar(9),
 						`Cidade` varchar(50) NOT NULL,
-						`Estado` char(2) NOT NULL
+						`Estado` char(2) NOT NULL,
+						`Website` text
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'evento' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'evento` (
 						`CodEvento` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -467,9 +468,9 @@ if(!function_exists('insere')){
 		$commands = array(
 
 			'tipousuario' => "INSERT INTO `".$prefix."tipousuario` (`CodTipoUsuario`, `Nome`, `Descricao`) 
-					 VALUES (NULL, 'Administrador', 'Usuário com total privilégio dentro da plataforma. Responsável por configurar a estrutura de acordo com o ambiente.'), 
-					 		(NULL, 'Funcionário', 'Usuário responsável por elaborar tarefas aos alunos, proporcionando a eles adquirir o máximo de conhecimento possível.'), 
-					 		(NULL, 'Alunos', 'Usuário que terá a maior evolução ao utilizar a plataforma, e estará em constante progresso');",
+					 VALUES (NULL, '".utf8_decode("Administrador")."', '".utf8_decode("Usuário com total privilégio dentro da plataforma. Responsável por configurar a estrutura de acordo com o ambiente.")."'),
+					 		(NULL, '".utf8_decode("Funcionário")."', '".utf8_decode("Usuário responsável por elaborar tarefas aos alunos, proporcionando a eles adquirir o máximo de conhecimento possível.")."'),  
+					 		(NULL, '".utf8_decode("Alunos")."', '".utf8_decode("Usuário que terá a maior evolução ao utilizar a plataforma, e estará em constante progresso.")."');",
 
 			'cabeloavatar' => "INSERT INTO `".$prefix."cabeloavatar` (`CodCabelo`, `Descricao`, `Link`) 
 					 VALUES (NULL, 'Default', 'avatar/cabelo');",
@@ -490,19 +491,28 @@ if(!function_exists('insere')){
 					 VALUES (NULL, 1, 1, 1, 1, 1);",
 
 			'tipoopiniao' => "INSERT INTO `".$prefix."tipoopiniao` (`CodTipoOpiniao`, `Descricao`) 
-					 VALUES (NULL, 'Boa idéia!'), (NULL, 'Nada a ver .-.');",
+					 VALUES (NULL, '".utf8_decode("Boa idéia!")."'), (NULL, 'Nada a ver!');",
 
 			'inteligencia' => "INSERT INTO `".$prefix."inteligencia` (`CodInteligencia`, `Nome`, `Descricao`)
-					 VALUES (NULL, 'Lógico­Matemática', 'A capacidade de confrontar e avaliar objetos e abstrações, discernindo as suas relações e princípios subjacentes. Habilidade para raciocínio dedutivo e para solucionar problemas matemáticos. Cientistas possuem esta característica.'),
-					 (NULL, 'Musical', 'Identificável pela habilidade para compor e executar padrões musicais, executando pedaços de ouvido, em termos de ritmo e timbre, mas também escutando­os e discernindo­os. Pode estar associada a outras inteligências, como a linguística, espacial ou corporal­cinestésica. É predominante em compositores, maestros, músicos e críticos de música.'),
-					 (NULL, 'Espacial', 'Expressa­se pela capacidade de compreender o mundo visual com precisão, permitindo transformar, modificar percepções e recriar experiências visuais até mesmo sem estímulos físicos. É predominante em arquitetos, artistas, escultores, cartógrafos, geógrafos, navegadores e jogadores de xadrez, por exemplo.'),
-					 (NULL, 'Corporal­Cinestésica', 'Traduz­se na maior capacidade de controlar e orquestrar movimentos do corpo. É predominante entre atores e aqueles que praticam a dança ou os esportes.'),
-					 (NULL, 'Intrapessoal', 'Expressa na capacidade de se conhecer, é a mais rara inteligência sob domínio do ser humano pois está ligada a capacidade de neutralização dos vícios, entendimento de crenças, limites, preocupações, estilo de vida profissional, autocontrole e domínio dos causadores de estresse.'),
-					 (NULL, 'Interpessoal', 'Expressa pela habilidade de entender as intenções, motivações e desejos dos outros. Encontra­se mais desenvolvida em políticos, religiosos e professores.'),
-					 (NULL, 'Naturalista', 'Traduz­se na sensibilidade para compreender e organizar os objetos, fenômenos e padrões da natureza, como reconhecer e classificar plantas, animais, minerais. É característica de biólogos e geólogos, por exemplo.'),
-					 (NULL, 'Existencial', 'Investigada no terreno ainda do “possível”, carece de maiores evidências. Abrange a capacidade de refletir e ponderar sobre questões fundamentais da existência. Seria característica de líderes espirituais e de pensadores filosóficos.'),
-					 (NULL, 'Linguística', 'Caracteriza­se por um domínio e gosto especial pelos idiomas e pelas palavras e por um desejo em os explorar. É predominante em poetas, escritores, e linguistas'), 
-					 (NULL, 'Prática', 'ainda não sabemos');"
+					 VALUES (NULL, '".utf8_decode("Lógico­Matemática")."', '".utf8_decode("A capacidade de confrontar e avaliar objetos e abstrações, discernindo as suas relações e princípios subjacentes. Habilidade para raciocínio dedutivo e para solucionar problemas matemáticos. Cientistas possuem esta característica.")."'),
+
+					 (NULL, '".utf8_decode("Musical")."', '".utf8_decode("Identificável pela habilidade para compor e executar padrões musicais, executando pedaços de ouvido, em termos de ritmo e timbre, mas também escutando­os e discernindo­os. Pode estar associada a outras inteligências, como a linguística, espacial ou corporal­cinestésica. É predominante em compositores, maestros, músicos e críticos de música.")."'),
+
+					 (NULL, '".utf8_decode("Espacial'").", '".utf8_decode("Expressa­se pela capacidade de compreender o mundo visual com precisão, permitindo transformar, modificar percepções e recriar experiências visuais até mesmo sem estímulos físicos. É predominante em arquitetos, artistas, escultores, cartógrafos, geógrafos, navegadores e jogadores de xadrez, por exemplo.")."'),
+
+					 (NULL, '".utf8_decode("Corporal­Cinestésica'").", '".utf8_decode("Traduz­se na maior capacidade de controlar e orquestrar movimentos do corpo. É predominante entre atores e aqueles que praticam a dança ou os esportes.")."'),
+
+					 (NULL, '".utf8_decode("Intrapessoal'").", '".utf8_decode("Expressa na capacidade de se conhecer, é a mais rara inteligência sob domínio do ser humano pois está ligada a capacidade de neutralização dos vícios, entendimento de crenças, limites, preocupações, estilo de vida profissional, autocontrole e domínio dos causadores de estresse.")."'),
+
+					 (NULL, '".utf8_decode("Interpessoal'").", '".utf8_decode("Expressa pela habilidade de entender as intenções, motivações e desejos dos outros. Encontra­se mais desenvolvida em políticos, religiosos e professores.")."'),
+
+					 (NULL, '".utf8_decode("Naturalista'").", '".utf8_decode("Traduz­se na sensibilidade para compreender e organizar os objetos, fenômenos e padrões da natureza, como reconhecer e classificar plantas, animais, minerais. É característica de biólogos e geólogos, por exemplo.")."'),
+
+					 (NULL, '".utf8_decode("Existencial'").", '".utf8_decode("Investigada no terreno ainda do “possível”, carece de maiores evidências. Abrange a capacidade de refletir e ponderar sobre questões fundamentais da existência. Seria característica de líderes espirituais e de pensadores filosóficos.")."'),
+
+					 (NULL, '".utf8_decode("Linguística'").", '".utf8_decode("Caracteriza­se por um domínio e gosto especial pelos idiomas e pelas palavras e por um desejo em os explorar. É predominante em poetas, escritores, e linguistas.")."'), 
+
+					 (NULL, '".utf8_decode("Prática'").", '".utf8_decode("Está ligada à constituição de uma ação ou de um uso repetido que resulta em um conhecimento ou em uma práxis. É o poder de conquistar aprendizado com as vivências, construindo aptidões funcionais. Ela se distingue da acadêmica, mais voltada para a percepção teórica, e nos ajuda a compreender porque algumas pessoas com um QI elevado não obtêm, apesar disso, o êxito na profissão.")."');"
 		);
 		return $commands;
 	}

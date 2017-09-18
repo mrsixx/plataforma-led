@@ -46,7 +46,7 @@
                         <a href="<?php echo base_url('painel');?>"><span class="glyphicon glyphicon-home"></span> Home</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-bell"></span>
+                        <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#modalNotificacoes"><span class="glyphicon glyphicon-bell"></span>
                             <?php if($qtdnotificacoes !== 0) {
                                 echo "<span class='badge badge-navbar'> 
                                     $qtdnotificacoes
@@ -80,6 +80,5 @@
                 </ul>
             </nav>
         </div>
-    </div>
-        
+    </div>  
         

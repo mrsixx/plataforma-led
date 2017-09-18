@@ -1,59 +1,58 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Panel extends CI_Controller {
-	//função index, verifica a situação da plataforma para direcionar o usuário para um destino
+class Ambiente extends CI_Controller {
 	public function index($erro = null){	
 		//verificando se a sessão existe, caso exista mando para o painel 
-		$this->load->library('session');
-		if($this->session->has_userdata('login')){
-			$usuario = $this->session->login;
-			$cod = $usuario['cod'];
-			$tipo = $usuario['tipo'];
+		// $this->load->library('session');
+		// if($this->session->has_userdata('login')){
+		// 	$usuario = $this->session->login;
+		// 	$cod = $usuario['cod'];
+		// 	$tipo = $usuario['tipo'];
 
-			//verificando se existem cursos cadastrados
-			$this->load->model('escola');
-			$curso = $this->escola->getCursos();
-			if(!empty($curso)){
-				//recebo o array com as informações da interface
-				$data = $this->preencheInterface($usuario);
+		// 	//verificando se existem cursos cadastrados
+		// 	$this->load->model('escola');
+		// 	$curso = $this->escola->getCursos();
+		// 	if(!empty($curso)){
+		// 		//recebo o array com as informações da interface
+		// 		$data = $this->preencheInterface($usuario);
 
-				//carregando a view enquanto passo as informações
-				$data['title'] = "Painel";
-				$data['content'] = "home";
-				$data['sidebar'] = "home";
-				// $data['css'] = array('css'=>'<link href="'.base_url("assets/css/style.css").'" rel="stylesheet">');
-				$this->load->view('panel/layout', $data);
-			}else{
-				redirect(base_url('configuracao-ambiente'));
-			}
-		}else{
-			//se não houver sessão, então mando de volta pois não existiu um login
-			redirect(base_url());
-		}
+		// 		//carregando a view enquanto passo as informações
+		// 		$data['title'] = "Painel";
+		// 		$data['content'] = "home";
+		// 		$data['sidebar'] = "home";
+		// 		// $data['css'] = array('css'=>'<link href="'.base_url("assets/css/style.css").'" rel="stylesheet">');
+		// 		$this->load->view('panel/layout', $data);
+		// 	}else{
+		// 		redirect(base_url('configuracao-ambiente'));
+		// 	}
+		// }else{
+		// 	//se não houver sessão, então mando de volta pois não existiu um login
+		// 	redirect(base_url());
+		// }
 	}
 
-	public function mural(){
+	public function attEscola(){
 		//verificando se a sessão existe, caso exista mando para o painel 
 		$this->load->library('session');
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
-			$cod = $usuario['cod'];
-			$tipo = $usuario['tipo'];
+			$data['Nome'] = $this->input->post('txtEscola');
+			$data['DataFundacao'] = $this->input->post('dtFundacao');
+			$data['Rua'] = $this->input->post('txtRua');
+			$data['Bairro'] = $this->input->post('txtBairro');
+			$data['Cidade'] = $this->input->post('txtCidade');
+			$data['Cep'] = $this->input->post('txtCep');
+			$data['Estado'] = $this->input->post('cmbEstado');
+			$data['Website'] = $this->input->post('txtWebsite');
+			$data['CodEscola'] = $this->input->post('cod');
 
-			//recebo o array com as informações da interface
-			$data = $this->preencheInterface($usuario);
-
-			//carregando a view enquanto passo as informações
-			$data['title'] = "Mural";
-			$data['content'] = "mural";
-			$data['sidebar'] = "mural";
-			//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
-			$this->load->helper('sidebar');
-			$data['menulateral'] = retornaSidebar($tipo);
-			$data['css'] = array('chat' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">');	
-			$this->load->view('panel/layout', $data);
-
+			//carrego a model com o update
+			$this->load->model("escola");
+			//atualizo
+			$retorno = $this->escola->updateEscola($data);
+			//passo o retorno 
+			return $retorno;
 		}else{
 			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());

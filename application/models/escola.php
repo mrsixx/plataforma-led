@@ -19,11 +19,18 @@ class Escola extends CI_Model
 		return $escola;
 	}
 	function getCursos($data = null){
-		if(isset($data)){
+		if(isset($data))
 			$query = $this->db->get_where("curso", $data);
-		}else{
+		else
 			$query = $this->db->get("curso");
-		}
+		return $query->result();
+	}
+
+	function getTurma($data = null){
+		if(isset($data))
+			$query = $this->db->get_where("turma", $data);
+		else
+			$query = $this->db->get("turma");
 		return $query->result();
 	}
 
@@ -34,10 +41,12 @@ class Escola extends CI_Model
 				'DataFundacao' => $data['dtfundacao'], 
 				'Cep' => $data['cep'], 
 				'Rua' => $data['rua'], 
+				'Bairro' => $data['bairro'],
 				'Cidade' => $data['cidade'], 
-				'Estado' => $data['estado']
+				'Estado' => $data['estado'], 
+				'Website' =>$data['website']
 			);
-			if($this->db->insert($this->tabela,$array)){
+			if($this->db->insert("escola", $array)){
 				return true;
 			}else{
 				return false;
@@ -47,6 +56,23 @@ class Escola extends CI_Model
 			$e;
 		}
 
+	}
+
+	function updateEscola($data){
+		try{
+			$this->db->set($data);
+			$this->db->where(array('CodEscola' => $data['CodEscola']));
+			if($this->db->update("escola")){
+				return true;
+			}
+			else{
+				return false;
+			}
+		
+
+		}catch(PDOException $e){
+			$e;
+		}
 	}
 
 

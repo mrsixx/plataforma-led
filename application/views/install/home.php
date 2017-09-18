@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                             <div class="form-group">
                                 <label for="txtBanco" class="control-label pull-left">Nome do banco de dados <span class="required">*</span></label>
-                                <input id="txtBanco" name="txtBanco" class="form-control" type="text" value="plataformaLed" placeholder="Insira o nome fornecido pelo serviço de hospedagem" required>
+                                <input id="txtBanco" name="txtBanco" class="form-control" type="text" value="dbled" placeholder="Insira o nome fornecido pelo serviço de hospedagem" required>
                             </div>
 
                             <div class="form-group">

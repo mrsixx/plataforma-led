@@ -475,3 +475,8 @@ i{
 }
 
 }
+
+#container-notificacao a{
+    color: black;
+    text-decoration: none;
+}

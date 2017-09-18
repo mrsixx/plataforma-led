@@ -1,10 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-	if(isset($css)){
+	if(isset($css))
 		$data['css'] = $css;
-	}
-	else{
+	else
 		$data['css'] = null;
-	}
     $this->load->view('panel/commons/led_header', $data);
 
 ?>
@@ -20,14 +18,14 @@
                     $this->load->view("panel/sidebars/$sidebar", $data);
                  ?>
             </div>
-            <div id="main-wrapper" class="col-md-9 pull-right">
+            <div id="main-wrapper" class="col-xs-12 col-sm-12 col-md-9 pull-right">
                 <?php
-                    $this->load->view("panel/contents/$content",$data);
+                    $this->load->view("panel/contents/$content", $data);
                 ?>
             </div>
         </div>
 <?php 
 
-    $this->load->view('panel/commons/led_footer');
+    $this->load->view('panel/commons/led_footer', $data);
 
     
