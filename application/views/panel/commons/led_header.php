@@ -12,11 +12,16 @@
     <link href="<?= base_url("assets/css/bootstrap.css");?>" rel="stylesheet">
     <link href="<?= base_url("assets/css/style.css");?>" rel="stylesheet">
     <link href="<?= base_url("assets/css/style.scss");?>" rel="stylesheet">
-    <?php if(isset($css)){
-        foreach ($css as $key => $value) {
+
+    <?php if(isset($files)){
+        foreach ($files as $key => $value) {
+            echo '<!-- script para '.$key.' -->';
+            echo "\n";
             echo $value;
+            echo "\n";
         }
     } ?>
+
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!--[if lt IE 9]>

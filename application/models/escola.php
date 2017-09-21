@@ -27,10 +27,26 @@ class Escola extends CI_Model
 	}
 
 	function getTurma($data = null){
+		if(isset($data)){
+			$this->db->select('*');
+			$this->db->from('turma');
+			$this->db->join('curso', 'curso.CodCurso = turma.CodCurso');
+			$this->db->where($data);
+			$query = $this->db->get();
+		}
+		else{
+			$this->db->select('*');
+			$this->db->from('turma');
+			$this->db->join('curso', 'curso.CodCurso = turma.CodCurso');
+			$query = $this->db->get();
+		}
+		return $query->result();
+	}
+	function getHierarquia($data = null){
 		if(isset($data))
-			$query = $this->db->get_where("turma", $data);
+			$query = $this->db->get_where("hierarquia", $data);
 		else
-			$query = $this->db->get("turma");
+			$query = $this->db->get("hierarquia");
 		return $query->result();
 	}
 
@@ -47,6 +63,34 @@ class Escola extends CI_Model
 				'Website' =>$data['website']
 			);
 			if($this->db->insert("escola", $array)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		catch(PDOException $e){
+			$e;
+		}
+
+	}
+
+	function cadastraCurso($data){
+		try{
+			if($this->db->insert("curso", $data)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		catch(PDOException $e){
+			$e;
+		}
+
+	}
+
+	function cadastraTurma($data){
+		try{
+			if($this->db->insert("turma", $data)){
 				return true;
 			}else{
 				return false;

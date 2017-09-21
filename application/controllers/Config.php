@@ -89,13 +89,13 @@ class Config extends CI_Controller {
 			$this->index($erro);
 		}else{
 			//recebendo valores dos inputs e passando para o array data 
-			$data['nome'] = $this->input->post('txtNome');
-			$data['sobrenome'] = $this->input->post('txtSobrenome');
-			$data['nick'] = $this->input->post('txtNick');
-			$data['sexo'] = $this->input->post('cmbSexo');
-			$data['nascimento'] = $this->input->post('dtNascimento');
-			$data['cidade'] = $this->input->post('txtCidade');
-			$data['email'] = $this->input->post('txtEmail');
+			$data['nome'] = utf8_decode($this->input->post('txtNome'));
+			$data['sobrenome'] = utf8_decode($this->input->post('txtSobrenome'));
+			$data['nick'] = utf8_decode($this->input->post('txtNick'));
+			$data['sexo'] = utf8_decode($this->input->post('cmbSexo'));
+			$data['nascimento'] = utf8_decode($this->input->post('dtNascimento'));
+			$data['cidade'] = utf8_decode($this->input->post('txtCidade'));
+			$data['email'] = utf8_decode($this->input->post('txtEmail'));
 			
 			$data['foto'] = null;
 			$this->load->helper('date');
@@ -265,14 +265,14 @@ class Config extends CI_Controller {
 				$this->index($erro);
 			}else{
 				//se não, passo os valores dos inputs para o array data
-				$data['escola'] = $this->input->post('txtEscola');
-				$data['dtfundacao'] = $this->input->post('dtFundacao');
-				$data['cep'] = $this->input->post('txtCep');
-				$data['rua'] = $this->input->post('txtRua');
-				$data['bairro'] = $this->input->post('txtBairro');
-				$data['cidade'] = $this->input->post('txtCidade');
-				$data['estado'] = $this->input->post('cmbEstado');
-				$data['website'] = $this->input->post('txtWebsite');
+				$data['escola'] = utf8_decode($this->input->post('txtEscola'));
+				$data['dtfundacao'] = utf8_decode($this->input->post('dtFundacao'));
+				$data['cep'] = utf8_decode($this->input->post('txtCep'));
+				$data['rua'] = utf8_decode($this->input->post('txtRua'));
+				$data['bairro'] = utf8_decode($this->input->post('txtBairro'));
+				$data['cidade'] = utf8_decode($this->input->post('txtCidade'));
+				$data['estado'] = utf8_decode($this->input->post('cmbEstado'));
+				$data['website'] = utf8_decode($this->input->post('txtWebsite'));
 				$this->load->model('escola');
 				$data['title'] = "Plataforma LED | Configuração de ambiente";
 				if($this->escola->cadastraEscola($data)){

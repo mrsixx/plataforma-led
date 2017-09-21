@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-	if(isset($css))
-		$data['css'] = $css;
+	if(isset($files))
+		$data['files'] = $files;
 	else
-		$data['css'] = null;
+		$data['files'] = null;
     $this->load->view('panel/commons/led_header', $data);
 
 ?>
@@ -25,7 +25,10 @@
             </div>
         </div>
 <?php 
-
+    if(isset($filesfooter))
+        $data['filesfooter'] = $filesfooter;
+    else
+        $data['filesfooter'] = null;
     $this->load->view('panel/commons/led_footer', $data);
 
     

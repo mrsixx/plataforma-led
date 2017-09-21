@@ -11,10 +11,12 @@ class Panel extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//verificando se existem cursos cadastrados
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
 			$this->load->model('escola');
 			$curso = $this->escola->getCursos();
-			if(!empty($curso)){
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
 				//recebo o array com as informações da interface
 				$data = $this->preencheInterface($usuario);
 
@@ -22,7 +24,6 @@ class Panel extends CI_Controller {
 				$data['title'] = "Painel";
 				$data['content'] = "home";
 				$data['sidebar'] = "home";
-				// $data['css'] = array('css'=>'<link href="'.base_url("assets/css/style.css").'" rel="stylesheet">');
 				$this->load->view('panel/layout', $data);
 			}else{
 				redirect(base_url('configuracao-ambiente'));
@@ -41,18 +42,27 @@ class Panel extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//recebo o array com as informações da interface
-			$data = $this->preencheInterface($usuario);
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
+			$this->load->model('escola');
+			$curso = $this->escola->getCursos();
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
+				//recebo o array com as informações da interface
+				$data = $this->preencheInterface($usuario);
 
-			//carregando a view enquanto passo as informações
-			$data['title'] = "Mural";
-			$data['content'] = "mural";
-			$data['sidebar'] = "mural";
-			//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
-			$this->load->helper('sidebar');
-			$data['menulateral'] = retornaSidebar($tipo);
-			$data['css'] = array('chat' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">');	
-			$this->load->view('panel/layout', $data);
+				//carregando a view enquanto passo as informações
+				$data['title'] = "Mural";
+				$data['content'] = "mural";
+				$data['sidebar'] = "mural";
+				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
+				$this->load->helper('sidebar');
+				$data['menulateral'] = retornaSidebar($tipo);
+				$data['files'] = array('chat' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">');	
+				$this->load->view('panel/layout', $data);
+			}else{
+				redirect(base_url('configuracao-ambiente'));
+			}
 
 		}else{
 			//se não houver sessão, então mando de volta pois não existiu um login
@@ -68,18 +78,27 @@ class Panel extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//recebo o array com as informações da interface
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
+			$this->load->model('escola');
+			$curso = $this->escola->getCursos();
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
+				//recebo o array com as informações da interface
 			$data = $this->preencheInterface($usuario);
 
-			//carregando a view enquanto passo as informações
-			$data['title'] = "Chat";
-			$data['content'] = "chat";
-			$data['sidebar'] = "chat";
-			//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
-			$this->load->helper('sidebar');
-			$data['menulateral'] = retornaSidebar($tipo);
-			$data['css'] = array('chat' => '<link href="'.base_url("assets/css/chat.css").'" rel="stylesheet">');	
-			$this->load->view('panel/layout', $data);
+				//carregando a view enquanto passo as informações
+				$data['title'] = "Chat";
+				$data['content'] = "chat";
+				$data['sidebar'] = "chat";
+				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
+				$this->load->helper('sidebar');
+				$data['menulateral'] = retornaSidebar($tipo);
+				$data['files'] = array('chat' => '<link href="'.base_url("assets/css/chat.css").'" rel="stylesheet">');	
+				$this->load->view('panel/layout', $data);
+			}else{
+				redirect(base_url('configuracao-ambiente'));
+			}
 
 		}else{
 			//se não houver sessão, então mando de volta pois não existiu um login
@@ -90,8 +109,26 @@ class Panel extends CI_Controller {
 	public function profile(){
 		$this->load->library('session');
 		if($this->session->has_userdata('login')){
-			echo "perfil";
+			$usuario = $this->session->login;
+			$cod = $usuario['cod'];
+			$tipo = $usuario['tipo'];
+
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
+			$this->load->model('escola');
+			$curso = $this->escola->getCursos();
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
+				//recebo o array com as informações da interface
+				$data = $this->preencheInterface($usuario);
+
+				echo "perfil";
+			}else{
+				redirect(base_url('configuracao-ambiente'));
+			}
+
 		}else{
+			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
 		}
 	}
@@ -99,8 +136,26 @@ class Panel extends CI_Controller {
 	public function help(){
 		$this->load->library('session');
 		if($this->session->has_userdata('login')){
-			echo "ajuda";
+			$usuario = $this->session->login;
+			$cod = $usuario['cod'];
+			$tipo = $usuario['tipo'];
+
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
+			$this->load->model('escola');
+			$curso = $this->escola->getCursos();
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
+				//recebo o array com as informações da interface
+				$data = $this->preencheInterface($usuario);
+
+				echo "ajuda";
+			}else{
+				redirect(base_url('configuracao-ambiente'));
+			}
+
 		}else{
+			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
 		}
 	}
@@ -108,8 +163,26 @@ class Panel extends CI_Controller {
 	public function settings(){
 		$this->load->library('session');
 		if($this->session->has_userdata('login')){
-			echo "configurações";
+			$usuario = $this->session->login;
+			$cod = $usuario['cod'];
+			$tipo = $usuario['tipo'];
+
+			//verificando se existem cursos cadastrados e o quadro de funcionários 
+			$this->load->model('escola');
+			$curso = $this->escola->getCursos();
+			$turma = $this->escola->getTurma();
+			$hierarquia = $this->escola->getHierarquia();
+			if(!empty($curso) && !empty($hierarquia) && !empty($turma)){
+				//recebo o array com as informações da interface
+				$data = $this->preencheInterface($usuario);
+
+				echo "configurações";
+			}else{
+				redirect(base_url('configuracao-ambiente'));
+			}
+
 		}else{
+			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
 		}
 	}
@@ -138,17 +211,23 @@ class Panel extends CI_Controller {
 			$this->load->model("escola");
 			$data['escola'] = $this->escola->getEscola();
 			$data['cursos'] = $this->escola->getCursos();
+			$data['cursosativos'] = $this->escola->getCursos(array('Status'=>1));
 			$data['turmas'] = $this->escola->getTurma();
 
 			$data['title'] = "Configuração de ambiente";
 			$data['content'] = "ambiente";
 			$data['sidebar'] = "home";
+			$data['files'] = array(
+				'css textearea'=> '<style>textarea{resize:none;}</style>'
+    		);
+    		$data['filesfooter'] = array(
+    			'funções para os modais da página' => '<script type="text/javascript" src="'.base_url('assets/js/scripts/ambiente.js').'"></script>'
+    		);
 			$this->load->view('panel/layout', $data);
 
 		}else{
 			redirect(base_url());
 		}
-
 	}
 
 

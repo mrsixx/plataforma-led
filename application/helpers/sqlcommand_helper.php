@@ -57,9 +57,9 @@ if(!function_exists('cria')){
 								`CriteriosAvaliacao` text,
 								`CodProfessor` bigint(20)
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'componente-curso' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-curso` (
+			'componente-turma' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-turma` (
 									`CodCompCurso` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-									`CodCurso` bigint(20) NOT NULL,
+									`CodTurma` bigint(20) NOT NULL,
 									`CodComponente` bigint(20) NOT NULL
 									) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'componente-professor' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-professor` (
@@ -104,11 +104,11 @@ if(!function_exists('cria')){
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'curso' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'curso` (
 						`CodCurso` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-						`Nome` text NOT NULL,
-						`Duracao` int(11) NOT NULL,
-						`Descricao` text,
-						`QtdAulas` int(11) NOT NULL,
-						`DuracaoAulas` int(11) NOT NULL
+					  	`Nome` varchar(50) NOT NULL,
+					  	`Status` tinyint(1) NOT NULL,
+					  	`SerieInicial` int(11) NOT NULL,
+					  	`SerieFinal` int(11) NOT NULL,
+					  	`Descricao` text
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'desempenha-task' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'desempenha-task` (
 									`CodDesempenho` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -301,12 +301,16 @@ if(!function_exists('cria')){
 								`Nome` varchar(50) NOT NULL,
 								`Descricao` text NOT NULL
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'turma' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'turma` (
+			'turma' => "CREATE TABLE IF NOT EXISTS `".$prefix."turma` (
 						`CodTurma` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						`Modulo` int(11) NOT NULL,
 						`NomeTurma` varchar(20) NOT NULL,
+					    `InicioLetivo` date NOT NULL,
+					    `FimLetivo` date NOT NULL,
+						`Periodo` enum('Integral','Matutino','Vespertino','Noturno') NOT NULL,
+						`QtdAlunos` int(11) NOT NULL,
 						`CodCurso` bigint(20) NOT NULL
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;', 
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;", 
 			'usuario' => "CREATE TABLE IF NOT EXISTS `".$prefix."usuario` (
 							`CodUsuario` bigint(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 							`Email` varchar(100) NOT NULL,
@@ -382,9 +386,9 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-inteligencia` FOREIGN KEY (`CodInteligencia`) REFERENCES `'.$prefix.'inteligencia` (`CodInteligencia`),
 								  ADD CONSTRAINT `fk-task` FOREIGN KEY (`CodTask`) REFERENCES `'.$prefix.'task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
-			'componente-curso' => 'ALTER TABLE `'.$prefix.'componente-curso`
-								  ADD CONSTRAINT `fk-componente-curso` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-curso-componente` FOREIGN KEY (`CodCurso`) REFERENCES `'.$prefix.'curso` (`CodCurso`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			'componente-turma' => 'ALTER TABLE `'.$prefix.'componente-turma`
+								  ADD CONSTRAINT `fk-componente-turma` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON UPDATE CASCADE,
+  									ADD CONSTRAINT `fk-turma-componente` FOREIGN KEY (`CodTurma`) REFERENCES `'.$prefix.'turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'conquista' => 'ALTER TABLE `'.$prefix.'conquista`
 								  ADD CONSTRAINT `fk-insignia` FOREIGN KEY (`CodInsignia`) REFERENCES `'.$prefix.'insignia` (`CodInsignia`) ON DELETE CASCADE ON UPDATE CASCADE,
