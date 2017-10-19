@@ -1,0 +1,57 @@
+/*default*/
+
+body {
+    padding-top: 100px;
+    padding-bottom: 150px;
+    font-size: 1.8em;
+}
+
+#header {
+    background-color: rgba(228, 114, 13, 100);
+    border: 1px solid #000;
+}
+
+
+.logo {
+    width: 30px;
+    margin-top: -5px;
+}
+
+
+.modal-header {
+    background: #0a5372;
+    color: white;
+}
+
+/*PERSONALIZAR AVATAR*/
+.tab-content > .tab_con > p{border:1px solid #333 ; height:250px; overflow-y:auto; } /* limitando altura do box */
+.tab-content > .tab_con > p::-webkit-scrollbar { width:10px; background:rgba(159, 149, 149, 0.41); } /* configurando scroll */
+.tab-content > .tab_con > p::-webkit-scrollbar-thumb { border-radius:10px; background:#4e4d47;  }
+.tab-content > .tab_con {overflow-x: hidden; overflow-y: inherit;}
+.tab-content > .tab_con img{
+    width: 80px;
+    height: 80px;
+}
+.modalAvatar{
+    overflow-y: auto;
+    min-height: 300px;
+}
+.partesAvatar{
+    margin: 10px
+}
+
+.nav-pills > li a{color: black;}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: #cb4949;
+}
+
+.avatar{
+    float: left;
+    position: absolute;
+}
+.avatar_card{
+    height: 200px;
+}
+
+/*ACABA AQUI*/

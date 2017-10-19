@@ -1,4 +1,8 @@
 <?php
+/**
+*  Helper com funções para criar o token de acesso dos usuários
+*  @author Matheus Antonio
+*/
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if(!function_exists('strUnique')){

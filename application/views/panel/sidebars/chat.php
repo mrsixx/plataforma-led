@@ -32,7 +32,7 @@
 
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                            <img src="<?php echo base_url('users/profile/IMG_1047.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
@@ -47,7 +47,7 @@
                                         </li>
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                            <img src="<?php echo base_url('users/profile/marino.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
@@ -62,7 +62,7 @@
                                         </li>
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                            <img src="<?php echo base_url('users/profile/sid.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
@@ -77,7 +77,7 @@
                                         </li>
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                            <img src="<?php echo base_url('users/profile/IMG_1054.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
@@ -113,11 +113,11 @@
 
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                     <img src="<?php echo base_url('assets/img/group.png');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
-                                                    <strong class="primary-font">3 ETIM</strong>
+                                                    <strong class="primary-font">3º ETIM</strong>
                                                     <small class="pull-right">12:09AM</small>
                                                 </div>
                                                 <div class="contact_sec">
@@ -128,11 +128,11 @@
                                         </li>
                                         <li class="left clearfix">
                                             <span class="chat-img pull-left">
-                                     <img src="img/user.png" class="img-circle">
+                                     <img src="<?php echo base_url('assets/img/group.png');?>" alt="Ketlyn" class="img-circle"/>
                                     </span>
                                             <div class="chat-body clearfix">
                                                 <div class="header_sec">
-                                                    <strong class="primary-font">3 INFO</strong>
+                                                    <strong class="primary-font">3º INFO</strong>
                                                     <small class="pull-right">12:09AM</small>
                                                 </div>
                                                 <div class="contact_sec">

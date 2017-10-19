@@ -1,4 +1,8 @@
 <?php
+/**
+*  Controlador com métodos pertinentes ao cadastro de administrador e escola
+*  @author Matheus Antonio
+*/
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Config extends CI_Controller {
@@ -89,50 +93,49 @@ class Config extends CI_Controller {
 			$this->index($erro);
 		}else{
 			//recebendo valores dos inputs e passando para o array data 
-			$data['nome'] = utf8_decode($this->input->post('txtNome'));
-			$data['sobrenome'] = utf8_decode($this->input->post('txtSobrenome'));
-			$data['nick'] = utf8_decode($this->input->post('txtNick'));
-			$data['sexo'] = utf8_decode($this->input->post('cmbSexo'));
-			$data['nascimento'] = utf8_decode($this->input->post('dtNascimento'));
-			$data['cidade'] = utf8_decode($this->input->post('txtCidade'));
-			$data['email'] = utf8_decode($this->input->post('txtEmail'));
+			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
+			$data['Sobrenome'] = utf8_decode($this->input->post('txtSobrenome'));
+			$data['Nickname'] = utf8_decode($this->input->post('txtNick'));
+			$data['Sexo'] = utf8_decode($this->input->post('cmbSexo'));
+			$data['DataNascimento'] = utf8_decode($this->input->post('dtNascimento'));
+			$data['Cidade'] = utf8_decode($this->input->post('txtCidade'));
+			$data['Email'] = utf8_decode($this->input->post('txtEmail'));
 			
-			$data['foto'] = null;
+			$data['Foto'] = null;
 			$this->load->helper('date');
-			$data['dtcad'] = unix_to_human(time());
-			$data['status'] = 0;
+			$data['DataCadastro'] = unix_to_human(time());
 
 			//gerando token
 			$this->load->helper('token');
-			$data['token'] = strUnique();
-			if(date("Y-m-d") - $data['nascimento'] >=18){
-				$data['tokenpai'] = null;
+			$data['Token'] = strUnique();
+			if(date("Y-m-d") - $data['DataNascimento'] >=18){
+				$data['TokenPai'] = null;
 			}else{
-				$data['tokenpai'] = strUnique();
+				$data['TokenPai'] = strUnique();
 			}
 
 
 			//encriptando senha e confirmação para comparar
-			$data['senha'] = $this->input->post('txtSenha');
-			$data['confirmacao'] = $this->input->post('txtConfirma');
+			$pass1 = $this->input->post('txtSenha');
+			$pass2 = $this->input->post('txtConfirma');
 
-			$senha = crypt($data['senha'], $data['token']);
-			$confirmacao = crypt($data['confirmacao'], $data['token']);
+			$senha = crypt($pass1, $data['Token']);
+			$confirmacao = crypt($pass2, $data['Token']);
 
-			$data['tipo'] = 1;
-			$data['avatar'] = null;
-			$data['hierarquia'] = null;
-			$email = $data['email'];
+			$data['CodTipoUsuario'] = 1;
+			$data['CodAvatar'] = null;
+			$data['CodHierarquia'] = null;
+			$email = $data['Email'];
 
 			//se a senha e a confirmação forem identicas, pega as informações e envia um email de confirmação além de cadastrar no banco temporariamente
 			if($senha === $confirmacao){
 					//primeiro encripto a senha definitivamente
-					$data['senha'] = password_hash($data['senha'], PASSWORD_DEFAULT);
+					$data['Senha'] = password_hash($pass1, PASSWORD_DEFAULT);
 					//encriptando valores para passar no email
-					$nome = $data['nome'];
-					$dtnasc = $data['nascimento'];
-					$token = $data['token'];
-					$dtcadastro = $data['dtcad'];
+					$nome = $data['Nome'];
+					$dtnasc = $data['DataNascimento'];
+					$token = $data['Token'];
+					$dtcadastro = date('Y-m-d', strtotime($data['DataCadastro']));;
 
 					//carregando biblioteca para encriptar os dados
 					$this->load->library('encrypt');
@@ -143,20 +146,20 @@ class Config extends CI_Controller {
 					//carregando meu helper de envio de email e passando valores para ele 
 					$this->load->helper('enviaEmail');
 					$data['de'] = $this->config->item('email');
-					$data['para'] = $data['email'];
+					$data['para'] = $data['Email'];
 					$data['assunto'] = "Confirmação de cadastro";
-					$data['mensagem'] = msg($data['nome'], base_url("configuracao/confirmacao?n=$nome&dt=$dtnasc&dtc=$dtcadastro&tk=$token"), $data['sexo']);
+					$data['mensagem'] = msg($data['Nome'], base_url("configuracao/confirmacao?n=$nome&dt=$dtnasc&dtc=$dtcadastro&tk=$token"), $data['Sexo']);
 
 					//verificando se o email foi enviado
 					$data['title'] = "Confirmação de email";
 					if(envia($data)){
 						$this->load->model('usuario');
-						$cad = $this->usuario->cadastra($data);
+						$cad = $this->usuario->cadastra(1,$data);
 						if($cad){
 							$data['header'] = "Email enviado com sucesso";
 							$data['body'] = "Por favor, verifique sua caixa de entrada ou sua caixa de spam";
-							$data['btn'] = "Já confirmei, vamos prosseguir";
-							$data['href'] = base_url();
+							$data['btn'] = "...";
+							$data['href'] = "#";
 							$this->load->view('install/success',$data);
 						}
 						else{
@@ -191,9 +194,9 @@ class Config extends CI_Controller {
 		$data['tken'] = $this->input->get('tk');
 		//chamando a model usuario para acessar o banco 
 		$this->load->model('usuario');
-		if(!$this->usuario->validaCadastro($data)){
+		if(!$this->usuario->validaCadastro($data,null,'adm')){
+			$this->usuario->apagaUser(array('Token' => base64_decode($data['tken'])));
 			//se o cadastro não for validado, eu solto o erro
-			$this->usuario->apagaUser($data);
 			$erro = '<div class="alert alert-danger alert-dismissable">
 							 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 							  			<strong>Erro!</strong> Infelizmente o cadastro não pode ser validado
@@ -204,16 +207,17 @@ class Config extends CI_Controller {
 			//se for então eu mando pra configurar o ambiente
 			//envio a primeira notificação pro usuário
 			$usuario = $this->usuario->getUser(array('Token' => $data['tken']));
+			$nome = utf8_encode($data['Nome']);
 			$this->load->model("interface_led");
 			$this->interface_led->enviaNotificacao(array(
-							'titulo' => 'Bem-Vindo a Plataforma LED',
-							'texto' => 'Alguma coisa',
-							'data' => date("Y-m-d h:m:i"),
-							'link' => null,
-							'remetente' => null,
-							'destinatario' => $usuario['CodUsuario']
+							'Titulo' => utf8_decode("Bem-Vindo a Plataforma LED"),
+							'Texto' => utf8_decode("Olá $nome, obrigado por ser mais um a escolher a LED"),
+							'DataHora' => date("Y-m-d H:m:i"),
+							'Link' => null,
+							'CodRemetente' => null,
+							'CodDestinatario' => $usuario['CodUsuario']
 			));
-			$this->interface_led->startRpg($usuario['CodUsuario']);
+			$this->interface_led->startRpg(array('CodUsuario' => $usuario['CodUsuario']));
 			redirect(base_url());
 		}
 	}
@@ -272,15 +276,29 @@ class Config extends CI_Controller {
 				$data['bairro'] = utf8_decode($this->input->post('txtBairro'));
 				$data['cidade'] = utf8_decode($this->input->post('txtCidade'));
 				$data['estado'] = utf8_decode($this->input->post('cmbEstado'));
-				$data['website'] = utf8_decode($this->input->post('txtWebsite'));
+
+				$this->load->helper('http');
+				$data['website'] = verificaProtocolo($this->input->post('txtWebsite'));
+				// $data['website'] = utf8_decode($this->input->post('txtWebsite'));
 				$this->load->model('escola');
 				$data['title'] = "Plataforma LED | Configuração de ambiente";
 				if($this->escola->cadastraEscola($data)){
-					$data['header'] = "A configuração de ambiente está quase lá";
-					$data['body'] = "Por favor, efetue login para continuar a configurar a plataforma LED";
-					$data['btn'] = "Vamos lá :D";
-					$data['href'] = base_url();
-					$this->load->view('install/success',$data);
+					$this->load->model('mural');
+					if($this->mural->insereMural(array('CodUsuario' => 1, 'CodMural' => 2, 'DataEntrada' => date('Y-m-d')))){
+						$data['header'] = "A configuração de ambiente está quase lá";
+						$data['body'] = "Por favor, efetue login para continuar a configurar a plataforma LED";
+						$data['btn'] = "Vamos lá :D";
+						$data['href'] = base_url();
+						$this->load->view('install/success',$data);
+					}else{
+						$erro = '
+								<div class="alert alert-danger alert-dismissable">
+								  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							  <strong>Erro!</strong> Houve um erro ao inserir seu usuário no mural da escola :/ , por favor tente novamente mais tarde...
+							</div>
+							';
+						$this->index($erro);
+					}
 				}else{
 					$erro = '
 						<div class="alert alert-danger alert-dismissable">
@@ -289,7 +307,7 @@ class Config extends CI_Controller {
 					</div>
 					';
 				$this->index($erro);
-				}//parei aqui 
+				}
 			}
 	}
 

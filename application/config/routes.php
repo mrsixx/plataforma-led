@@ -62,22 +62,34 @@ $route['configuracao'] = 'config';
 	$route['configuracao/cadastro-escola'] = 'config/cadastraEscola';
 $route['login'] = 'led/login';
 $route['logout'] = 'panel/logout';
-$route['configuracao-ambiente'] = 'panel/configEscola';
+$route['configuracao-ambiente'] = 'ambiente';
+$route['configuracao-ambiente/turma/:num'] = 'ambiente/configTurma';
 
-
+//cadastro
+$route['cadastro/step-2'] = 'cadastro/enviaEmail';
+$route['cadastro/confirmacao'] = 'cadastro/validaCad';
+$route['cadastro/step-3/:any'] = 'panel/avatar';
 //links da interface
 
 //links navbar
 $route['painel'] = 'panel';
-$route['perfil'] = 'panel/profile';
+$route['perfil/:any'] = 'perfil';
+	$route['alteraAvatar'] = 'perfil/alteraAvatar';
+	$route['atualizaPerfil'] = 'perfil/alteraPerfil';
+	$route['attFoto'] = 'perfil/alteraFoto';
 $route['ajuda'] = 'panel/help';
 $route['configuracoes'] = 'panel/settings';
 
 //links sidebar
 $route['mural'] = 'panel/mural';
-$route['chat'] = 'panel/chat';
-$route['tasks'] = 'panel/tasks';
-$route['biblioteca'] = 'panel/biblioteca';
-$route['calendario'] = 'panel/calendario';
-$route['ferramentas'] = 'panel/tools';
+	$route['mural/:num'] = 'posts';
+	$route['post/:num'] = 'posts/chamaPostagem/:num';
+$route['chat'] = 'chat';
+$route['tasks'] = 'task';
+$route['biblioteca'] = 'biblioteca';
+$route['calendario'] = 'calendario';
+$route['ferramentas'] = 'ferramenta';
+$route['ferramentas/cadastro'] = 'ferramenta/cadLink';
+$route['ferramentas/editar/:num'] = 'ferramenta/edtLink';
+$route['ferramentas/:num'] = 'ferramenta/exibeLink';
 $route['denuncias'] = 'panel/reports';

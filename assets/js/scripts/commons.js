@@ -12,34 +12,6 @@
                 })
             });
 
-            //upload de imagem da postagem
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        $('#blah').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#imgInp").change(function() {
-                readURL(this);
-            });
-            //fim upload imagem
-
-            //opinião FAZER PESQUISA COM O AJAX DEPOIS 
-            $(function() {
-                $('.boa').click(function() {
-                    $('#opiniao').removeClass();
-                    $('#opiniao').addClass('op1');
-                });
-                $('.nada').click(function() {
-                    $('#opiniao').removeClass();
-                    $('#opiniao').addClass('op2');
-                });
-            });
 
             //ajax para marcar notificação como lida
             $(document).ready(function() {
@@ -51,7 +23,7 @@
                     var status = $(div).attr('data-status');
                     var coduser = $('#modalNotificacoes').attr('data-user');
                     if (status != 1) {
-                        $.post('panel/attNotificacao', {
+                        $.post('/panel/attNotificacao', {
                             user: coduser,
                             notificacao: codnotificacao
                         }, function retorno(result) {
@@ -75,4 +47,21 @@
         $('[data-toggle="tooltip"]').tooltip({
             container: 'body'
         })
+    });
+
+    if (self != top) { top.location.replace(window.location.href) }
+
+    // //função para inputs type date não renderizados arrumar isso dps
+    //   $(function(){           
+    //     if (!Modernizr.inputtypes.date) {
+    //         $('input[type=date]').datepicker({
+    //               dateFormat : 'yy-mm-dd'
+    //             }
+    //          );
+    //     }
+    // });
+
+    //função para dar refresh na página ao fechar um modal     
+    $('.att').click(function(){
+        location.reload();
     });

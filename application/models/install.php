@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
-* 
+* Model com métodos de consulta ao banco de dados pertinentes a instação da plataforma
+* @author Matheus Antonio
 */
 class Install extends CI_Model
 {
@@ -64,6 +64,15 @@ class Install extends CI_Model
 					}
 				}
 
+				//rodando comandos para inserir os avatares no banco
+				$cadAvatar = cadAvatar($data['prefixo']);
+				foreach ($cadAvatar as $tabela => $comando) {
+					$stm = $con->prepare($comando);
+					if(!$stm->execute()){
+						return false;
+					}
+				}
+
 				return true;
 
 			}catch(PDOException $e){
@@ -75,7 +84,7 @@ class Install extends CI_Model
 	}
 	function verificaAdm(){
 		$db = $this->load->database();
-		$where = array('CodTipoUsuario' => 1 );
+		$where = array('CodTipoUsuario' => 1, 'Status' => 1);
 		$query = $this->db->get_where("usuario", $where);
 		return $query->row_array();
 	}

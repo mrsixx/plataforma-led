@@ -1,28 +1,35 @@
 <?php
-/*
-*	@author Kaue Reis
+/**
 * Model criada para gerenciar o módulo com cadastro de links uteis na unidade de ensino com métodos de acesso ao banco de dados da plataforma
+* @author Kaue Reis
 */
-class led extends CI_Model {
+
+class Link extends CI_Model
+{
 	
+	function __construct(){
+		parent::__construct();
+		$db = $this->load->database();
+	}
+
 	function cadastraLink($data){
 		try{
-			if($this->db->insert("link", $data)){
+			if($this->db->insert("linkexterno", $data)){
 				return true;
 			}else{
 				return false;
 			}
 		}
 		catch(PDOException $e){
-			$e;
+			return $e;
 		}
 	}
-	
+
 	function salvarLink($data,$where){
 		try{
 			$this->db->set($data);
 			$this->db->where($where);
-			if($this->db->update("link"))
+			if($this->db->update("linkexterno"))
 			{
 				return true;
 			}
@@ -30,23 +37,34 @@ class led extends CI_Model {
 			{
 				return false;
 			}
-			catch(PDOException $e)
-			{
-			$e;
-			}
-		
 		}
+		catch(PDOException $e){
+			return $e;
+		}
+		
 	}
-	function Excluir($id) {
-    if(is_null($id))
-      return false;
-    $this->db->where('CodLink', $id);
-    return $this->db->delete($this->table);
-  }
+
+	function deleteLink($id) {
+	    if(is_null($id))
+	      return false;
+	    $this->db->where(array('CodLink' => $id));
+	    return $this->db->delete("linkexterno");
+  	}
   
-  function retornaLink(){
-	  return $this->db->get("link");
-  }
+	function retornaLink($data = null){
+		try{
+			if(isset($data)){
+				$link = $this->db->get_where("linkexterno",$data);
+			}
+			else{
+				$link = $this->db->get("linkexterno");
+			}
+			
+		 	return $link->result();
+		}
+		catch(PDOException $e){
+			return $e;
+		}
+
+	}
 }
-}
-?>

@@ -5,7 +5,7 @@
 									*/
 									$config["base_url"] = "http://localhost/";
 									$config["host"] = "localhost";
-									$config["dbname"] = "dbled";
+									$config["dbname"] = "leddatabase";
 									$config["dbuser"] = "mrsixx";
 									$config["dbpass"] = "Led1968/80";
 									$config["prefix"] = "led_";

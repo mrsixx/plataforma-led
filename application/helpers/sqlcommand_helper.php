@@ -1,4 +1,8 @@
 <?php
+/**
+*  Helper com funções para gerar script SQL de criação do banco de dados da plataforma dinâmicamente
+*  @author Matheus Antonio
+*/
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if(!function_exists('cria')){
@@ -52,13 +56,13 @@ if(!function_exists('cria')){
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'compcurricular' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'compcurricular` (
 								`CodComponente` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-								`Nome` varchar(50) NOT NULL,
+								`Nome` varchar(100) NOT NULL,
 								`Sigla` varchar(10) NOT NULL,
 								`CriteriosAvaliacao` text,
 								`CodProfessor` bigint(20)
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'componente-turma' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-turma` (
-									`CodCompCurso` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+									`CodCompTurma` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 									`CodTurma` bigint(20) NOT NULL,
 									`CodComponente` bigint(20) NOT NULL
 									) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
@@ -104,7 +108,7 @@ if(!function_exists('cria')){
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'curso' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'curso` (
 						`CodCurso` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-					  	`Nome` varchar(50) NOT NULL,
+					  	`Nome` varchar(150) NOT NULL,
 					  	`Status` tinyint(1) NOT NULL,
 					  	`SerieInicial` int(11) NOT NULL,
 					  	`SerieFinal` int(11) NOT NULL,
@@ -120,7 +124,7 @@ if(!function_exists('cria')){
 						`CodDuvida` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						`Titulo` varchar(200) NOT NULL,
 						`DataHora` datetime NOT NULL,
-						`Conteudo` text NOT NULL,
+						`Conteudo` text,
 						`CodCompCurricular` bigint(20) NOT NULL,
 						`CodCriador` bigint(20) NOT NULL
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
@@ -175,14 +179,17 @@ if(!function_exists('cria')){
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'grupo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'grupo` (
 						`CodGrupo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-						`Nome` varchar(20) NOT NULL,
+						`Nome` varchar(150) NOT NULL,
 						`CodCriador` bigint(20),
-						`DataCriacao` date NOT NULL
+						`DataCriacao` date NOT NULL,
+						`CodCurso` bigint(20),
+						`CodTurma` bigint(20)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'hierarquia' => "CREATE TABLE IF NOT EXISTS `".$prefix."hierarquia` (
 							`CodHierarquia` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`Nome` varchar(30) NOT NULL,
-							`Nivel` enum('adm', 'aluno', 'func') NOT NULL
+							`Nome` varchar(50) NOT NULL,
+							`Descricao` varchar(200),
+							`Nivel` int(11) NOT NULL
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 
 			'insignia' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'insignia` (
@@ -221,8 +228,10 @@ if(!function_exists('cria')){
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'mural' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'mural` (
 						`CodMural` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-						`Nome` varchar(20) NOT NULL,
-						`Descricao` text NOT NULL
+						`Nome` varchar(150) NOT NULL,
+						`Descricao` text NOT NULL,
+					    `CodCurso` bigint(20),
+					    `CodTurma` bigint(20)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'notificacao' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'notificacao` (
 								`CodNotificacao` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -242,7 +251,7 @@ if(!function_exists('cria')){
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'postagem' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'postagem` (
 							`CodPost` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`Conteudo` text NOT NULL,
+							`Conteudo` text,
 							`DataHora` datetime NOT NULL,
 							`Imagem` text,
 							`CodMural` bigint(20) NOT NULL,
@@ -313,25 +322,25 @@ if(!function_exists('cria')){
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;", 
 			'usuario' => "CREATE TABLE IF NOT EXISTS `".$prefix."usuario` (
 							`CodUsuario` bigint(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`Email` varchar(100) NOT NULL,
-							`Senha` varchar(255) NOT NULL,
-							`Nome` varchar(50) NOT NULL,
-							`Sobrenome` varchar(50) NOT NULL,
-							`Nickname` varchar(10) NOT NULL,
-							`DataNascimento` date NOT NULL,
-							`DataCadastro` date NOT NULL,
-  							`Foto` text, 
-							`Sexo` enum('F','M') NOT NULL,
-							`Cidade` varchar(50),
-							`Status` tinyint(1) NOT NULL DEFAULT '0',
-							`Online` tinyint(1) DEFAULT 0, 
-							`Token` varchar(8) NOT NULL,
-							`TokenPai` varchar(8),
-							`QtdConsultorias` int(11) NOT NULL DEFAULT '0',
-							`UltimoLogin` date,
-							`CodTipoUsuario` int(11) NOT NULL,
-							`CodAvatar` bigint(20),
-							`CodHierarquia` int(11)
+						    `Email` varchar(100) NOT NULL DEFAULT 'led',
+						    `Senha` varchar(255) NOT NULL DEFAULT 'led',
+						    `Nome` varchar(50) NOT NULL DEFAULT 'led',
+						    `Sobrenome` varchar(50) NOT NULL DEFAULT 'led',
+						    `Nickname` varchar(10) NOT NULL DEFAULT 'led',
+						    `DataNascimento` date NOT NULL DEFAULT '0000-00-00',
+						    `DataCadastro` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+						    `Foto` text, 
+						    `Sexo` enum('F','M','L') NOT NULL DEFAULT 'L',
+						    `Cidade` varchar(50),
+						    `Status` tinyint(1) NOT NULL DEFAULT '0',
+						    `HorarioLimite` datetime, 
+						    `Token` varchar(8) NOT NULL,
+						    `TokenPai` varchar(8),
+						    `QtdConsultorias` int(11) NOT NULL DEFAULT '0',
+						    `UltimoLogin` datetime,
+						    `CodTipoUsuario` int(11) NOT NULL,
+						    `CodAvatar` bigint(20),
+						    `CodHierarquia` int(11)
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 			'usuarioequipe' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'usuario-equipe` (
 								`CodUsuarioEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -344,6 +353,12 @@ if(!function_exists('cria')){
 								`Admin` tinyint(1) NOT NULL DEFAULT 0,
 								`CodUsuario` bigint(20) NOT NULL,
 								`CodGrupo` bigint(20) NOT NULL
+								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			'usuariomural' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'usuario-mural` (
+								`CodUsuarioMural` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+								`DataEntrada` date NOT NULL,
+								`CodUsuario` bigint(20) NOT NULL,
+								`CodMural` bigint(20) NOT NULL
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;'
 			);
 		return $commands;
@@ -387,7 +402,7 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-task` FOREIGN KEY (`CodTask`) REFERENCES `'.$prefix.'task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
 			'componente-turma' => 'ALTER TABLE `'.$prefix.'componente-turma`
-								  ADD CONSTRAINT `fk-componente-turma` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON UPDATE CASCADE,
+								  ADD CONSTRAINT `fk-componente-turma` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON UPDATE CASCADE ON DELETE CASCADE,
   									ADD CONSTRAINT `fk-turma-componente` FOREIGN KEY (`CodTurma`) REFERENCES `'.$prefix.'turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'conquista' => 'ALTER TABLE `'.$prefix.'conquista`
@@ -421,12 +436,18 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-formcampo` FOREIGN KEY (`CodForm`) REFERENCES `'.$prefix.'formulario` (`CodForm`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'grupo' => 'ALTER TABLE `'.$prefix.'grupo`
-  								ADD CONSTRAINT `fk-criadorgrupo` FOREIGN KEY (`CodCriador`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;',
+  								ADD CONSTRAINT `fk-criadorgrupo` FOREIGN KEY (`CodCriador`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE,
+								ADD CONSTRAINT `fk-grupocurso` FOREIGN KEY (`CodCurso`) REFERENCES `'.$prefix.'curso` (`CodCurso`) ON DELETE CASCADE ON UPDATE CASCADE,
+								ADD CONSTRAINT `fk-grupoturma` FOREIGN KEY (`CodTurma`) REFERENCES `'.$prefix.'turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'mensagem' => 'ALTER TABLE `'.$prefix.'mensagem`
 								  ADD CONSTRAINT `fk-destinomsg` FOREIGN KEY (`CodDestino`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-grupomsg` FOREIGN KEY (`CodGrupo`) REFERENCES `'.$prefix.'grupo` (`CodGrupo`) ON DELETE CASCADE ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-remetentemsg` FOREIGN KEY (`CodRemetente`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;',
+
+			'mural' => 'ALTER TABLE `'.$prefix.'mural`
+								ADD CONSTRAINT `fk-muralcurso` FOREIGN KEY (`CodCurso`) REFERENCES `'.$prefix.'curso` (`CodCurso`) ON DELETE CASCADE ON UPDATE CASCADE,
+								ADD CONSTRAINT `fk-muralturma` FOREIGN KEY (`CodTurma`) REFERENCES `'.$prefix.'turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'notificacao' => 'ALTER TABLE `'.$prefix.'notificacao`
 								  ADD CONSTRAINT `fk-destinatarionotificacao` FOREIGN KEY (`CodDestinatario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -452,7 +473,7 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-tipotask` FOREIGN KEY (`CodTipoTask`) REFERENCES `'.$prefix.'tipotask` (`CodTipoTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'turma' => 'ALTER TABLE `'.$prefix.'turma`
-  								ADD CONSTRAINT `fk-turma-curso` FOREIGN KEY (`CodCurso`) REFERENCES `'.$prefix.'curso` (`CodCurso`) ON DELETE CASCADE ON UPDATE CASCADE;',
+  								ADD CONSTRAINT `fk-turma-curso` FOREIGN KEY (`CodCurso`) REFERENCES `'.$prefix.'curso` (`CodCurso`) ON DELETE RESTRICT ON UPDATE CASCADE;',
 			
 			'usuario' => 'ALTER TABLE `'.$prefix.'usuario`
 								  ADD CONSTRAINT `fk-avatar` FOREIGN KEY (`CodAvatar`) REFERENCES `'.$prefix.'avatar` (`CodAvatar`) ON UPDATE CASCADE,
@@ -461,7 +482,11 @@ if(!function_exists('relaciona')){
 			
 			'usuario-equipe' => 'ALTER TABLE `'.$prefix.'usuario-equipe`
 								  ADD CONSTRAINT `fk-equipeusuario` FOREIGN KEY (`CodEquipe`) REFERENCES `'.$prefix.'equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-usuarioequipe` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;'
+								  ADD CONSTRAINT `fk-usuarioequipe` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
+
+			'usuario-mural' => 'ALTER TABLE `'.$prefix.'usuario-mural`
+								  ADD CONSTRAINT `fk-mural-usuario` FOREIGN KEY (`CodMural`) REFERENCES `'.$prefix.'mural` (`CodMural`) ON DELETE CASCADE ON UPDATE CASCADE,
+								  ADD CONSTRAINT `fk-usuario-mural` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;'
 		);
 		return $commands;
 	}	
@@ -476,26 +501,41 @@ if(!function_exists('insere')){
 					 		(NULL, '".utf8_decode("Funcionário")."', '".utf8_decode("Usuário responsável por elaborar tarefas aos alunos, proporcionando a eles adquirir o máximo de conhecimento possível.")."'),  
 					 		(NULL, '".utf8_decode("Alunos")."', '".utf8_decode("Usuário que terá a maior evolução ao utilizar a plataforma, e estará em constante progresso.")."');",
 
-			'cabeloavatar' => "INSERT INTO `".$prefix."cabeloavatar` (`CodCabelo`, `Descricao`, `Link`) 
-					 VALUES (NULL, 'Default', 'avatar/cabelo');",
+			// 'cabeloavatar' => "INSERT INTO `".$prefix."cabeloavatar` (`CodCabelo`, `Descricao`, `Link`) 
+			// 		 VALUES (NULL, 'Default', 'avatar/cabelo');",
 
-			'corpoavatar' => "INSERT INTO `".$prefix."corpoavatar` (`CodCorpo`, `Descricao`, `Link`) 
-					 VALUES (NULL, 'Default', 'avatar/corpo');",
+			// 'corpoavatar' => "INSERT INTO `".$prefix."corpoavatar` (`CodCorpo`, `Descricao`, `Link`) 
+			// 		 VALUES (NULL, '".utf8_decode('Amarelo')."', 'corpo/corpoavatar(1)'),
+			//    			    (NULL, '".utf8_decode('Azul')."', 'corpo/corpoavatar(2)'),
+			//    			    (NULL, '".utf8_decode('Rosa')."', 'corpo/corpoavatar(3)'),
+			//    			    (NULL, '".utf8_decode('Brasil')."', 'corpo/corpoavatar(4)'),
+			//    			    (NULL, '".utf8_decode('Rainbow')."', 'corpo/corpoavatar(5)'),
+			//    			    (NULL, '".utf8_decode('Marrom escuro')."', 'corpo/corpoavatar(6)'),
+			//    			    (NULL, '".utf8_decode('Verde-musgo')."', 'corpo/corpoavatar(7)'),
+			//    			    (NULL, '".utf8_decode('Marrom claro')."', 'corpo/corpoavatar(8)'),
+			//    			    (NULL, '".utf8_decode('Cor de pele')."', 'corpo/corpoavatar(9)'),
+			//    			    (NULL, '".utf8_decode('Rosa pink')."', 'corpo/corpoavatar(10)'),
+			//    			    (NULL, '".utf8_decode('Lilás')."', 'corpo/corpoavatar(11)'),
+			//    			    (NULL, '".utf8_decode('Verde')."', 'corpo/corpoavatar(12)'),
+			//    			    (NULL, '".utf8_decode('Vinho')."', 'corpo/corpoavatar(13)');",
 
-			'itemavatar' => "INSERT INTO `".$prefix."itemavatar` (`CodItem`, `Descricao`, `Link`) 
-					 VALUES (NULL, 'Default', 'avatar/item');",
+			// 'itemavatar' => "INSERT INTO `".$prefix."itemavatar` (`CodItem`, `Descricao`, `Link`) 
+			// 		 VALUES (NULL, 'Default', 'avatar/item');",
 
-			'rostoavatar' => "INSERT INTO `".$prefix."rostoavatar` (`CodRosto`, `Descricao`, `Link`) 
-					 VALUES (NULL, 'Default', 'avatar/rosto');",
+			// 'rostoavatar' => "INSERT INTO `".$prefix."rostoavatar` (`CodRosto`, `Descricao`, `Link`) 
+			// 		 VALUES (NULL, 'Default', 'avatar/rosto');",
 
-			'roupaavatar' => "INSERT INTO `".$prefix."roupaavatar` (`CodRoupa`, `Descricao`, `Link`) 
-					 VALUES (NULL, 'Default', 'avatar/roupa');",
+			// 'roupaavatar' => "INSERT INTO `".$prefix."roupaavatar` (`CodRoupa`, `Descricao`, `Link`) 
+			// 		 VALUES (NULL, 'Default', 'avatar/roupa');",
 
-			'avatar' => "INSERT INTO `".$prefix."avatar` (`CodAvatar`, `CodCabelo`, `CodCorpo`, `CodItem`, `CodRosto`, `CodRoupa`) 
-					 VALUES (NULL, 1, 1, 1, 1, 1);",
+			// 'avatar' => "INSERT INTO `".$prefix."avatar` (`CodAvatar`, `CodCabelo`, `CodCorpo`, `CodItem`, `CodRosto`, `CodRoupa`) 
+			// 		 VALUES (NULL, 1, 1, 1, 1, 1);",
 
 			'tipoopiniao' => "INSERT INTO `".$prefix."tipoopiniao` (`CodTipoOpiniao`, `Descricao`) 
 					 VALUES (NULL, '".utf8_decode("Boa idéia!")."'), (NULL, 'Nada a ver!');",
+
+			'mural' => "INSERT INTO `".$prefix."mural` (`CodMural`, `Nome`, `Descricao`) 
+					 VALUES (1, '".utf8_decode("Funcionários")."', '".utf8_decode("Mural destinado aos funcionários da instituição de ensino")."');",
 
 			'inteligencia' => "INSERT INTO `".$prefix."inteligencia` (`CodInteligencia`, `Nome`, `Descricao`)
 					 VALUES (NULL, '".utf8_decode("Lógico­Matemática")."', '".utf8_decode("A capacidade de confrontar e avaliar objetos e abstrações, discernindo as suas relações e princípios subjacentes. Habilidade para raciocínio dedutivo e para solucionar problemas matemáticos. Cientistas possuem esta característica.")."'),
@@ -518,6 +558,63 @@ if(!function_exists('insere')){
 
 					 (NULL, '".utf8_decode("Prática'").", '".utf8_decode("Está ligada à constituição de uma ação ou de um uso repetido que resulta em um conhecimento ou em uma práxis. É o poder de conquistar aprendizado com as vivências, construindo aptidões funcionais. Ela se distingue da acadêmica, mais voltada para a percepção teórica, e nos ajuda a compreender porque algumas pessoas com um QI elevado não obtêm, apesar disso, o êxito na profissão.")."');"
 		);
+		return $commands;
+	}
+}
+
+if(!function_exists('cadAvatar')){
+	function cadAvatar($prefix){
+		$qtd = 14;
+		$corpoavatar = "INSERT INTO `".$prefix."corpoavatar` (`Descricao`, `Link`) 
+						 VALUES";
+						 for ($i=1; $i <= $qtd; $i++) { 
+						 	$corpoavatar.= ($i != 1) ? ", " : ' ';
+							$corpoavatar.= "(".utf8_decode("'Modelo de corpo $i'").", 'corpo/corpo(".$i.")')";
+						 	$corpoavatar.= ($i == $qtd) ? ";" : ' ';
+						}
+		$qtd = 82;
+		$cabeloavatar = "INSERT INTO `".$prefix."cabeloavatar` (`Descricao`, `Link`) 
+						 VALUES";
+						 for ($i=1; $i <= $qtd; $i++) { 
+						 	$cabeloavatar.= ($i != 1) ? ", " : ' ';
+							$cabeloavatar.= "(".utf8_decode("'Modelo de cabelo $i'").", 'cabelo/cabelo (".$i.")')";
+						 	$cabeloavatar.= ($i == $qtd) ? ";" : ' ';
+						}
+		$qtd = 6;
+		$itemavatar = "INSERT INTO `".$prefix."itemavatar` (`Descricao`, `Link`) 
+						 VALUES";
+						 for ($i=1; $i <= $qtd; $i++) { 
+						 	$itemavatar.= ($i != 1) ? ", " : ' ';
+							$itemavatar.= "(".utf8_decode("'Item $i'").", 'item/item (".$i.")')";
+						 	$itemavatar.= ($i == $qtd) ? ";" : ' ';
+						}
+		$qtd = 27;
+		$rostoavatar = "INSERT INTO `".$prefix."rostoavatar` (`Descricao`, `Link`) 
+						 VALUES";
+						 for ($i=1; $i <= $qtd; $i++) { 
+						 	$rostoavatar.= ($i != 1) ? ", " : ' ';
+							$rostoavatar.= "(".utf8_decode("'Modelo de rosto $i'").", 'rosto/rosto (".$i.")')";
+						 	$rostoavatar.= ($i == $qtd) ? ";" : ' ';
+						}
+		$qtd = 83;
+		$roupaavatar = "INSERT INTO `".$prefix."roupaavatar` (`Descricao`, `Link`) 
+						 VALUES";
+						 for ($i=1; $i <= $qtd; $i++) { 
+						 	$roupaavatar.= ($i != 1) ? ", " : ' ';
+							$roupaavatar.= "(".utf8_decode("'Modelo de roupa $i'").", 'roupa/roupa (".$i.")')";
+						 	$roupaavatar.= ($i == $qtd) ? ";" : ' ';
+						}
+
+
+		$commands = array(
+			'corpoavatar' => $corpoavatar,
+			'cabeloavatar' => $cabeloavatar,
+			'itemavatar' => $itemavatar,
+			'rostoavatar' => $rostoavatar,
+			'roupaavatar' => $roupaavatar
+						
+		);
+
 		return $commands;
 	}
 }

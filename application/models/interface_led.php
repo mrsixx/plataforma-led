@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
-* 
+* Model com métodos de consulta ao banco de dados pertinentes ao layout principal
+* @author Matheus Antonio
 */
 class Interface_led extends CI_Model
 {
@@ -20,49 +20,55 @@ class Interface_led extends CI_Model
 	}
 
 	function contadorNotificacoes($data){
+		$this->db->select('DataCadastro');
+		$dt = $this->db->get_where('usuario',array('CodUsuario'=>$data['cod']))->row_array();
+		$dt = $dt['DataCadastro'];
+		$where = array('CodDestinatario' => $data['cod']);
+
 		$this->db->where('CodDestinatario',null)->or_where('CodDestinatario',$data['cod']);
-		$status = array('Status' => 0);
+		$status = array('Status' => 0, 'CodDestinatario <>' => null, 'DataHora >' => $dt);
 		$query = $this->db->get_where("notificacao", $status);
 		
 		return $query->num_rows();
 	}
 
 	function statusNotificacao($data){
-		$array = array('CodDestinatario' => $data['usuario'], 'CodNotificacao' => $data['notificacao']);
-		$this->db->where($array);
+		// $where = array('CodNotificacao' => $data['CodNotificacao']);
 		$this->db->set('Status', 1);
-		if($this->db->update("notificacao")){
+		$this->db->where($data);
+		if($this->db->update("notificacao")){	
 			return true;
+		}else{
+			return false;
 		}
 	}
 
 	function notificacoes($data){
+		$this->db->select('DataCadastro');
+		$dt = $this->db->get_where('usuario',array('CodUsuario'=>$data['cod']))->row_array();
+		$dt = $dt['DataCadastro'];
 		$where = array('CodDestinatario' => $data['cod']);
+		$this->db->where(array('DataHora >=' => $dt));
 		$this->db->where($where)->or_where('CodDestinatario', null);
+		$this->db->order_by('DataHora', 'DESC');
 		$query = $this->db->get("notificacao");
 		return $query->result();
 	}
 
 	function enviaNotificacao($notificacao){
-		$titulo = $notificacao['titulo'];
-		$texto = $notificacao['texto'];
-		$dthr = $notificacao['data'];
-		$link = $notificacao['link'];
-		$remetente = $notificacao['remetente'];
-		$destinatario = $notificacao['destinatario'];
-		$array = array(
-			'Titulo' => $titulo, 
-			'Texto' => $texto,
-			'DataHora' => $dthr, 
-			'Link' => $link, 
-			'CodRemetente' => $remetente, 
-			'CodDestinatario' => $destinatario 
-		);
-		$this->db->insert("notificacao", $array);
+		try{
+			$this->db->insert("notificacao", $notificacao);
+		}
+		catch(PDOException $e){
+			return $e;
+		}
 	}
 
-	function startRpg($usuario){
-		$this->db->insert("experiencia", array('CodUsuario' => $usuario['CodUsuario']));
+	function startRpg($where){
+		//pego o usuário com o where que veio como parâmetro
+		$usuario = $this->db->get_where("usuario", $where)->row();
+		$array = array('CodUsuario' => $usuario->CodUsuario);
+		$this->db->insert("experiencia", $array);
 	}
 
 	function retornaLvl($usuario){
@@ -75,4 +81,43 @@ class Interface_led extends CI_Model
 		return $xp;
 		//arrumar aqui
 	}
+
+	// function retornaAvatar($where = null){
+	// 	try {
+	// 		if(isset($where)){
+	// 			$this->db->select('CodAvatar');
+	// 			$codAvatar = $this->db->get_where('avatar',$where)->row_array();
+	// 			var_dump($codAvatar);
+	// 			break;
+	// 			$avatar = array(
+	// 				'corpo' => $this->db->get_where('corpoavatar', $where['corpo'])->result(),
+	// 				'roupa' => $this->db->get_where('roupaavatar', $where['roupa'])->result(),
+	// 				'cabelo' => $this->db->get_where('cabeloavatar', $where['cabelo'])->result(),
+	// 				'rosto' => $this->db->get_where('rostoavatar', $where['rosto'])->result(),
+	// 				'item' => $this->db->get_where('itemavatar', $where['item'])->result()
+
+	// 			);
+	// 		}else{
+	// 			$avatar = array(
+	// 				'corpo' => $this->db->get('corpoavatar')->result(),
+	// 				'roupa' => $this->db->get('roupaavatar')->result(),
+	// 				'cabelo' => $this->db->get('cabeloavatar')->result(),
+	// 				'rosto' => $this->db->get('rostoavatar')->result(),
+	// 				'item' => $this->db->get('itemavatar')->result()
+
+	// 			);
+	// 		}
+	// 		return $avatar;
+
+	// 	} catch (PDOException $e) {
+	// 		return $e;
+	// 	}
+	// }
+
+	// function cadastraAvatar($data){
+	// 	if($this->db->insert('avatar',$data))
+	// 		return true;
+	// 	else
+	// 		return false;
+	// }
 }

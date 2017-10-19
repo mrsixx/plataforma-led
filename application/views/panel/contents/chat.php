@@ -16,7 +16,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="pull-left"><button>USUARIO</button></div>
+                                    <div class="pull-left"><button>3 º ETIM</button></div>
                                 </div>
                                 <!--aqui acaba cabeçalho -->
 
@@ -25,30 +25,44 @@
                                     <ul class="list-unstyled container-fluid">
                                         <li class="left clearfix row">
                                             <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
+                                                    <img src="<?php echo base_url('users/profile/sid.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                             </span>
                                             <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem?</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
+                                                <p><?php echo parse_smileys("E aí povo,<br/>  B)  B)  B)  B)", base_url('assets/smileys/'))?></p>
+                                                <div class="chat_time pull-right">09:39PM</div>
                                             </div>
                                         </li>
 
-                                        <li class="right clearfix row">
 
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>E aí?</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Você já ouviu falar da plataforma LED?</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
                                         <li class="left clearfix row">
+                                            <span class="chat-img1 pull-left col-xs-1">
+                                                    <img src="<?php echo base_url('users/profile/IMG_1054.JPG');?>" alt="Ketlyn" class="img-circle"/>
+                                            </span>
+                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
+                                                <p><?php echo parse_smileys("Oii,<br/>  :uni:", base_url('assets/smileys/'))?></p>
+                                                <div class="chat_time pull-right">09:39PM</div>
+                                            </div>
+                                        </li>
+
+                                        <li class="left clearfix row">
+                                            <span class="chat-img1 pull-left col-xs-1">
+                                                    <img src="<?php echo base_url('users/profile/marino.JPG');?>" alt="Ketlyn" class="img-circle"/>
+                                            </span>
+                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
+                                                <p><?php echo parse_smileys("Shazam :v >.<", base_url('assets/smileys/'))?></p>
+                                                <div class="chat_time pull-right">09:41PM</div>
+                                            </div>
+                                        </li>
+
+                                        <li class="right clearfix row">
+
+                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
+                                                <p><?php echo parse_smileys("Fala galera,<br/>Tudo bem? :?", base_url('assets/smileys/'))?></p>
+
+                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:42PM</div>
+                                            </div>
+                                        </li>
+                                        <!-- <li class="left clearfix row">
                                             <span class="chat-img1 pull-left col-xs-1">
                                                     <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
                                             </span>
@@ -222,7 +236,7 @@
                                                 <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
                                                 <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
                                             </div>
-                                        </li>
+                                        </li> -->
 
                                     </ul>
                                 </div>
@@ -256,37 +270,8 @@
 
                                             <!--aqui vai o botão de emoticon-->
                                                 
-                                                <div class="dropdown-menu drop-up col-xs-12 col-sm-8 col-md-6" role="menu">
-
-                                                    <table class="emoticons-lista table">
-                                                        <tr>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                            <td>☺</td>
-                                                        </tr>
-                                                    </table>
-
+                                                <div class="dropdown-menu drop-up col-xs-12 col-sm-8 col-md-3" role="menu">
+                                                    <?php echo $smiley_table; ?>
                                                 </div>
                                                 <button class="btn_chat dropdown-toggle col-md-1 col-xs-1 col-sm-1" data-toggle="dropdown">
                                                     <i class="fa fa-smile-o" aria-hidden="true"></i>

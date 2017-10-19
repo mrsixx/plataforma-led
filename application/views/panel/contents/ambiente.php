@@ -27,7 +27,7 @@
                                     </small><br/>
                                     <p>
                                         <i class="glyphicon glyphicon-globe"></i>&nbsp;
-                                        <a href="http://<?php echo utf8_encode($escola['Website']); ?>" target="_blank">
+                                        <a href="<?php echo utf8_encode($escola['Website']); ?>" target="_blank">
                                             <?php echo utf8_encode($escola['Website']);?>
                                         </a><br/>
                                         <i class="glyphicon glyphicon-gift"></i>&nbsp;
@@ -46,43 +46,144 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Quadro de funcionários</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body table-responsive">
                         <?php 
-                            if(!empty($hierarquia)){ ?>
-                            <table class="table table-striped table-hover ">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Descrição</th>
-                                        <th>Duração</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($cursos as $coluna): ?>
-                                        <tr>
-                                            <td>
-                                                <?php echo utf8_encode($coluna->Nome); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo utf8_encode($coluna->Descricao); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo utf8_encode($coluna->DuracaoAulas)."min"; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                    </tbody>
-                            </table>
+                            if(!empty($hierarquia)){
+                                
+                                foreach ($hierarquia as $cargo):
+                                    switch ($cargo->Nivel) {
+                                        case 1:
+                                            $nivel1[] = $cargo ;
+                                            break;
+                                        
+                                        case 2:
+                                            $nivel2[] = $cargo;
+                                            break;
+                                        
+                                        case 3:
+                                            $nivel3[] = $cargo;
+                                            break;
+                                        
+                                        case 4:
+                                            $nivel4[] = $cargo;
+                                            break;
+                                        
+                                        case 5:
+                                            $nivel5[] = $cargo;
+                                            break;
+                                    }
+                                endforeach;
+                                // var_dump($nivel2);
+                                if(!empty($nivel1)){
+                                    foreach ($nivel1 as $cargo) :?>
+                                        <div class="media">
+                                            <div class="media-left">
+                                              <img src="<?= base_url('assets/img/lvl1.png');?>" />
+                                            </div>
+                                            <div class="media-body">
+                                              <h4 class="media-heading"><?php echo utf8_encode($cargo->Nome);?> <button type="button" class="btn btn-default btn-xs editarhierarquia" data-toogle="tooltip" title="Editar" id="<?php echo $cargo->CodHierarquia;?>" data-url="ambiente/retornaFunc">
+                                                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                    </button><button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirFunc?cod=<?php echo $cargo->CodHierarquia;?>&tabela=<?php echo 'hierarquia';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
+                                                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                    </button></h4>
+                                              <p><?php echo utf8_encode($cargo->Descricao);?></p>
+                                                      <?php
+                                                        if(!empty($nivel2)){
+                                                            foreach ($nivel2 as $cargo) :?>
+                                                            <!-- Nested media object -->
+                                                              <div class="media">
+                                                                <div class="media-left">
+                                                                  <img src="<?= base_url('assets/img/lvl2.png');?>" />
+                                                                </div>
+                                                                <div class="media-body">
+                                                                  <h4 class="media-heading"><?php echo utf8_encode($cargo->Nome);?> <button type="button" class="btn btn-default btn-xs editarhierarquia" data-toogle="tooltip" title="Editar" id="<?php echo $cargo->CodHierarquia;?>" data-url="ambiente/retornaFunc">
+                                                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                    </button><button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirFunc?cod=<?php echo $cargo->CodHierarquia;?>&tabela=<?php echo 'hierarquia';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
+                                                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                    </button></h4>
+                                                                  <p><?php echo utf8_encode($cargo->Descricao);?></p>
+                                                                    <?php 
+                                                                        if(!empty($nivel3)){
+                                                                            foreach ($nivel3 as $cargo): ?>
+                                                                                <!-- Nested media object -->
+                                                                                  <div class="media">
+                                                                                    <div class="media-left">
+                                                                                      <img src="<?= base_url('assets/img/lvl3.png');?>" />
+                                                                                    </div>
+                                                                                    <div class="media-body">
+                                                                                      <h4 class="media-heading"><?php echo utf8_encode($cargo->Nome);?> <button type="button" class="btn btn-default btn-xs editarhierarquia" data-toogle="tooltip" title="Editar" id="<?php echo $cargo->CodHierarquia;?>" data-url="ambiente/retornaFunc">
+                                                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                    </button><button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirFunc?cod=<?php echo $cargo->CodHierarquia;?>&tabela=<?php echo 'hierarquia';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
+                                                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                    </button></h4>
+                                                                                      <p><?php echo utf8_encode($cargo->Descricao);?></p>
+                                                                                        <?php
+                                                                                            if(!empty($nivel4)){
+                                                                                                foreach ($nivel4 as $cargo) :?>
+                                                                                                <!-- Nested media object -->
+                                                                                                  <div class="media">
+                                                                                                    <div class="media-left">
+                                                                                                      <img src="<?= base_url('assets/img/lvl4.png');?>" />
+                                                                                                    </div>
+                                                                                                    <div class="media-body">
+                                                                                                      <h4 class="media-heading"><?php echo utf8_encode($cargo->Nome);?> <button type="button" class="btn btn-default btn-xs editarhierarquia" data-toogle="tooltip" title="Editar" id="<?php echo $cargo->CodHierarquia;?>" data-url="ambiente/retornaFunc">
+                                                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                    </button><button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirFunc?cod=<?php echo $cargo->CodHierarquia;?>&tabela=<?php echo 'hierarquia';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
+                                                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                    </button></h4>
+                                                                                                      <p><?php echo utf8_encode($cargo->Descricao);?></p>
+                                                                                                        <?php 
+                                                                                                            if(!empty($nivel5)){
+                                                                                                                foreach ($nivel5 as $cargo): ?>
+                                                                                                                    <!-- Nested media object -->
+                                                                                                                      <div class="media">
+                                                                                                                        <div class="media-left">
+                                                                                                                          <img src="<?= base_url('assets/img/lvl5.png');?>" />
+                                                                                                                        </div>
+                                                                                                                        <div class="media-body">
+                                                                                                                          <h4 class="media-heading"><?php echo utf8_encode($cargo->Nome);?> <button type="button" class="btn btn-default btn-xs editarhierarquia" data-toogle="tooltip" title="Editar" id="<?php echo $cargo->CodHierarquia;?>" data-url="ambiente/retornaFunc">
+                                                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                    </button><button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirFunc?cod=<?php echo $cargo->CodHierarquia;?>&tabela=<?php echo 'hierarquia';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
+                                                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                    </button></h4>
+                                                                                                                          <p><?php echo utf8_encode($cargo->Descricao);?></p>
+                                                                                                                        </div>
+                                                                                                                      </div>
+                                                                                                                <?php endforeach; $nivel5 = array();
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                      
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                <?php endforeach; $nivel4 = array();
+                                                                                            }
+                                                                                          ?>
+                                                                                    </div>
+                                                                                  </div>
+                                                                            <?php endforeach; $nivel3 = array();
+                                                                        }
+                                                                    ?>
+                                                                  
+                                                                </div>
+                                                              </div>
+                                                            <?php endforeach; $nivel2 = array();
+                                                        }
+                                                      ?>
+                                            </div>
+                                          </div>
+                                    <?php endforeach; $nivel1 = array();
+                                }else{
+                                    echo '<div class="well">Não há nenhuma posição de nível 1 cadastrada :/</div>';
+                                }
+                            ?>
                             <?php 
-                                $valuebtn = "Editar";
                             }
                             else{
                                 echo '<div class="well">O quadro de funcionários da instituição não foi cadastrado ainda :/</div>';
-                                $valuebtn = "Cadastrar";
                             } ?>
                     </div>
                     <div class="panel-footer" align="right">
-                        <input class="btn btn-primary" data-toggle="modal" data-target="#funcionarios" type="button" value="<?php echo $valuebtn; ?>">
+                        <input class="btn btn-primary" data-toggle="modal" data-target="#funcCad" type="button" value="Cadastrar">
                     </div>
                 </div>
 
@@ -101,7 +202,8 @@
                                         <th>Status</th>
                                         <th>Descrição</th>
                                         <th>Intervalo de séries/módulos</th>
-                                        <th></th>
+                                        <th>Editar</th>
+                                        <th>Excluir</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,16 +223,19 @@
                                                  ?>
                                             </td>
                                             <td>
-                                               <?php echo utf8_encode($coluna->Descricao); ?>
+                                               <p id="linha<?php echo $coluna->CodCurso;?>" class="collapse"><?php echo utf8_encode($coluna->Descricao); ?></p>
+                                                 <a type="button" href="#" data-toggle="collapse" id="" data-target="#linha<?php echo $coluna->CodCurso;?>">Mostrar/Esconder</a>
                                             </td>
                                             <td>
                                                 <?php echo $coluna->SerieInicial."º a ".$coluna->SerieFinal."º módulo"; ?>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-default btn-xs" data-toogle="tooltip" title="Editar">
+                                                <button type="button" class="btn btn-default btn-xs editarcurso" data-toogle="tooltip" title="Editar" id="<?php echo $coluna->CodCurso;?>">
                                                   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-xs" data-toogle="tooltip" title="Excluir">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-default btn-xs excluir" data-controller="ambiente/excluirCurso?cod=<?php echo $coluna->CodCurso;?>&tabela=<?php echo 'curso';?>" data-toogle="tooltip" title="Excluir" data-table="curso">
                                                   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </button>
                                             </td>
@@ -150,8 +255,6 @@
                         <input class="btn btn-primary" data-toggle="modal" data-target="#cursosCad" type="button" value="<?php echo $valuebtn; ?>">
                     </div>
                     </div>
-
-                 <!--Painel Componentes curriculares  -->
 
                 <!-- Painel Turmas -->
                 <div class="panel panel-primary">
@@ -192,13 +295,18 @@
                                                     <?php echo date('d/m/Y', strtotime($coluna->InicioLetivo))." a ".date('d/m/Y', strtotime($coluna->FimLetivo)); ?>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-default btn-xs" data-toogle="tooltip" title="Editar">
+                                                    <!-- btn para editar turma -->
+                                                    <button type="button" class="btn btn-default btn-xs editarturma" data-toogle="tooltip" title="Editar" id="<?php echo $coluna->CodTurma; ?>">
                                                       <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                                     </button>
-                                                    <button type="button" class="btn btn-default btn-xs" data-toogle="tooltip" title="Adicionar componentes curriculares">
-                                                      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-default btn-xs" data-toogle="tooltip" title="Excluir">
+                                                    <!-- btn para add componente curricular -->
+                                                    <a href="configuracao-ambiente/turma/<?php echo $coluna->CodTurma;?>"> 
+                                                        <button class="btn btn-default btn-xs" title="Componentes curriculares" id="<?php echo $coluna->CodTurma;?>">
+                                                          <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                                                        </button>
+                                                    </a>
+                                                    <!-- btn para excluir -->
+                                                    <button type="button" class="btn btn-default btn-xs excluir" data-table="turma" data-toogle="tooltip" data-controller="ambiente/excluirTurma?cod=<?php echo $coluna->CodTurma;?>&tabela=<?php echo 'turma';?>" title="Excluir">
                                                       <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </button>
                                                 </td>
@@ -210,8 +318,15 @@
                             <?php 
                                 $valuebtn = "Adicionar";
                             }else{
-                                echo '<div class="well">Nenhum curso foi cadastrado ainda :/</div>';
                                 $valuebtn = "Cadastrar";
+                                if(empty($cursos)){
+                                    echo '<div class="well">Sem cursos, sem turmas :/</div>';
+                                    $disabled = "disabled";
+                                }
+                                else{
+                                    echo '<div class="well">Nenhuma turma foi cadastrada ainda :/</div>';
+                                    $disabled = '';
+                                }
                             } 
 
                                 if(empty($cursos))
@@ -224,9 +339,6 @@
                         <input class="btn btn-primary" data-toggle="modal" <?php echo $disabled;?> data-target="#turmasCad" type="button" value="<?php echo $valuebtn; ?>">
                     </div>
                 </div>
-
-                 <!--Painel Componentes curriculares  -->
-
             </div>
         </div>
     </div>

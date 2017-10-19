@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <li>Senha do banco de dados;</li>
                                         <li>Nome do banco de dados.</li>
                                     </ol>
-                                    <p>Essas informações serão utilizadas para criação de um arquivo de configuração. Se de alguma forma esse arquivo não for gerado automaticamente, abra o arquivo <code>config-reserva.php</code> em um editor de textos e siga as instruções. Caso qualquer imprevisto venha a surgir, <a href="#">teremos prazer em ajudar</a>.</p>
+                                    <p>Essas informações serão utilizadas para criação de um arquivo de configuração. Se de alguma forma esse arquivo não for gerado automaticamente, abra o arquivo <code>config-database-reserva.php</code> em um editor de textos e siga as instruções (não se esqueça de alterar o nome do arquivo para <code>config-database.php</code>). Caso qualquer imprevisto venha a surgir, <a href="#">teremos prazer em ajudar</a>.</p>
                                     <p>Geralmente essas informações são fornecidas pelo seu serviço de hospedagem.</p>
                                 </div>
                                 <div class="modal-footer">

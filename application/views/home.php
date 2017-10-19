@@ -60,23 +60,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </form>
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <hr class="mostra" />
-                                <form method="post" action='' name="cadastro_form" class="form">
+                                <div class="hidden-md hidden-lg">
+                                    <hr />
+                                </div>
+                                <form method="post" action="<?= base_url('cadastro')?>" name="cadastro_form" class="form">
                                     <h2 align="center">Cadastro</h2>
                                     <hr class="some">
                                     <div class="row wvdivide form-group">
                                         <div class="col-md-6">
                                             <label for="txtNome">Nome</label>
-                                            <input type="text" class="form-control" id="txtNome" placeholder="Insira seu nome" required>
+                                            <input type="text" class="form-control" name="txtNome" id="txtNome" placeholder="Insira seu nome" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="txtSobrenome">Sobrenome</label>
-                                            <input type="text" class="form-control" id="txtSobrenome" placeholder="Insira seu sobrenome" required>
+                                            <input type="text" class="form-control" name="txtSobrenome" id="txtSobrenome" placeholder="Insira seu sobrenome" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="txtCodigo" data-original-title="Para maiores informações, contate o responsável pela instalação do sistema na instituição." data-toggle="tooltip" data-placement="right">Código de acesso *</label>
-                                        <input type="text" class="form-control" id="txtCodigo" placeholder="Insira o código de acesso fornecido pelo administrador" required>
+                                        <input type="password" class="form-control" name="txtCodigo" id="txtCodigo" placeholder="Insira o código de acesso fornecido pelo administrador" required>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                                 </form>

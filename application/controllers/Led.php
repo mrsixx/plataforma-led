@@ -1,4 +1,8 @@
 <?php
+/**
+*  Controlador com inicial com métodos para gerenciar as tomadas de decisões ao acessar a raiz do site
+*  @author Matheus Antonio
+*/
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Led extends CI_Controller {
@@ -21,7 +25,7 @@ class Led extends CI_Controller {
 			$qtdtables = $this->install->verificaDatabase();
 			$this->load->helper('sqlcommand');
 			$sizearray = sizeof(cria());
-			if($qtdtables == $sizearray){
+			if($qtdtables >= $sizearray){
 				//se sim, verifico se o ambiente está criado mandamos para a configuração de ambiente
 				$this->load->model('install');
 				$escola = $this->install->verficaEscola();
@@ -94,19 +98,10 @@ class Led extends CI_Controller {
 
 			$data['senha'] = $this->input->post('txtSenha');
 
-			$data['url'] = $this->input->post('txtUrl');
 			//url
-			$url = $data['url'];
-			$subs = substr($url, 0, 8);
-			if($subs !== "https://"){
-				$subs = substr($subs, 0, 5);
-				if($subs !== "http:"){
-					$data['url'] = "http://".$data['url'];
-				}
-			}
-			if(substr($data['url'], -1) !== "/")
-				$data['url'] = $data['url']."/";
-			//fim url
+			$this->load->helper('http');
+			$data['url'] = verificaProtocolo($this->input->post('txtUrl'));
+			
 			//prefixo
 			$data['prefixo'] = $this->input->post('txtPrefixo');
 			$prefix = $data['prefixo'];

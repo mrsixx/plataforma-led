@@ -59,7 +59,7 @@
                              } ?>Notificações</a>
                     </li>
                     <li>
-                       <a href="<?php echo base_url("perfil");?>"><span class="glyphicon glyphicon-user"></span> Perfil</a>
+                       <a href="<?php echo base_url("perfil/$token");?>"><span class="glyphicon glyphicon-user"></span> Perfil</a>
                     </li>
                 </ul>
                 <div class="col-sm-4 col-md-4">

@@ -11,7 +11,8 @@
             <div class="rank-label-container">
                 <span class="label label-default rank-label">
                     <?php 
-                        echo $nickname;
+                        // echo utf8_encode($nickname);
+                        echo utf8_encode("$nome");
                         echo " - Lvl. ".$lvl;
                     ?>
                 </span>
@@ -27,8 +28,11 @@
     <div id="sidebarled">
     <?php 
         //exibindo dinâmicamente os links da sidebar
-        foreach ($menulateral as $link => $valor): ?>
-                    <a class="list-group-item" href="<?php echo $valor['href'];?>">
+        foreach ($menulateral as $link => $valor): 
+                if(!isset($valor['disabled']))
+                    $valor['disabled'] = FALSE;
+            ?>
+                    <a class="list-group-item <?php echo $valor['disabled'] == TRUE ? 'disabled': ''; ?>" href="<?php echo $valor['href'];?>" <?php echo $valor['disabled'] == TRUE ? 'onClick="return false;"': ''; ?> >
                         <i class="glyphicon <?php echo $valor['icon'];?>" aria-hidden="true">&nbsp;</i>
                         <?php 
                             echo $valor['title']; 
