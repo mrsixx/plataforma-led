@@ -29,22 +29,21 @@ class Perfil extends CI_Controller {
 				$this->load->model('usuario');
 				$this->load->model('interface_led');
 				$this->load->model('avatar');
-				$this->load->model('task');
+				$this->load->model('missoes');
 				// $this->load->model('consultoria');
 				$user = $this->usuario->getUser(array('Token' => $codperfil));
 				if($user){
 					$this->load->helper('interface');
-					$data = preencheInterface($usuario);
+					$data = preencheInterface(array('cod'=>$user['CodUsuario'], 'tipo'=> $user['CodTipoUsuario']));
 
 					$nome = utf8_encode($user['Nome'])." ".utf8_encode($user['Sobrenome']);
 					$data['infoUser'] = $user;
 					//passando as informações do painel de inteligências
-					$data['inteligencia'] = $this->task->retornaInteligencia();
-					$qtdXp = $this->task->retornaLvl(array('CodUsuario' => $user['CodUsuario']));
+					$data['inteligencia'] = $this->missoes->retornaInteligencia();
 
-					$lvl = 2;
+					// $this->load->helper('xp');
 
-					$xp = (50/3)*($lvl*$lvl*$lvl)-(100*sqrt($lvl))+((850/3)*$lvl)-200;
+					$qtdXp =$this->missoes->retornaLvl(array('CodUsuario'=>$user['CodUsuario']));
 					
 					//puxando em qual inteligência o usuário é melhor
 					foreach ($qtdXp as $int) {
@@ -52,7 +51,7 @@ class Perfil extends CI_Controller {
 					}
 					$melhor = array('inteligencia' => 'default', 'xp' => 0);
 					foreach ($qtdXp as $int => $valor) {
-						if($int != "CodUsuario"){
+						if($int != "CodUsuario" && $int != "PontosXP"){
 							if($valor > $melhor['xp']){
 								$melhor['inteligencia'] = $int;
 								$melhor['xp'] = $valor;
@@ -60,7 +59,6 @@ class Perfil extends CI_Controller {
 						}
 					}
 					$data['card'] = $melhor;
-					//break;
 
 
 
@@ -106,7 +104,7 @@ class Perfil extends CI_Controller {
 			$this->load->helper('inicia');
 			if(verificaAmbiente()){
 				$this->load->model('usuario');
-				$nickname = $this->usuario->atualizaCadastro(array('Nickname'=>$this->input->post('txtNick')),array('CodUsuario' => $cod));
+				$nickname = $this->usuario->atualizaCadastro(array('Nickname'=>utf8_decode($this->input->post('txtNick'))),array('CodUsuario' => $cod));
 				$codavatar = $this->input->post('codavatar');
 				$avatar = array(
 						'CodCorpo' => ($this->input->post('codcorpo') != 0) ? $this->input->post('codcorpo') : null,

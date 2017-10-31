@@ -29,11 +29,57 @@ class Panel extends CI_Controller {
 				$data['sidebar'] = "home";
 				$this->load->view('panel/layout', $data);
 			}else{
-				redirect(base_url('configuracao-ambiente'));
+				if($tipo == 1)
+					redirect(base_url('configuracao-ambiente'));
+				else
+					redirect(base_url());
 			}
 		}else{
 			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
+		}
+	}
+
+	public function busca(){
+		$this->load->library('session');
+		if($this->session->has_userdata('login')){
+			$usuario = $this->session->login;
+			$cod = $usuario['cod'];
+			$tipo = $usuario['tipo'];
+
+			//verificando se a configuração de ambiente já foi feita
+			$this->load->helper('inicia');
+
+			if(verificaAmbiente()){
+				//recebo o array com as informações da interface
+				$this->load->helper('interface');
+				$data = preencheInterface($usuario,'principal');
+				
+
+				//recupero os valores e efetuo a busca
+				if(isset($_GET['q']) && $_GET['q'] != null){
+					$busca = $this->input->get('q');
+
+					$this->load->model('usuario');
+					$data['resultado'] = $this->usuario->getUser("`Nome` LIKE '$busca%' ESCAPE '!' OR  `Sobrenome` LIKE '$busca%' ESCAPE '!' OR  `Nickname` LIKE '$busca%' ESCAPE '!'",'obj');
+					$data['pageHeader'] = (!empty($data['resultado']))? "Resultados para "."<i>''$busca''</i>" : "Não há resultados para "."<i>''$busca''</i>";
+				}
+				else{
+					redirect(base_url('panel'));
+				}
+
+				//carregando a view enquanto passo as informações
+				$data['title'] = "Resultado da busca";
+				$data['content'] = "busca";
+				$data['sidebar'] = "home";
+				$data['files'] = array('img do perfil' => '<style>.img-comentario{border-radius: 100px;}</style>');
+
+
+				$this->load->view('panel/layout', $data);
+			}
+			else{
+				redirect(base_url('configuracao-ambiente'));
+			}
 		}
 	}
 

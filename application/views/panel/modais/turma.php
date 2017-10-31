@@ -25,9 +25,10 @@
                               <div class="form-group col-sm-12 col-md-12">
                               <small for="cmbProfessor" class="control-label pull-left">Professor</small>
                               <select name="cmbProfessor" id="cmbProfessor" class="form-control">
-                              <option selected value="">Selecione o ministrante desse componente</option>
+                              <option selected value="" disabled>Selecione o ministrante desse componente</option>
+                              <option value="1">Aguardando cadastro...</option>
                               <?php foreach($professor as $prof):?>
-                                <option value="<?php echo $prof->CodUsuario;?>"><?php echo $prof->Nome." ".$prof->Sobrenome;?></option>
+                                <option value="<?php echo $prof->CodUsuario;?>"><?php echo utf8_encode($prof->Nome." ".$prof->Sobrenome);?></option>
                               <?php endforeach;?>
                               </select>
                             </div>
@@ -69,11 +70,12 @@
                               <div class="form-group col-sm-12 col-md-12">
                               <small for="cmbProfessor" class="control-label pull-left">Professor</small>
                               <select name="cmbProfessor"  id="cmbProfessor" class="form-control">
-                              <option value="">Selecione o ministrante desse componente</option>
+                                <!-- <option value="">Selecione o ministrante desse componente</option> -->
+                              <option value="" disabled>Selecione o ministrante desse componente</option>
+                              <option value="1">Aguardando cadastro...</option>
                               <?php foreach($professor as $prof):?>
-                                <option value="<?php echo $prof->CodUsuario;?>"><?php echo $prof->Nome." ".$prof->Sobrenome;?></option>
+                                <option value="<?php echo $prof->CodUsuario;?>"><?php echo utf8_encode($prof->Nome." ".$prof->Sobrenome);?></option>
                               <?php endforeach;?>
-                              <option value="5">Selecione o ministrante desse componente</option>
                               </select>
                             </div>
                             <?php endif;?>

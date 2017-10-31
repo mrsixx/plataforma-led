@@ -62,10 +62,38 @@
         })
 
         $(document).ready(function () {
-
-        	$('.star').on('click', function () {
-              $(this).toggleClass('star-checked');
+            //botão para premiar aluno
+        	$('.star').on('click', function(){
+                var status = $(this).attr('data-status');
+                var cod = $(this).attr('data-cod');
+                var premio = $(this).attr('data-premio');
+                var codDesempenho = $(this).attr('data-desempenho');
+                if(status == 0){
+                    $('#confirmXp').modal('show');
+                    $('#CodUsuario').val(cod);
+                    $('#CodDesempenho').val(codDesempenho);
+                    $('#Premio').val(premio);
+                }
             });
+
+
+
+            $('#confirmXp').on('submit',function(e){
+                var id = '#premio'+ $('#CodUsuario').val();
+                e.preventDefault;
+                $.post( "/task/premiaAluno", $(this).serialize(), function(data) {
+                        $('#confirmXp').modal('hide');
+                        $(id).toggleClass('star-checked');
+                        // alert('Sucesso!');
+                });
+                return false;
+
+
+            });
+
+
+
+
 
             $('.ckbox label').on('click', function () {
               $(this).parents('tr').toggleClass('selected');

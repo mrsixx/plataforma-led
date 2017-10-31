@@ -76,10 +76,10 @@
                         <div class="row">
                             <div class="fb-profile">
                                 <div class="perfil_capa">
-                                    <img align="left" class="fb-image-lg filtro" src="<?php echo base_url($capa);?>" alt="Capa" />
+                                    <img align="left" class="fb-image-lg filtro" src="<?php echo base_url($capa);echo "?".time();?>" alt="Capa" />
                                 </div>
                                 <div class="filtro1">
-                                    <img align="left" class="fb-image-profile img-circle thumbnail" src="<?php echo base_url($foto);?>" alt="Foto de perfil" />
+                                    <img align="left" class="fb-image-profile img-circle thumbnail" src="<?php echo base_url($foto);echo "?".time();?>" alt="Foto de perfil" />
                                 </div>
                             </div>
 
@@ -93,6 +93,7 @@
                                 <?php 
                                     else:?>
                                     <div class="pull-right">
+                                        <a data-toggle="modal" data-target="" class="btn"><i class="glyphicon glyphicon-comment"></i> <strong>Enviar mensagem</strong></a>
                                         <a data-toggle="modal" data-target="#visualizaPerfil" class="btn"><i class="glyphicon glyphicon-edit"></i> <strong>Visualizar perfil</strong></a>
                                     </div>
                                 <?php endif;
@@ -117,26 +118,26 @@
                                                     <center><div style="min-height: 220px;">
                                                     <div class="avatar_card">
                                                     <div>
-                                                        <img src="<?= base_url('assets/avatar/'.$avatar['corpo'].".png");?>" id="corpo">
+                                                        <img src="<?= base_url('assets/img/avatar/'.$avatar['corpo'].".png");echo "?".time();?>" id="corpo">
                                                     </div>
                                                     <?php if(!empty($avatar['roupa'])): ?>
                                                     <div class="avatarCorpo_card">
-                                                        <img src="<?= base_url('assets/avatar/'.$avatar['roupa'].".png");?>" id="roupa">
+                                                        <img src="<?= base_url('assets/img/avatar/'.$avatar['roupa'].".png");echo "?".time();?>" id="roupa">
                                                     </div>
                                                     <?php endif; ?>
                                                     <?php if(!empty($avatar['item'])): ?>
                                                     <div class="avatarCorpo_card">
-                                                        <img src="<?= base_url('assets/avatar/'.$avatar['item'].".png");?>" id="item">
+                                                        <img src="<?= base_url('assets/img/avatar/'.$avatar['item'].".png");echo "?".time();?>" id="item">
                                                     </div> 
                                                     <?php endif; ?>
                                                     <?php if(!empty($avatar['rosto'])): ?>
                                                     <div class="avatarCorpo_card"> 
-                                                        <img src="<?= base_url('assets/avatar/'.$avatar['rosto'].".png");?>" id="rosto">
+                                                        <img src="<?= base_url('assets/img/avatar/'.$avatar['rosto'].".png");echo "?".time();?>" id="rosto">
                                                     </div>
                                                     <?php endif; ?>
                                                     <?php if(!empty($avatar['cabelo'])): ?>
                                                     <div class="avatarCorpo_card">
-                                                        <img src="<?= base_url('assets/avatar/'.$avatar['cabelo'].".png");?>" id="cabelo">
+                                                        <img src="<?= base_url('assets/img/avatar/'.$avatar['cabelo'].".png");echo "?".time();?>" id="cabelo">
                                                     </div>
                                                     <?php endif; ?>
                                                     </div></center>
@@ -151,13 +152,13 @@
                                                     </p>
                                                 </div>
                                                 <div class="panel-heading">
-
-                                                    <div style="text-align:center;">Lvl ? - 50%</div>
+                                                    <?php if($tipo == 3 || $tipo == 4):?>
+                                                    <div style="text-align:center;"><?php echo "Lvl. $lvl - $porcentagem%";?></div>
                                                     <div class="progress">
-                                                        <div class="progress-bar <?php echo $progress;?> progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                                                        <div class="progress-bar <?php echo $progress;?> progress-bar-striped active" role="progressbar"  aria-valuenow="<?php echo $xp;?>" aria-valuemin="<?php echo $min; ?>" aria-valuemax="<?php echo $max; ?>" style="width:<?php echo $porcentagem;?>%;">
                                                         </div>
                                                     </div>
-                                                            
+                                                    <?php endif;?>  
                                                     <br/>
                                                         <?php if($infoUser['CodUsuario'] == $codUsuario):?>
                                                     <div class="dropdown">
@@ -234,13 +235,18 @@
                                                                     <p>
                                                                         A teoria das múltiplas inteligências foi idealizada pelo psicólogo Howard Gardner, em oposição a ideia de que a inteligência é uma capacidade inata, única e geral.  Gardner estabeleceu que a dita inteligência acadêmica (adquirida através de qualificações e méritos educacionais) não deve ser fator decisivo para determinar a inteligência de uma pessoa.
                                                                     </p><br/>
-                                                                    <center><h4>Experiência atual</h4></center><br/>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar progress-bar progress-bar-striped" style="width: 10%">
-                                                                            <span class="sr-only">porcentagem% XP (nomeInteligencia)</span>
-                                                                        </div>
 
+                                                                    <?php if($tipo == 3 || $tipo == 4):?>
+                                                                    <center><h4><?php echo "Lvl. $lvl - $porcentagem%";?></h4></center>
+                                                                    <div class="input-group">
+                                                                    <span class="input-group-addon"><?php echo "$min pts"; ?></span>
+                                                                    <div class="form-control progress" style="height: 30px; background-color:transparent;">
+                                                                        <div class="progress-bar <?php echo $progress;?> progress-bar-striped active" role="progressbar"  aria-valuenow="<?php echo $xp;?>" aria-valuemin="<?php echo $min; ?>" aria-valuemax="<?php echo $max; ?>" style="width:<?php echo $porcentagem;?>%;">
+                                                                        </div>
                                                                     </div>
+                                                                    <span class="input-group-addon"><?php echo "$max pts"; ?></span>
+                                                                    </div>
+                                                                    <?php endif;?>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -254,13 +260,16 @@
                                                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                                                             <h1><?php echo "Inteligência ".utf8_encode($int->Nome);?></h1>
                                                                             <p><?php echo utf8_encode($int->Descricao);?></p><br/>
-                                                                            <center><h4>Experiência atual</h4></center><br/>
+
+                                                                            <?php if($tipo == 3 || $tipo == 4):?>
+                                                                            <center><h4>Pontuação</h4></center><br/>
                                                                             <p>Esta inteligência atualmente corresponde a <?php echo $qtd = "50%";?> da sua experiência total</p>
                                                                             <div class="progress">
                                                                                 <div class="progress-bar progress-bar-striped" style="width: <?php echo $qtd; ?>">
                                                                                     <span class="sr-only"><?php echo $qtd; ?></span>
                                                                                 </div>
                                                                             </div>
+                                                                            <?php endif;?>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -275,11 +284,7 @@
                             </div>
                             <div class="bs-callout bs-callout-primary">
                                 <h4>Conquistas</h4><br/>
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                    <i class="fa fa-smile-o fa-2x"></i>
+                                <div class="well"><center>Nenhuma conquista foi desbloqueada :/</center></div>
                             </div>
                         </div>
                         <div class="row">

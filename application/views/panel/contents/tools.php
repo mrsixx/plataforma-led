@@ -79,16 +79,19 @@
                         <h3><?php echo utf8_encode($link->Nome); ?></h3>
                          <p id="desc" class="collapse"><small><?php echo utf8_encode($link->Descricao); ?></small></p>
                          <a type="button" style="cursor: pointer;" data-toggle="collapse" data-target="#desc">Mostrar/Esconder Descrição</a>
-                         <div class="btn-group pull-right">
-                                         <a type="button" href="<?php echo base_url("/ferramentas/editar/").$link->CodLink; ?>" class="btn btn-default btn-xs">
-                                            <span class="glyphicon glyphicon-pencil">
-                                            </span>
-                                        </a>
-                                        <a type="button" href="<?php echo base_url("/ferramenta/exclink/").$link->CodLink; ?>" class="btn btn-danger btn-xs excluir">
-                                            <span class="glyphicon glyphicon-trash">
-                                            </span>
-                                        </a>
-                                    </div>
+                         <?php
+                            if($tipo == 1):?>
+                            <div class="btn-group pull-right">
+                                 <a type="button" href="<?php echo base_url("/ferramentas/editar/").$link->CodLink; ?>" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-pencil">
+                                    </span>
+                                </a>
+                                <a type="button" href="<?php echo base_url("/ferramenta/exclink/").$link->CodLink; ?>" class="btn btn-danger btn-xs excluir">
+                                    <span class="glyphicon glyphicon-trash">
+                                    </span>
+                                </a>
+                            </div>
+                        <?php endif;?>
                     </div>
                     <div class="page-body">
                         <div class="embed-responsive page-toda embed-responsive-4by3">

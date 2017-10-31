@@ -7,19 +7,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-md-8 col-md-offset-2">
                         <span>Preencha os campos abaixo com as informações da sua escola.<br/> Campos sinalizados com <span class="required">*</span> são obrigatórios.</span>
                         <!--FORMULARIO-->
-                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="<?php echo base_url('configuracao/cadastro-escola'); ?>">
+                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="/configuracao/cadastro-escola">
                             <br/>
                             <div class="form-group">
                                 <label for="txtEscola" class="control-label pull-left">Nome da escola <span class="required">*</span></label>
                                 <input id="txtEscola" name="txtEscola" class="form-control" type="text" placeholder="Insira o nome da unidade de ensino" required>
                             </div>
                             <div class="form-group">
-                                <label for="dtFundacao" class="control-label pull-left">Data de fundação</label>
+                                <label for="dtFundacao" class="control-label pull-left">Data de fundação <span class="required">*</span></label>
                                 <input id="dtFundacao" name="dtFundacao" class="form-control" type="date"  placeholder="Insira a data em que a instituição foi fundada" max="<?php echo date('Y-m-d');?>" required oninvalid="this.setCustomValidity('Viagens no tempo ainda não são possíveis :D')" oninput="setCustomValidity('')">
                             </div>
 
                             <div class="form-group">
-                                <label for="txtWebsite" class="control-label pull-left">Website <span class="required">*</span></label>
+                                <label for="txtWebsite" class="control-label pull-left">Website</label>
                                 <input id="txtWebsite" name="txtWebsite" class="form-control" type="text" placeholder="Insira o website da instituição de ensino">
                             </div>
 							

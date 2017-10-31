@@ -77,6 +77,7 @@ $(document).ready(function () {
             success: function(json){
                 $('#compUpd #txtNome').val(json.Nome);
                 $('#compUpd #txtSigla').val(json.Sigla);
+                $("#compUpd #cmbProfessor option[value='"+json.CodProfessor+"']").attr('selected','selected');
             //     $('#turmasUpd #dtFinal').val(json.FimLetivo);
             //     $('#turmasUpd #nbQtd').val(json.QtdAlunos);
             //     $("#turmasUpd #cmbPeriodo option[value='"+json.Periodo+"']").attr('selected','selected');

@@ -1,20 +1,21 @@
- <div class="modal fade" id="exampleModal7" role="dialog">
+ <div class="modal fade" id="descricao" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
                                 </button>
-                                <h4 class="modal-title" id="exampleModalLabel">Descrição da Missão</h4>
+                                <h4 class="modal-title" id="exampleModalLabel">Descrição</h4>
                             </div>
                             <div class="modal-body">
-                                <p> O que é Lorem Ipsum? Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos. Lorem Ipsum sobreviveu não só a cinco séculos, como também ao salto para a editoração eletrônica, permanecendo essencialmente inalterado. Se popularizou na década de 60, quando a Letraset lançou decalques contendo passagens de Lorem Ipsum, e mais recentemente quando passou a ser integrado a softwares de editoração eletrônica como Aldus PageMaker.
-                                </p>
+                                <p><?php echo utf8_encode($missoes['Descricao']);?></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="exampleModal9" role="dialog">
+
+
+                <!-- <div class="modal fade" id="download" name="download" role="dialog">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -42,35 +43,56 @@
 
                                         <div class="col-xs-12 col-md-6 col-sm-8">
                                             <h3>Completar Missão</h3>
-                                            <!-- image-preview-filename input [CUT FROM HERE]-->
                                             <div class="input-group image-preview">
                                                 <input type="text" placeholder="Escolher arquivo" class="form-control image-preview-filename" disabled="disabled">
-                                                <!-- don't give a name === doesn't send on POST/GET -->
                                                 <span class="input-group-btn">
-                                                            <!-- image-preview-clear button -->
                                                             <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
                                                                 <span class="glyphicon glyphicon-remove"></span> Limpar
                                                 </button>
                                                 <button type="button" class="btn btn-success image-preview-clear" style="display:none;">
                                                                 <span class="glyphicon glyphicon-ok"></span> Enviar
                                                             </button>
-                                                <!-- image-preview-input -->
                                                 <div class="btn btn-default image-preview-input">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                                     <span class="image-preview-input-title">Buscar</span>
                                                     <input type="file" accept="image/png, image/jpeg, image/gif" name="input-file-preview" />
-                                                    <!-- rename it -->
                                                 </div>
                                                 </span>
                                             </div>
-                                            <!-- /input-group image-preview [TO HERE]-->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
+                <form class="modal fade" id="confirmXp" name="confirmXp" role="dialog" method="post">
+                    <div class="modal-dialog modal-xs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+                                </button>
+                                <h4 class="modal-title" id="exampleModalLabel">Confirmação</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Este aluno receberá <?php echo $missoes['Premio']." pontos de experiência."; ?></p>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="CodUsuario" id="CodUsuario">
+                                <input type="hidden" name="CodDesempenho" id="CodDesempenho">
+                                <input type="hidden" name="Premio" id="Premio">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <input type="submit" class="btn btn-success" class="premiaXP" value="Ok, continuar" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
                 <div class="modal fade" id="exampleModal10" role="dialog">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">

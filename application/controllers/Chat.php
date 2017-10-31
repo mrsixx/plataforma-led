@@ -18,7 +18,7 @@ class Chat extends CI_Controller {
 			//verificando se a configuração de ambiente já foi feita
 			$this->load->helper('inicia');
 
-			if(verificaAmbiente()){
+			if(verificaAmbiente($tipo)){
 				//recebo o array com as informações da interface
 				$this->load->helper('interface');
 				$data = preencheInterface($usuario,'chat');
@@ -62,7 +62,7 @@ class Chat extends CI_Controller {
 				);
 
 				$this->table->set_template($template);
-                $image_array = get_clickable_smileys(base_url('assets/smileys/'), 'status_message');
+                $image_array = get_clickable_smileys(base_url('assets/img/smileys/'), 'status_message');
                 $col_array = $this->table->make_columns($image_array, 4);
 
                 $data['smiley_table'] = $this->table->generate($col_array);

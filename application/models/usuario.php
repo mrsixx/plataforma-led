@@ -37,7 +37,7 @@ class Usuario extends CI_Model
 						'UltimoLogin' => null, 
 						'CodTipoUsuario' => $data['CodTipoUsuario'], 
 						'CodAvatar' => $data['CodAvatar'], 
-						'CodHierarquia' => $data['CodHierarquia'], 
+						'CodHierarquia' => $data['CodHierarquia'] 
 					);
 					if($this->db->insert($this->tabela,$cad)){
 						$where = array('CodUsuario' => $this->db->insert_id(), 'CodMural' => 1, 'DataEntrada' => date('Y-m-d'));
@@ -85,6 +85,46 @@ class Usuario extends CI_Model
 				}
 				break;
 
+			case 4:
+				if($this->db->insert($this->tabela, $data)){
+					$codUsuario = $this->db->insert_id();
+					$data = array(
+						array('CodUsuario' => $codUsuario, 'CodMural' => 1, 'DataEntrada' => date('Y-m-d')),
+						array('CodUsuario' => $codUsuario, 'CodMural' => 2, 'DataEntrada' => date('Y-m-d'))
+					);
+						$retorno = false;
+						foreach ($data as $mural) {
+							if($this->db->insert('usuario-mural',$mural)){
+								$retorno = true;
+							}
+							else{
+								$retorno = false;
+							}
+						}
+						return $retorno;
+				}
+				break;
+			//cadastro alternativo para administradores
+			case 5:
+				if($this->db->insert($this->tabela, $data)){
+					$codUsuario = $this->db->insert_id();
+					$data = array(
+						array('CodUsuario' => $codUsuario, 'CodMural' => 1, 'DataEntrada' => date('Y-m-d')),
+						array('CodUsuario' => $codUsuario, 'CodMural' => 2, 'DataEntrada' => date('Y-m-d'))
+					);
+						$retorno = false;
+						foreach ($data as $mural) {
+							if($this->db->insert('usuario-mural',$mural)){
+								$retorno = true;
+							}
+							else{
+								$retorno = false;
+							}
+						}
+						return $retorno;
+				}
+				break;
+				
 		}
 	
 		
@@ -100,13 +140,23 @@ class Usuario extends CI_Model
 				return false;
 	}
 
-	function getUser($array = null,$retorno = null){
-		if(isset($array)){	
-			$query = $this->db->get_where($this->tabela, $array);
+	function getUser($query = null,$retorno = null){
+		if(isset($query)){
+			if(is_array($query)){
+				$query = $this->db->get_where($this->tabela, $query);
+			}
+			else{
+				$this->db->where($query);
+				$this->db->order_by('Nome','ASC');
+				$query = $this->db->get('usuario');
+			}
 		}else{
 			$query = $this->db->get($this->tabela);
 		}
 		switch ($retorno) {
+			case 'count':
+				$usuario = $query->num_rows();
+				break;
 			case 'obj':
 				$usuario = $query->result();
 				break;

@@ -1,10 +1,18 @@
 <!--aqui vai o conteúdo da sidebar que abre e fecha-->
                     <div class="list-group">
                         <!--aqui vai o trecho header da sidebar que abre e fecha-->
-                        <span class="list-group-item active">
-                        <span class="pull-right" id="slide-submenu">
+                        <span href="#" class="list-group-item active">
+                            <span class="pull-right" id="slide-submenu">
                                 <i  class="glyphicon glyphicon-remove-circle"></i>
                             </span>
+                        
+                            <a class="list-group-item pull-left" href="javascript:window.history.go(-1)">
+                                <i class="glyphicon glyphicon-chevron-left"></i> Página anterior
+                            </a><br/><br/>
+                        
+                        <hr/>
+
+                        </span>
                         <!--aqui vão as opções de conversa-->
                         <div class="caixaA-1">
                             <center>
@@ -13,7 +21,6 @@
                             </center>
                         </div>
                         <!--aqui acabam as opções de conversa-->
-                        </span>
                         <!--aqui acaba o trecho-->
                         <div class="tab-content">
                             <div class="tab-pane active" id="conversas">

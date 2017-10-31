@@ -61,22 +61,28 @@ class Escola extends CI_Model
 			$query = $this->db->get("hierarquia");
 		return $query->result();
 	}
-
+	
 	function getCompCurricular($data = null){
 		if(isset($data)){
-			$this->db->select('*');
-			$this->db->from('componente-turma a');
-			$this->db->join('compcurricular b', 'a.CodComponente = b.CodComponente');
+			$this->db->select('us.Nome NomeUsuario,us.Sobrenome,us.DataNascimento,us.Token,us.Nickname,us.Foto,us.Cidade,us.Sexo, compprof.*,comp.Nome, comp.Sigla, compt.*, t.*');
+			$this->db->from('compcurricular comp');
+			$this->db->join('componente-turma compt', 'comp.CodComponente = compt.CodComponente');
+			$this->db->join('turma t', 'compt.CodTurma = t.CodTurma');
+			$this->db->join('componente-professor compprof','compprof.CodComponente = comp.CodComponente');
+			$this->db->join('usuario us','us.CodUsuario = compprof.CodProfessor','left');
+			$this->db->order_by('comp.Nome, t.Modulo','ASC');
 			$this->db->where($data);
-			$this->db->order_by('Nome','ASC');
 			$query = $this->db->get();
 			// $query = $this->db->get_where("compcurricular", $data);
 		}
 		else{
-			$this->db->select('*');
-			$this->db->from('componente-turma a');
-			$this->db->join('compcurricular b', 'a.CodComponente = b.CodComponente');
-			$this->db->order_by('Nome','ASC');
+			$this->db->select('us.Nome NomeUsuario,us.Sobrenome,us.DataNascimento,us.Token,us.Nickname,us.Foto,us.Cidade,us.Sexo, compprof.*,comp.Nome, comp.Sigla, compt.*, t.*');
+			$this->db->from('compcurricular comp');
+			$this->db->join('componente-turma compt', 'comp.CodComponente = compt.CodComponente');
+			$this->db->join('turma t', 'compt.CodTurma = t.CodTurma');
+			$this->db->join('componente-professor compprof','compprof.CodComponente = comp.CodComponente');
+			$this->db->join('usuario us','us.CodUsuario = compprof.CodProfessor','left');
+			$this->db->order_by('comp.Nome, t.Modulo','ASC');
 			$query = $this->db->get();
 
 		}
@@ -106,7 +112,29 @@ class Escola extends CI_Model
 	}
 
 
+	function getAlunoTurma($where,$return = null){
+		$this->db->select('*');
+		$this->db->from('usuario u');
+		$this->db->join('aluno-turma at', 'at.CodUsuario = u.CodUsuario');
+		$this->db->where($where);
+		$this->db->order_by('Nome','ASC');
+		$query = $this->db->get();
 
+		if(isset($return) && $return = 'array'){
+			return $query->row_array();
+		}
+		return $query->result();
+	}
+
+	function getFuncionario($where){
+		$this->db->select('hierarquia.Nome` AS `Hierarquia, hierarquia.CodHierarquia, usuario.*');
+		$this->db->from('hierarquia');
+		$this->db->join('usuario', 'hierarquia.CodHierarquia = usuario.CodHierarquia');
+		$this->db->where($where);
+		$this->db->order_by('usuario.Nome','ASC');
+		$query = $this->db->get();
+		return $query->result();
+	}
 
 
 //funções com delete
@@ -192,7 +220,6 @@ class Escola extends CI_Model
 		}catch(PDOException $e){
 			return $e;
 		}
-
 	}	
 
 	//função para cadastrar turmas no banco
@@ -415,14 +442,29 @@ class Escola extends CI_Model
 
 
 	//função para alterar dados de um componente curricular
-	function updateComponente($data){
+	function updateComponente($data,$where,$tabela = 'compcurricular'){
 		try{
-			$this->db->set($data);
-			$this->db->where(array('CodComponente' => $data['CodComponente']));
-			if($this->db->update("compcurricular")){
-				return true;
-			}else{
-				return false;
+			if($tabela == 'compcurricular'){
+				$this->db->set($data);
+				$this->db->where(array('CodComponente' => $data['CodComponente']));
+				$comp = $this->db->update("compcurricular");
+
+				$this->db->set(array('CodProfessor'=>$where));
+				$this->db->where(array('CodComponente' => $data['CodComponente']));
+				$compprof = $this->db->update('componente-professor');
+
+				if($comp && $compprof){
+					return true;
+				}else{
+					return false;
+				}
+			}
+			else if($tabela = 'compprof'){
+				$this->db->set($data);
+				$this->db->where($where);
+				$comp = $this->db->update("componente-professor");
+				return $comp;
+
 			}
 		}
 		catch(PDOException $e){
@@ -451,10 +493,12 @@ class Escola extends CI_Model
 	//função para cadastrar cursos no banco
 	function cadComponente($data, $turma){
 		try{
-			if($this->db->insert("compcurricular", $data)){
+			$componente = array('Nome' => $data['Nome'],'Sigla'=> $data['Sigla']);
+			if($this->db->insert("compcurricular", $componente)){
 				$comp = $this->db->insert_id();
-				$data = array('CodTurma' => $turma, 'CodComponente' => $comp);
-				if($this->db->insert("componente-turma", $data))
+				$compturma = array('CodTurma' => $turma, 'CodComponente' => $comp);
+				$compprof = array('CodProfessor' => $data['CodProfessor'], 'CodComponente' => $comp);
+				if($this->db->insert("componente-turma", $compturma) && $this->db->insert('componente-professor',$compprof))
 					return true;
 			}else{
 				return false;
@@ -465,6 +509,8 @@ class Escola extends CI_Model
 		}
 
 	}
+
+	// function cadCompProf()
 
 
 	function updateGrupo($set,$cod){

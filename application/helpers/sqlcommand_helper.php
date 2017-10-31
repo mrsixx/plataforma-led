@@ -40,13 +40,13 @@ if(!function_exists('cria')){
 								`Descricao` text NOT NULL,
 								`Link` text NOT NULL
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'campo` (
-						`CodCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-						`Questao` longtext NOT NULL,
-						`RespostaCerta` longtext,
-						`Peso` decimal(10,0) NOT NULL DEFAULT 1,
-						`CodTipoCampo` int(11) NOT NULL
-						 )ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'campo` (
+			// 			`CodCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 			`Questao` longtext NOT NULL,
+			// 			`RespostaCerta` longtext,
+			// 			`Peso` decimal(10,0) NOT NULL DEFAULT 1,
+			// 			`CodTipoCampo` int(11) NOT NULL
+			// 			 )ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'comentario' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'comentario` (
 							`CodComentario` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 							`Comentario` text NOT NULL,
@@ -58,8 +58,7 @@ if(!function_exists('cria')){
 								`CodComponente` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 								`Nome` varchar(100) NOT NULL,
 								`Sigla` varchar(10) NOT NULL,
-								`CriteriosAvaliacao` text,
-								`CodProfessor` bigint(20)
+								`CriteriosAvaliacao` text
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'componente-turma' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-turma` (
 									`CodCompTurma` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -68,7 +67,6 @@ if(!function_exists('cria')){
 									) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'componente-professor' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'componente-professor` (
 									`CodCompProfessor` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-								    `CodUsuario` bigint(20) NOT NULL,
 								    `CodComponente` bigint(20) NOT NULL,
 								    `CriteriosAvaliacao` text,
 								    `CodProfessor` bigint(20)
@@ -117,8 +115,16 @@ if(!function_exists('cria')){
 			'desempenha-task' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'desempenha-task` (
 									`CodDesempenho` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 									`DataInicio` datetime NOT NULL,
+									`CaminhoArquivo` text NOT NULL,
+									`Status` tinyint(1) DEFAULT "0",
 									`CodTask` bigint(20) NOT NULL,
 									`CodUsuario` bigint(20) NOT NULL
+									) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			'dica' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'dica` (
+									`CodDica` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+								    `Dica` text NOT NULL,
+								    `Painel` text NOT NULL,
+								    `TipoUsuario` tinyint(1)
 									) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'duvida' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'duvida` (
 						`CodDuvida` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -128,12 +134,12 @@ if(!function_exists('cria')){
 						`CodCompCurricular` bigint(20) NOT NULL,
 						`CodCriador` bigint(20) NOT NULL
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'equipe' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'equipe` (
-						`CodEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-						`Nome` varchar(200) DEFAULT NULL,
-						`CaminhoArquivo` text,
-						`CodTask` bigint(20) NOT NULL
-						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'equipe' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'equipe` (
+			// 			`CodEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 			`Nome` varchar(200) DEFAULT NULL,
+			// 			`CaminhoArquivo` text,
+			// 			`CodTask` bigint(20) NOT NULL
+			// 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'escola' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'escola` (
 						`CodEscola` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						`Nome` varchar(50) NOT NULL,
@@ -157,6 +163,7 @@ if(!function_exists('cria')){
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'experiencia' => "CREATE TABLE IF NOT EXISTS `".$prefix."experiencia` (
 								`CodUsuario` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+								`PontosXP` bigint(20) NOT NULL DEFAULT '0',
 								`QtdCinestesica` bigint(20) NOT NULL DEFAULT '0',
 								`QtdEspacial` bigint(20) NOT NULL DEFAULT '0',
 								`QtdExistencial` bigint(20) NOT NULL DEFAULT '0',
@@ -168,15 +175,15 @@ if(!function_exists('cria')){
 								`QtdNaturalista` bigint(20) NOT NULL DEFAULT '0',
 								`QtdPratica` bigint(20) NOT NULL DEFAULT '0'
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-			'form-campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'form-campo` (
-							`CodFormCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`CodForm` bigint(20) NOT NULL,
-							`CodCampo` bigint(20) NOT NULL
-							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'formulario' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'formulario` (
-							`CodForm` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`Duracao` int(11) DEFAULT NULL
-							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'form-campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'form-campo` (
+			// 				`CodFormCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 				`CodForm` bigint(20) NOT NULL,
+			// 				`CodCampo` bigint(20) NOT NULL
+			// 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'formulario' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'formulario` (
+			// 				`CodForm` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 				`Duracao` int(11) DEFAULT NULL
+			// 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'grupo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'grupo` (
 						`CodGrupo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						`Nome` varchar(150) NOT NULL,
@@ -202,8 +209,12 @@ if(!function_exists('cria')){
 			'inteligencia' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'inteligencia` (
 								`CodInteligencia` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 								`Nome` varchar(20) NOT NULL,
-								`Descricao` text NOT NULL
+								`Descricao` text NOT NULL,
+								`Icon` varchar(200) NOT NULL,
+								`Classe` varchar(200) NOT NULL,
+								`ProgressBar` varchar(200) NOT NULL
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+
 			'itemavatar' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'itemavatar` (
 							`CodItem` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 							`Descricao` text NOT NULL,
@@ -257,13 +268,13 @@ if(!function_exists('cria')){
 							`CodMural` bigint(20) NOT NULL,
 							`CodUsuario` bigint(20)
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
-			'resposta-campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'resposta-campo` (
-								`CodResposta` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-								`Resposta` longtext NOT NULL,
-								`CodCampo` bigint(20) NOT NULL,
-								`CodUsuario` bigint(20) DEFAULT NULL,
-								`CodGrupo` bigint(20) DEFAULT NULL
-								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'resposta-campo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'resposta-campo` (
+			// 					`CodResposta` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 					`Resposta` longtext NOT NULL,
+			// 					`CodCampo` bigint(20) NOT NULL,
+			// 					`CodUsuario` bigint(20) DEFAULT NULL,
+			// 					`CodGrupo` bigint(20) DEFAULT NULL
+			// 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'rostoavatar' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'rostoavatar` (
 							`CodRosto` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 							`Descricao` text NOT NULL,
@@ -276,19 +287,20 @@ if(!function_exists('cria')){
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'task' => "CREATE TABLE IF NOT EXISTS `".$prefix."task` (
 						`CodTask` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    					`Nome` varchar(50) NOT NULL,
 						`Descricao` text NOT NULL,
-						`QtdExperiencia` bigint(20) NOT NULL,
+						`CaminhoArquivo` text,
 						`Prazo` datetime NOT NULL,
-						`Realizada` enum('Individual','Grupo') NOT NULL,
+						`Data` datetime NOT NULL,
 						`CodCriador` bigint(20),
-						`CodForm`bigint(20),
 						`CodTipoTask` bigint(20) NOT NULL
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-			'tipocampo' => "CREATE TABLE IF NOT EXISTS `".$prefix."tipocampo` (
-							`CodTipoCampo` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-							`Nome` varchar(200) NOT NULL,
-							`TipoCampo` enum('inputText','optionGroup','textArea','cxSelecao') NOT NULL
-							) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+
+			// 'tipocampo' => "CREATE TABLE IF NOT EXISTS `".$prefix."tipocampo` (
+			// 				`CodTipoCampo` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 				`Nome` varchar(200) NOT NULL,
+			// 				`TipoCampo` enum('inputText','optionGroup','textArea','cxSelecao') NOT NULL
+			// 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
 			'tipoevento' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'tipoevento` (
 							`CodTipoEvento` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 							`Nome` varchar(10) NOT NULL,
@@ -310,6 +322,7 @@ if(!function_exists('cria')){
 								`Nome` varchar(50) NOT NULL,
 								`Descricao` text NOT NULL
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+
 			'turma' => "CREATE TABLE IF NOT EXISTS `".$prefix."turma` (
 						`CodTurma` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						`Modulo` int(11) NOT NULL,
@@ -319,7 +332,15 @@ if(!function_exists('cria')){
 						`Periodo` enum('Integral','Matutino','Vespertino','Noturno') NOT NULL,
 						`QtdAlunos` int(11) NOT NULL,
 						`CodCurso` bigint(20) NOT NULL
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+
+			'turma-task' => "CREATE TABLE IF NOT EXISTS `".$prefix."turma-task` (
+						`CodTurmaTask` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+						`CodTurma` bigint(20) NOT NULL,
+						`CodTask` bigint(20) NOT NULL,
+						`CodComponente` bigint(20) NOT NULL
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;", 
+
 			'usuario' => "CREATE TABLE IF NOT EXISTS `".$prefix."usuario` (
 							`CodUsuario` bigint(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						    `Email` varchar(100) NOT NULL DEFAULT 'led',
@@ -330,7 +351,7 @@ if(!function_exists('cria')){
 						    `DataNascimento` date NOT NULL DEFAULT '0000-00-00',
 						    `DataCadastro` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 						    `Foto` text, 
-						    `Sexo` enum('F','M','L') NOT NULL DEFAULT 'L',
+						    `Sexo` enum('F','M','?') NOT NULL DEFAULT '?',
 						    `Cidade` varchar(50),
 						    `Status` tinyint(1) NOT NULL DEFAULT '0',
 						    `HorarioLimite` datetime, 
@@ -342,11 +363,11 @@ if(!function_exists('cria')){
 						    `CodAvatar` bigint(20),
 						    `CodHierarquia` int(11)
 							) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
-			'usuarioequipe' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'usuario-equipe` (
-								`CodUsuarioEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-								`CodUsuario` bigint(20) NOT NULL,
-								`CodEquipe` bigint(20) NOT NULL
-								) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
+			// 'usuarioequipe' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'usuario-equipe` (
+			// 					`CodUsuarioEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+			// 					`CodUsuario` bigint(20) NOT NULL,
+			// 					`CodEquipe` bigint(20) NOT NULL
+			// 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;',
 			'usuariogrupo' => 'CREATE TABLE IF NOT EXISTS `'.$prefix.'usuario-grupo` (
 								`CodUsuarioGrupo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 								`DataEntrada` date NOT NULL,
@@ -386,16 +407,16 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-rostoavatar` FOREIGN KEY (`CodRosto`) REFERENCES `'.$prefix.'rostoavatar` (`CodRosto`) ON DELETE SET NULL ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-roupaavatar` FOREIGN KEY (`CodRoupa`) REFERENCES `'.$prefix.'roupaavatar` (`CodRoupa`) ON DELETE SET NULL ON UPDATE CASCADE;',
 
-			'campo' => 'ALTER TABLE `'.$prefix.'campo`
-  								ADD CONSTRAINT `fk-tipocampo` FOREIGN KEY (`CodTipoCampo`) REFERENCES `'.$prefix.'tipocampo` (`CodTipoCampo`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			// 'campo' => 'ALTER TABLE `'.$prefix.'campo`
+  	// 							ADD CONSTRAINT `fk-tipocampo` FOREIGN KEY (`CodTipoCampo`) REFERENCES `'.$prefix.'tipocampo` (`CodTipoCampo`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
 			'comentario' => 'ALTER TABLE `'.$prefix.'comentario`
 								  ADD CONSTRAINT `fk-postagem` FOREIGN KEY (`CodPostagem`) REFERENCES `'.$prefix.'postagem` (`CodPost`) ON DELETE CASCADE ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-usuariocomentario` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
 			'componente-professor' => 'ALTER TABLE `'.$prefix.'componente-professor`
-     							ADD CONSTRAINT `fk-comp` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON DELETE CASCADE ON UPDATE CASCADE,
-  								ADD CONSTRAINT `fk-professor` FOREIGN KEY (`CodProfessor`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE',
+     							ADD CONSTRAINT `fk-compcurricular` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  								ADD CONSTRAINT `fk-professor` FOREIGN KEY (`CodProfessor`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
 			'competencia' => 'ALTER TABLE `'.$prefix.'competencia`
 								  ADD CONSTRAINT `fk-inteligencia` FOREIGN KEY (`CodInteligencia`) REFERENCES `'.$prefix.'inteligencia` (`CodInteligencia`),
@@ -421,8 +442,8 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-compcurricular-duvida` FOREIGN KEY (`CodCompCurricular`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON DELETE CASCADE ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-criadorduvida` FOREIGN KEY (`CodCriador`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
 											
-			'equipe' => 'ALTER TABLE `'.$prefix.'equipe`
-  								ADD CONSTRAINT `fk-equipetask` FOREIGN KEY (`CodTask`) REFERENCES `'.$prefix.'task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			// 'equipe' => 'ALTER TABLE `'.$prefix.'equipe`
+  	// 							ADD CONSTRAINT `fk-equipetask` FOREIGN KEY (`CodTask`) REFERENCES `'.$prefix.'task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'evento' => 'ALTER TABLE `'.$prefix.'evento`
 							ADD CONSTRAINT `fk-criadorevento` FOREIGN KEY (`CriadoPor`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -431,9 +452,9 @@ if(!function_exists('relaciona')){
 			'experiencia' => 'ALTER TABLE `'.$prefix.'experiencia`
   								ADD CONSTRAINT `fk-xp` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
-			'form-campo' => 'ALTER TABLE `'.$prefix.'form-campo`
-								  ADD CONSTRAINT `fk-campoform` FOREIGN KEY (`CodCampo`) REFERENCES `'.$prefix.'campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-formcampo` FOREIGN KEY (`CodForm`) REFERENCES `'.$prefix.'formulario` (`CodForm`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			// 'form-campo' => 'ALTER TABLE `'.$prefix.'form-campo`
+			// 					  ADD CONSTRAINT `fk-campoform` FOREIGN KEY (`CodCampo`) REFERENCES `'.$prefix.'campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE,
+			// 					  ADD CONSTRAINT `fk-formcampo` FOREIGN KEY (`CodForm`) REFERENCES `'.$prefix.'formulario` (`CodForm`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'grupo' => 'ALTER TABLE `'.$prefix.'grupo`
   								ADD CONSTRAINT `fk-criadorgrupo` FOREIGN KEY (`CodCriador`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -462,14 +483,13 @@ if(!function_exists('relaciona')){
 								  ADD CONSTRAINT `fk-criadorpost` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-mural` FOREIGN KEY (`CodMural`) REFERENCES `'.$prefix.'mural` (`CodMural`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
-			'resposta-campo' => 'ALTER TABLE `'.$prefix.'resposta-campo`
-								  ADD CONSTRAINT `fk-responderamcampo` FOREIGN KEY (`CodGrupo`) REFERENCES `'.$prefix.'equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-respondeucampo` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-respostacampo` FOREIGN KEY (`CodCampo`) REFERENCES `'.$prefix.'campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			// 'resposta-campo' => 'ALTER TABLE `'.$prefix.'resposta-campo`
+			// 					  ADD CONSTRAINT `fk-responderamcampo` FOREIGN KEY (`CodGrupo`) REFERENCES `'.$prefix.'equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
+			// 					  ADD CONSTRAINT `fk-respondeucampo` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
+			// 					  ADD CONSTRAINT `fk-respostacampo` FOREIGN KEY (`CodCampo`) REFERENCES `'.$prefix.'campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'task' => 'ALTER TABLE `'.$prefix.'task`
 								  ADD CONSTRAINT `fk-criadortask` FOREIGN KEY (`CodCriador`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-formulario` FOREIGN KEY (`CodForm`) REFERENCES `'.$prefix.'formulario` (`CodForm`) ON DELETE SET NULL ON UPDATE CASCADE,
 								  ADD CONSTRAINT `fk-tipotask` FOREIGN KEY (`CodTipoTask`) REFERENCES `'.$prefix.'tipotask` (`CodTipoTask`) ON DELETE CASCADE ON UPDATE CASCADE;',
 			
 			'turma' => 'ALTER TABLE `'.$prefix.'turma`
@@ -477,16 +497,22 @@ if(!function_exists('relaciona')){
 			
 			'usuario' => 'ALTER TABLE `'.$prefix.'usuario`
 								  ADD CONSTRAINT `fk-avatar` FOREIGN KEY (`CodAvatar`) REFERENCES `'.$prefix.'avatar` (`CodAvatar`) ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-hierarquia` FOREIGN KEY (`CodHierarquia`) REFERENCES `'.$prefix.'hierarquia` (`CodHierarquia`),
+								  ADD CONSTRAINT `fk-hierarquia` FOREIGN KEY (`CodHierarquia`) REFERENCES `'.$prefix.'hierarquia` (`CodHierarquia`) ON DELETE CASCADE,
 								  ADD CONSTRAINT `fk-tipousuario` FOREIGN KEY (`CodTipoUsuario`) REFERENCES `'.$prefix.'tipousuario` (`CodTipoUsuario`) ON UPDATE CASCADE;',
 			
-			'usuario-equipe' => 'ALTER TABLE `'.$prefix.'usuario-equipe`
-								  ADD CONSTRAINT `fk-equipeusuario` FOREIGN KEY (`CodEquipe`) REFERENCES `'.$prefix.'equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-usuarioequipe` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
+			// 'usuario-equipe' => 'ALTER TABLE `'.$prefix.'usuario-equipe`
+			// 					  ADD CONSTRAINT `fk-equipeusuario` FOREIGN KEY (`CodEquipe`) REFERENCES `'.$prefix.'equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
+			// 					  ADD CONSTRAINT `fk-usuarioequipe` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
 
 			'usuario-mural' => 'ALTER TABLE `'.$prefix.'usuario-mural`
 								  ADD CONSTRAINT `fk-mural-usuario` FOREIGN KEY (`CodMural`) REFERENCES `'.$prefix.'mural` (`CodMural`) ON DELETE CASCADE ON UPDATE CASCADE,
-								  ADD CONSTRAINT `fk-usuario-mural` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;'
+								  ADD CONSTRAINT `fk-usuario-mural` FOREIGN KEY (`CodUsuario`) REFERENCES `'.$prefix.'usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;',
+
+			'turma-task' => 'ALTER TABLE `'.$prefix.'turma-task`
+								  ADD CONSTRAINT `fk-turma-task` FOREIGN KEY (`CodTurma`) REFERENCES `'.$prefix.'turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE,
+								  ADD CONSTRAINT `fk-task-turma` FOREIGN KEY (`CodTask`) REFERENCES `'.$prefix.'task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE,
+  								  ADD CONSTRAINT `fk-task-componente` FOREIGN KEY (`CodComponente`) REFERENCES `'.$prefix.'compcurricular` (`CodComponente`) ON DELETE CASCADE ON UPDATE CASCADE;'
+
 		);
 		return $commands;
 	}	
@@ -498,65 +524,39 @@ if(!function_exists('insere')){
 
 			'tipousuario' => "INSERT INTO `".$prefix."tipousuario` (`CodTipoUsuario`, `Nome`, `Descricao`) 
 					 VALUES (NULL, '".utf8_decode("Administrador")."', '".utf8_decode("Usuário com total privilégio dentro da plataforma. Responsável por configurar a estrutura de acordo com o ambiente.")."'),
-					 		(NULL, '".utf8_decode("Funcionário")."', '".utf8_decode("Usuário responsável por elaborar tarefas aos alunos, proporcionando a eles adquirir o máximo de conhecimento possível.")."'),  
-					 		(NULL, '".utf8_decode("Alunos")."', '".utf8_decode("Usuário que terá a maior evolução ao utilizar a plataforma, e estará em constante progresso.")."');",
+					 		(NULL, '".utf8_decode("Funcionário")."', '".utf8_decode("Demais funcionários na escola responsáveis por manter o funcionamento da instituição de ensino.")."'),  
+					 		(NULL, '".utf8_decode("Alunos")."', '".utf8_decode("Usuário que terá a maior evolução ao utilizar a plataforma, e estará em constante progresso.")."'),
+					 		(NULL, '".utf8_decode("Professor")."', '".utf8_decode("Usuário responsável por elaborar tarefas aos alunos, proporcionando a eles adquirir o máximo de conhecimento possível.")."');",
 
-			// 'cabeloavatar' => "INSERT INTO `".$prefix."cabeloavatar` (`CodCabelo`, `Descricao`, `Link`) 
-			// 		 VALUES (NULL, 'Default', 'avatar/cabelo');",
-
-			// 'corpoavatar' => "INSERT INTO `".$prefix."corpoavatar` (`CodCorpo`, `Descricao`, `Link`) 
-			// 		 VALUES (NULL, '".utf8_decode('Amarelo')."', 'corpo/corpoavatar(1)'),
-			//    			    (NULL, '".utf8_decode('Azul')."', 'corpo/corpoavatar(2)'),
-			//    			    (NULL, '".utf8_decode('Rosa')."', 'corpo/corpoavatar(3)'),
-			//    			    (NULL, '".utf8_decode('Brasil')."', 'corpo/corpoavatar(4)'),
-			//    			    (NULL, '".utf8_decode('Rainbow')."', 'corpo/corpoavatar(5)'),
-			//    			    (NULL, '".utf8_decode('Marrom escuro')."', 'corpo/corpoavatar(6)'),
-			//    			    (NULL, '".utf8_decode('Verde-musgo')."', 'corpo/corpoavatar(7)'),
-			//    			    (NULL, '".utf8_decode('Marrom claro')."', 'corpo/corpoavatar(8)'),
-			//    			    (NULL, '".utf8_decode('Cor de pele')."', 'corpo/corpoavatar(9)'),
-			//    			    (NULL, '".utf8_decode('Rosa pink')."', 'corpo/corpoavatar(10)'),
-			//    			    (NULL, '".utf8_decode('Lilás')."', 'corpo/corpoavatar(11)'),
-			//    			    (NULL, '".utf8_decode('Verde')."', 'corpo/corpoavatar(12)'),
-			//    			    (NULL, '".utf8_decode('Vinho')."', 'corpo/corpoavatar(13)');",
-
-			// 'itemavatar' => "INSERT INTO `".$prefix."itemavatar` (`CodItem`, `Descricao`, `Link`) 
-			// 		 VALUES (NULL, 'Default', 'avatar/item');",
-
-			// 'rostoavatar' => "INSERT INTO `".$prefix."rostoavatar` (`CodRosto`, `Descricao`, `Link`) 
-			// 		 VALUES (NULL, 'Default', 'avatar/rosto');",
-
-			// 'roupaavatar' => "INSERT INTO `".$prefix."roupaavatar` (`CodRoupa`, `Descricao`, `Link`) 
-			// 		 VALUES (NULL, 'Default', 'avatar/roupa');",
-
-			// 'avatar' => "INSERT INTO `".$prefix."avatar` (`CodAvatar`, `CodCabelo`, `CodCorpo`, `CodItem`, `CodRosto`, `CodRoupa`) 
-			// 		 VALUES (NULL, 1, 1, 1, 1, 1);",
+			'dica' => "INSERT INTO `".$prefix."dica` (`Dica`, `Painel`, `TipoUsuario`) 
+					 VALUES ('".utf8_decode("O mural é uma ferramenta poderosa para fixar uma ideia com todos ao seu redor. 
+Busque ser gentil e educado em suas publicações e comentários com os outros membros, assim eles estarão propensos a encarar melhor suas ideias :D")."', '".utf8_decode("Mural")."', NULL);",
+			 		
+			'tipotask' => "INSERT INTO `".$prefix."tipotask` (`Nome`, `Premio`, `Dificuldade`) 
+					 VALUES ('".utf8_decode("Nível Bronze")."', 5, '".utf8_decode("Bronze")."'),
+					 		('".utf8_decode("Nível Prata")."', 10, '".utf8_decode("Prata")."'),  
+					 		('".utf8_decode("Nível Ouro")."', 15, '".utf8_decode("Ouro")."'),
+					 		('".utf8_decode("Nível Platina")."', 20, '".utf8_decode("Platina")."');",
 
 			'tipoopiniao' => "INSERT INTO `".$prefix."tipoopiniao` (`CodTipoOpiniao`, `Descricao`) 
-					 VALUES (NULL, '".utf8_decode("Boa idéia!")."'), (NULL, 'Nada a ver!');",
+					 VALUES (NULL, '".utf8_decode("Boa ideia!")."'), (NULL, 'Nada a ver!');",
 
 			'mural' => "INSERT INTO `".$prefix."mural` (`CodMural`, `Nome`, `Descricao`) 
 					 VALUES (1, '".utf8_decode("Funcionários")."', '".utf8_decode("Mural destinado aos funcionários da instituição de ensino")."');",
 
-			'inteligencia' => "INSERT INTO `".$prefix."inteligencia` (`CodInteligencia`, `Nome`, `Descricao`)
-					 VALUES (NULL, '".utf8_decode("Lógico­Matemática")."', '".utf8_decode("A capacidade de confrontar e avaliar objetos e abstrações, discernindo as suas relações e princípios subjacentes. Habilidade para raciocínio dedutivo e para solucionar problemas matemáticos. Cientistas possuem esta característica.")."'),
-
-					 (NULL, '".utf8_decode("Musical")."', '".utf8_decode("Identificável pela habilidade para compor e executar padrões musicais, executando pedaços de ouvido, em termos de ritmo e timbre, mas também escutando­os e discernindo­os. Pode estar associada a outras inteligências, como a linguística, espacial ou corporal­cinestésica. É predominante em compositores, maestros, músicos e críticos de música.")."'),
-
-					 (NULL, '".utf8_decode("Espacial'").", '".utf8_decode("Expressa­se pela capacidade de compreender o mundo visual com precisão, permitindo transformar, modificar percepções e recriar experiências visuais até mesmo sem estímulos físicos. É predominante em arquitetos, artistas, escultores, cartógrafos, geógrafos, navegadores e jogadores de xadrez, por exemplo.")."'),
-
-					 (NULL, '".utf8_decode("Corporal­Cinestésica'").", '".utf8_decode("Traduz­se na maior capacidade de controlar e orquestrar movimentos do corpo. É predominante entre atores e aqueles que praticam a dança ou os esportes.")."'),
-
-					 (NULL, '".utf8_decode("Intrapessoal'").", '".utf8_decode("Expressa na capacidade de se conhecer, é a mais rara inteligência sob domínio do ser humano pois está ligada a capacidade de neutralização dos vícios, entendimento de crenças, limites, preocupações, estilo de vida profissional, autocontrole e domínio dos causadores de estresse.")."'),
-
-					 (NULL, '".utf8_decode("Interpessoal'").", '".utf8_decode("Expressa pela habilidade de entender as intenções, motivações e desejos dos outros. Encontra­se mais desenvolvida em políticos, religiosos e professores.")."'),
-
-					 (NULL, '".utf8_decode("Naturalista'").", '".utf8_decode("Traduz­se na sensibilidade para compreender e organizar os objetos, fenômenos e padrões da natureza, como reconhecer e classificar plantas, animais, minerais. É característica de biólogos e geólogos, por exemplo.")."'),
-
-					 (NULL, '".utf8_decode("Existencial'").", '".utf8_decode("Investigada no terreno ainda do “possível”, carece de maiores evidências. Abrange a capacidade de refletir e ponderar sobre questões fundamentais da existência. Seria característica de líderes espirituais e de pensadores filosóficos.")."'),
-
-					 (NULL, '".utf8_decode("Linguística'").", '".utf8_decode("Caracteriza­se por um domínio e gosto especial pelos idiomas e pelas palavras e por um desejo em os explorar. É predominante em poetas, escritores, e linguistas.")."'), 
-
-					 (NULL, '".utf8_decode("Prática'").", '".utf8_decode("Está ligada à constituição de uma ação ou de um uso repetido que resulta em um conhecimento ou em uma práxis. É o poder de conquistar aprendizado com as vivências, construindo aptidões funcionais. Ela se distingue da acadêmica, mais voltada para a percepção teórica, e nos ajuda a compreender porque algumas pessoas com um QI elevado não obtêm, apesar disso, o êxito na profissão.")."');"
+			'inteligencia' => "INSERT INTO `".$prefix."inteligencia` (`CodInteligencia`, `Nome`, `Descricao`,`Icon`,
+								`Classe`,`ProgressBar`)
+					 VALUES (NULL, '".utf8_decode("Lógico e/ou matemática")."', '".utf8_decode("É o tipo de inteligência ligada à capacidade de raciocínio lógico e resolução de problemas matemáticos. A velocidade de resolução destes problemas é o indicador que determina quanta inteligência lógico-matemática a pessoa tem. O teste de quociente de inteligência (QI) é baseado neste tipo de inteligência e, em menor proporção, na inteligência linguística. Cientistas, economistas, acadêmicos, engenheiros e matemáticos muitas vezes se destacam neste tipo de inteligência.")."', 'fa fa-superscript fa-2x', 'card-logicoMatematica', 'progress-bar-logicoMatematica'),
+					 (NULL, '".utf8_decode("Linguística")."', '".utf8_decode("A capacidade de dominar a linguagem e se comunicar com outros é importante em todas as culturas. A inteligência linguística não só se refere à capacidade de comunicação oral, mas a outras formas de comunicação como a escrita, gestual, etc. Quem domina melhor essa capacidade de comunicação possui uma inteligência linguística superior, além de grande expressividade. Também têm um alto grau de atenção e sensibilidade para entender pontos de vista alheios. É uma inteligência fortemente relacionada ao lado esquerdo do cérebro e uma das mais comuns em profissões dentre políticos, escritores, poetas, jornalistas e etc.")."', 'fa fa-comment-o fa-2x', 'card-linguistica', 'progress-bar-linguistica'),
+					 (NULL, '".utf8_decode("Espacial ou Visual")."', '".utf8_decode("Resume-se na capacidade de observar o mundo e objetos em diferentes perspectivas. Pessoas que se destacam nessa inteligência, geralmente têm habilidades que lhes permitem criar imagens mentais, desenhar e identificar detalhes, além de um sentimento pessoal de estética. Destacam-se ao desenvolver essa inteligência os profissionais de xadrez e artes visuais, como pintores, fotógrafos, designers, publicitários, arquitetos, e outras profissões que exigem criatividade.")."', 'fa fa-grav fa-2x', 'card-espacial', 'progress-bar-espacial'),
+					 (NULL, '".utf8_decode("Corporal e/ou cinestésica")."', '".utf8_decode("É a capacidade de utilizar as habilidades motoras do corpo para utilizar ferramentas (cinestésica) ou para expressar certas emoções (corporal). Pessoas com esse tipo de inteligência possuem grande noção de espaço, distância e profundidade, além de possuir maior controle o próprio corpo do que as outras pessoas. Logo, são capazes de realizar com precisão movimentos complexos, fortes ou até mesmo movimentos sensíveis aos olhos de quem os vê.
+						São notáveis neste tipo de inteligência todos aqueles que carecem de usar racionalmente suas capacidades físicas – provenientes de comandos vindos do cerebelo, o trecho do cérebro responsável por movimentos voluntários – com precisão, como dançarinos, atores, atletas e até mesmo cirurgiões e artistas plásticos.")."', 'fa fa-heartbeat fa-2x', 'card-corporalCinestesica', 'progress-bar-corporalCinestesica'),
+					 (NULL, '".utf8_decode("Musical")."', '".utf8_decode("Resume-se a capacidade de interpretar e compreender sons e pausas, principalmente quando combinados em ritmo, melodia e harmonia, organizados de forma temporal. Grandes artistas que vão de Mozart a Jimi Hendrix possuem esse tipo de inteligência desde pequenos e quando praticada, o sujeito tende a tocar instrumentos, ler e compor peças musicais com facilidade e abstrair sons que outras pessoas não conseguiriam.")."', 'fa fa-headphones fa-2x', 'card-musical', 'progress-bar-musical'),
+					 (NULL, '".utf8_decode("Naturalista")."', '".utf8_decode("Sensibilidade com a natureza, para o entendimento da mesma e desenvolvimento de habilidades biológicas. Algumas personalidades famosas com esse tipo de inteligência são Charles Darwin e Richard Dawkins, por exemplo.")."', 'fa fa-pagelines fa-2x', 'card-naturalista', 'progress-bar-naturalista'),
+					 (NULL, '".utf8_decode("Existencial")."', '".utf8_decode("Capacidades filosóficas, como refletir sobre a existência e a vida. Algumas personalidades famosas com esse tipo de inteligência: Nietzsche, Descartes.")."', 'fa fa-sun-o fa-2x', 'card-existencial', 'progress-bar-existencial'),
+					 (NULL, '".utf8_decode("Existencial")."', '".utf8_decode("Capacidades filosóficas, como refletir sobre a existência e a vida. Algumas personalidades famosas com esse tipo de inteligência: Nietzsche, Descartes.")."', 'fa fa-sun-o fa-2x', 'card-existencial', 'progress-bar-existencial'),
+					 (NULL, '".utf8_decode("Intrapessoal")."', '".utf8_decode("Capacidade de entender a si mesmo, lidar com seus desejos e sonhos, direcionar a própria vida de forma efetiva. É o correlativo interno da inteligência interpessoal.")."', 'fa fa-heart fa-2x', 'card-intrapessoal', 'progress-bar-intrapessoal'),
+					 (NULL, '".utf8_decode("Prática")."', '".utf8_decode("Essa inteligência se refere à pessoa ganhar conhecimento vivendo a situação, acaba apreendendo melhor na práxis do que na teoria, o intelecto vinculado à práxis refere-se à totalidade dos elementos cognitivos conquistados na elaboração das tarefas rotineiras.")."', 'fa fa-flash fa-2x', 'card-pratica', 'progress-bar-pratica');"
 		);
 		return $commands;
 	}

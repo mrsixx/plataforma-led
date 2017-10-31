@@ -15,10 +15,13 @@
                                     <div class="panel panel-primary">
                                         <span class="mural-img pull-left">
                                                 <?php 
-                                                    $s = ($post->Sexo == 'f') ? 'f' : 'm';
-                                                    $foto = (isset($post->Foto))? "users/profile/$post->Foto.jpg" : "assets/img/user-$s.png" ;
+                                                    $CI =& get_instance();
+                                                    $CI->load->helper('interface');
+                                                    $foto = fotoPerfil($post->Foto,$post->Sexo);
+                                                    // $s = ($post->Sexo == 'f') ? 'f' : 'm';
+                                                    // $foto = (isset($post->Foto))? "users/profile/$post->Foto.jpg"."?".time() : "assets/img/user-$s.png"."?".time() ;
                                                 ?>
-                                                <img src="<?= base_url($foto); ?>" class="img-circle">
+                                                <img src="<?= $foto; ?>" class="img-circle">
                                         </span>
                                         <div class="panel-heading">
                                             <h3 class="panel-title"><a href="/perfil/<?php echo $post->Token;?>"><?php echo utf8_encode($post->Nome."&nbsp;".$post->Sobrenome);?></a><small> <?php echo "em ".date("d/m/Y à\s H:i", strtotime($post->DataHora));?></small></h3>
@@ -29,7 +32,7 @@
                                         <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/IXdNnw99" frameborder="0" allowfullscreen></iframe> -->
                                             <p> <?php 
                                                     $str = utf8_encode($post->Conteudo);
-                                                    $str = parse_smileys($str, base_url('assets/smileys/'));
+                                                    $str = parse_smileys($str, base_url('assets/img/smileys/'));
 
                                                     $pub = explode(" ", $str);
 
@@ -52,7 +55,7 @@
                                             <?php 
                                                 if(isset($post->Imagem)):?>
                                                     <center>
-                                                        <img src="<?= base_url($post->Imagem); ?>" class="img img-responsive" style="max-width: 80%;height: auto" >
+                                                        <img src="<?= base_url('data/posts/'); echo "$post->Imagem?".time();?>" class="img img-responsive" style="max-width: 80%;height: auto" >
                                                     </center>
                                                 <?php endif;
                                             ?>

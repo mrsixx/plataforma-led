@@ -71,53 +71,16 @@ class Interface_led extends CI_Model
 		$this->db->insert("experiencia", $array);
 	}
 
-	function retornaLvl($usuario){
-		$cod = $usuario['cod'];
-		$where = array('CodUsuario' => $cod);
-		$this->db->select('QtdCinestesica, QtdEspacial, QtdExistencial, QtdInterpessoal, QtdIntrapessoal, QtdLinguistica, QtdLogicoMat, QtdMusical, QtdNaturalista, QtdPratica');
-		$xp = $this->db->get_where("experiencia", $where);
-		$xp = array_sum($xp->row_array());
-		$xp = 50 * sqrt($xp);
-		return $xp;
-		//arrumar aqui
+	function retornaXp($usuario){
+		try{
+			$user = $this->db->get_where('experiencia',array('CodUsuario' => $usuario['cod']))->row_array();
+			//apagar esta linha
+			return $user['PontosXP'];
+		}
+		catch(PDOException $e){
+			return $e;
+		}
 	}
 
-	// function retornaAvatar($where = null){
-	// 	try {
-	// 		if(isset($where)){
-	// 			$this->db->select('CodAvatar');
-	// 			$codAvatar = $this->db->get_where('avatar',$where)->row_array();
-	// 			var_dump($codAvatar);
-	// 			break;
-	// 			$avatar = array(
-	// 				'corpo' => $this->db->get_where('corpoavatar', $where['corpo'])->result(),
-	// 				'roupa' => $this->db->get_where('roupaavatar', $where['roupa'])->result(),
-	// 				'cabelo' => $this->db->get_where('cabeloavatar', $where['cabelo'])->result(),
-	// 				'rosto' => $this->db->get_where('rostoavatar', $where['rosto'])->result(),
-	// 				'item' => $this->db->get_where('itemavatar', $where['item'])->result()
 
-	// 			);
-	// 		}else{
-	// 			$avatar = array(
-	// 				'corpo' => $this->db->get('corpoavatar')->result(),
-	// 				'roupa' => $this->db->get('roupaavatar')->result(),
-	// 				'cabelo' => $this->db->get('cabeloavatar')->result(),
-	// 				'rosto' => $this->db->get('rostoavatar')->result(),
-	// 				'item' => $this->db->get('itemavatar')->result()
-
-	// 			);
-	// 		}
-	// 		return $avatar;
-
-	// 	} catch (PDOException $e) {
-	// 		return $e;
-	// 	}
-	// }
-
-	// function cadastraAvatar($data){
-	// 	if($this->db->insert('avatar',$data))
-	// 		return true;
-	// 	else
-	// 		return false;
-	// }
 }

@@ -129,14 +129,10 @@ class Ferramenta extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//verificando se existem cursos cadastrados e o quadro de funcionários 
-			$this->load->model('escola');
-			$curso = $this->escola->getCursos();
-			$turma = $this->escola->getTurma();
-			$hierarquia = $this->escola->getHierarquia();
-			$compcurricular = $this->escola->getCompCurricular();
+			//verificando se a configuração de ambiente já foi feita
+			$this->load->helper('inicia');
 
-			if(!empty($curso) && !empty($hierarquia) && !empty($turma) && !empty($compcurricular)){
+			if(verificaAmbiente()){
 				//recebo o array com as informações da interface
 				$this->load->helper('interface');
 				$data = preencheInterface($usuario,'tools');

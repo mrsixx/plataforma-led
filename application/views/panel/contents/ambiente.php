@@ -27,9 +27,15 @@
                                     </small><br/>
                                     <p>
                                         <i class="glyphicon glyphicon-globe"></i>&nbsp;
+                                        <?php if(isset($escola['Website']) && $escola['Website'] != 'http://'):?>
                                         <a href="<?php echo utf8_encode($escola['Website']); ?>" target="_blank">
                                             <?php echo utf8_encode($escola['Website']);?>
-                                        </a><br/>
+                                        </a>
+                                      <?php else:
+                                            echo "Website não cadastrado";
+                                          endif;
+                                      ?>
+                                        <br/>
                                         <i class="glyphicon glyphicon-gift"></i>&nbsp;
                                             <?php echo utf8_encode(date('d/m/Y', strtotime($escola['DataFundacao']))); ?>
                                     </p>
@@ -47,6 +53,35 @@
                         <h3 class="panel-title">Quadro de funcionários</h3>
                     </div>
                     <div class="panel-body table-responsive">
+                          <h4>Administradores</h4><hr/>
+                          <?php 
+                             if(!empty($adm)){
+                                if($adm > 1) 
+                                  echo '<div class="well"><center>Há '.$adm.' administradores cadastrados no sistema';
+                                else
+                                  echo '<div class="well"><center>Por enquanto, você é o único administrador...';
+
+                                  echo '<br/><a href="/relacao/administradores">Veja a lista</a></center></div>';
+                             }
+                          ?>
+                    </div>
+                    <div class="panel-body table-responsive">
+                          <h4>Professores</h4><hr/>
+                          <?php 
+                             if(!empty($teachers)){
+                                echo '<div class="well"><center>Até o momento, a '.utf8_encode($escola['Nome']).' conta com ';
+                                if($teachers > 1) 
+                                  echo "$teachers professores cadastrados";
+                                else
+                                  echo "$teachers professor cadastrado";
+                                echo ' :D<br/><a href="/relacao/professores">Veja a lista</a></center></div>';
+                             }
+                              else
+                                echo '<div class="well"><center>Nenhum professor foi adicionado ainda :/</center></div>';
+                          ?>
+                    </div>
+                    <div class="panel-body table-responsive">
+                          <h4>Direção e coordenação acadêmica e administrativa</h4><hr/>
                         <?php 
                             if(!empty($hierarquia)){
                                 
@@ -173,17 +208,19 @@
                                           </div>
                                     <?php endforeach; $nivel1 = array();
                                 }else{
-                                    echo '<div class="well">Não há nenhuma posição de nível 1 cadastrada :/</div>';
+                                    echo '<div class="well"><center>Não há nenhuma posição de nível 1 cadastrada :/</center></div>';
                                 }
                             ?>
                             <?php 
                             }
                             else{
-                                echo '<div class="well">O quadro de funcionários da instituição não foi cadastrado ainda :/</div>';
+                                echo '<div class="well"><center>Você pode cadastrar outros funcionários a qualquer momento :D</center></div>';
                             } ?>
                     </div>
                     <div class="panel-footer" align="right">
-                        <input class="btn btn-primary" data-toggle="modal" data-target="#funcCad" type="button" value="Cadastrar">
+                      <input class="btn btn-primary" data-toggle="modal" data-target="#admCad" type="button" value="Cadastrar administradores">
+                      <input class="btn btn-primary" data-toggle="modal" data-target="#profCad" type="button" value="Cadastrar professores">
+                      <input class="btn btn-primary" data-toggle="modal" data-target="#funcCad" type="button" value="Cadastrar funcionários">
                     </div>
                 </div>
 
@@ -302,7 +339,7 @@
                                                     <!-- btn para add componente curricular -->
                                                     <a href="configuracao-ambiente/turma/<?php echo $coluna->CodTurma;?>"> 
                                                         <button class="btn btn-default btn-xs" title="Componentes curriculares" id="<?php echo $coluna->CodTurma;?>">
-                                                          <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                                                          <span class="glyphicon glyphicon-apple" aria-hidden="true"></span>
                                                         </button>
                                                     </a>
                                                     <!-- btn para excluir -->

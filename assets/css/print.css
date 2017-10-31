@@ -1,0 +1,42 @@
+*{
+    background: transparent !important;
+    color: black !important; 
+    text-shadow: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+}
+body{
+    margin: 0;
+    padding: 0;
+    line-height: 1.4em;
+    overflow-y: scroll;
+}
+
+#main{
+    overflow-y: visible;
+}
+
+@page{
+    margin: 0.5cm;
+}
+
+#sidebar-wrapper, #btnImpressao{
+    display: none;
+}
+/*
+.thExcluir{
+   visibility: hidden; 
+  display: none;
+}
+.thAssinatura{
+    visibility: visible;
+    display: inline;
+}
+#assinatura-header{
+    display: initial;
+
+}
+.assinatura{
+    display: initial;
+}
+*/

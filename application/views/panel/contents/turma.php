@@ -46,7 +46,7 @@
                                         </td>
                                         <td>
                                             <?php 
-                                                echo isset($coluna->NomeProfessor) ? utf8_encode($coluna->NomeProfessor)." ".utf8_encode($coluna->SobrenomeProfessor): "Não cadastrado";
+                                                echo (isset($coluna->NomeUsuario) && ($coluna->CodProfessor != 1)) ? utf8_encode($coluna->NomeUsuario)." ".utf8_encode($coluna->Sobrenome): "Não cadastrado";
                                              ?>
                                         </td>
                                         <td>

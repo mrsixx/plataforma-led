@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span>Preencha os campos abaixo com as informações de conexão com a base de dados.</span><br/><br/>
                         <small>Campos sinalizados com <span class="required">*</span> são obrigatórios</small>
                         <!--FORMULARIO-->
-                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="<?php echo base_url('instalacao'); ?>">
+                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="/instalacao">
                             <br/>
                             <div class="form-group">
                                 <label for="textUrl" class="control-label pull-left">Url de hospedagem <span class="required">*</span></label>

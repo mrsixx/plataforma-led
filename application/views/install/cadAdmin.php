@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-md-8 col-md-offset-2">
                         <span>Já que você quem fará tudo acontecer vamos começar a configuração a partir de seu cadastro \0/.<br/><br/>Preencha todos os campos, pois eles são obrigatórios :) </span>
                         <!--FORMULARIO-->
-                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="<?php echo base_url('configuracao/cadastro-admin'); ?>">
+                        <form class="form-validate form-vertical" id="formExemplo" data-toggle="validator" role="form" method="POST" action="/configuracao/cadastro-admin">
                             <br/>
                             <div class="row">
                                 <div class="form-group col-md-6 col-xs-12">
@@ -65,40 +65,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </form>
                         <!--\FORMULARIO-->
                     </div>
-                     <!--<div class="modal fade" id="bemVindo">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <h4 class="modal-title">Bem-vindo(a) ao LED</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>O Led é um LMS &#40;Sistema de Gerenciamento de Aprendizagem&#41; idealizado no intuito de aproximar toda a comunidade escolar. Cada passo na criação dessa plataforma foi tomado com carinho para que os alunos e funcionários desta instituição de ensino passem a se organizar e interagir melhor, enquanto se divertem e adquirem inúmeras conquistas e experiências.</p>
-                                    <p>Antes de prosseguir com a instalação, certifique-se que possui as seguintes informações:</p>
-                                    <ol>
-                                        <li>Servidor do banco de dados;</li>
-                                        <li>Nome de usuario do banco de dados;</li>
-                                        <li>Senha do banco de dados;</li>
-                                        <li>Nome do banco de dados.</li>
-                                    </ol>
-                                    <p>Essas informações serão utilizadas para criação de um arquivo de configuração. Se de alguma forma esse arquivo não for gerado automaticamente, abra o arquivo <code>config-reserva.php</code> em um editor de textos e siga as instruções. Caso qualquer imprevisto venha a surgir, <a href="#">teremos prazer em ajudar</a>.</p>
-                                    <p>Geralmente essas informações são fornecidas pelo seu serviço de hospedagem.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-warning" data-dismiss="modal">Instalar LED</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
-                </div>
-            </div>
-        </div>
-        <!--<script>
-            $(function() {
-                $(function modal() {
-                    $("body").ready(function modal() {
-                        $("#bemVindo").modal();
-                    });
-                });
-            });
-        </script>-->
 <?php $this->load->view('install/commons/footer_install'); 

@@ -14,6 +14,8 @@ class Ambiente extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 			
+			if($tipo != 1)
+				redirect(base_url('panel'));
 
 			//verificando se a configuração de ambiente já foi feita
 			$this->load->helper('inicia');
@@ -30,12 +32,15 @@ class Ambiente extends CI_Controller {
 			//se existir eu mando pra view com as informações
 
 			$this->load->model("escola");
+			$this->load->model('usuario');
 			$data['escola'] = $this->escola->getEscola();
 			$data['cursos'] = $this->escola->getCursos();
 			$data['cursosativos'] = $this->escola->getCursos(array('Status'=>1));
 			$data['turmas'] = $this->escola->getTurma();
 			$data['compcurricular'] = $this->escola->getCompCurricular();
 			$data['hierarquia'] = $this->escola->getHierarquia();
+			$data['teachers'] = $this->usuario->getUser(array('CodTipoUsuario' => 4),'count');
+			$data['adm'] = $this->usuario->getUser(array('CodTipoUsuario' => 1),'count');
 			$data['maiorNivel'] = $this->escola->getHierarquia();
 
 			$data['title'] = "Configuração de ambiente";
@@ -165,7 +170,7 @@ class Ambiente extends CI_Controller {
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['SerieInicial'] = $this->input->post('nbInicial');
 			$data['SerieFinal'] = $this->input->post('nbFinal');
-			$data['Status'] = $this->input->post('cmbStatus');
+			$data['Status'] = (bool)$this->input->post('cmbStatus');
 			$data['Descricao'] = utf8_decode($this->input->post('txtDescricao'));
 
 			//carrego a model com o update
@@ -338,12 +343,12 @@ class Ambiente extends CI_Controller {
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['Sigla'] = utf8_decode($this->input->post('txtSigla'));
 			$prof = $this->input->post('cmbProfessor');
-			$data['CodProfessor'] = (isset($prof))? $prof : null;
+			$prof = (isset($prof))? $prof : null;
 		
 
 			
 			//atualizo
-			$retorno = $this->escola->updateComponente($data);
+			$retorno = $this->escola->updateComponente($data,$prof);
 			//passo o retorno 
 			return $retorno;
 		}else{
@@ -356,7 +361,7 @@ class Ambiente extends CI_Controller {
 	public function retornaComponentesCurricularesAjax(){
 		//verifico se recebi algum valor por get como parametro, se sim ele será o código se não passo nulo
 		if(isset($_GET['cod']))
-			$data = array('a.CodCompTurma' => $this->input->get('cod'));
+			$data = array('CodCompTurma' => $this->input->get('cod'));
 		else
 			$data = null;
 
@@ -553,7 +558,7 @@ class Ambiente extends CI_Controller {
 					//carrego a model do usuário para começar a cadastrar os alunos
 					$this->load->model('usuario');
 					$this->load->helper('token');
-					for ($i=0; $i < $qtd; $i++) { 
+					for ($i = 0; $i < $qtd; $i++) { 
 						
 						$token = strUnique();
 						$array = array('Token' => $token, 'CodTipoUsuario' => 3);
@@ -569,7 +574,35 @@ class Ambiente extends CI_Controller {
 				break;
 			
 			default:
-				# code...
+				if(isset($qtd)){
+					//carrego a model do usuário para começar a cadastrar os alunos
+					$this->load->model('usuario');
+					$this->load->helper('token');
+					for ($i = 0; $i < $qtd; $i++) { 
+						$return = array();
+						$token = strUnique();
+
+						if(isset($data))
+							$tipo = 1;
+						$array = array('Token' => $token, 'CodTipoUsuario' => $tipo);
+						//para o cadastro alternativo de admin
+
+						if(isset($data))
+							$tipo = 5;
+
+						if($this->usuario->cadastra($tipo,$array)){
+							$return[] = true;
+						}
+						else{
+							$return[] = false;
+						}
+
+					}
+						if(in_array(false, $return))
+							return false;
+						else
+							return true;
+				}
 				break;
 		}
 	}
@@ -584,6 +617,9 @@ class Ambiente extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 			//preencho a interface 
+
+			if($tipo != 1)
+				redirect(base_url('panel'));
 
 			$this->load->helper('inicia');
 			if(verificaAmbiente())
@@ -600,22 +636,11 @@ class Ambiente extends CI_Controller {
 			$data['cursosativos'] = $this->escola->getCursos(array('Status'=>1));
 			if(!empty($this->escola->getTurma())){
 				$codTurma = $this->uri->segment(3);
-				$data['turmas'] = $this->escola->getTurma(array('CodTurma' => $codTurma));
+				$data['turmas'] = $this->escola->getTurma(array('turma.CodTurma' => $codTurma));
 				if(!empty($data['turmas'])){
-					$data['compcurricular'] = $this->escola->getCompCurricular(array('CodTurma' => $codTurma));
-					
-					foreach ($data['compcurricular'] as $comp) {
-						if($comp->CodProfessor !== null){
-							$professor = $this->usuario->getUser(array('CodUsuario' => $comp->CodProfessor));
-							$comp->NomeProfessor = $professor['Nome'];
-							$comp->SobrenomeProfessor = $professor['Sobrenome'];
-						}else{
-							$comp->NomeProfessor = null;
-							$comp->SobrenomeProfessor = null;
-						}
-					}
+					$data['compcurricular'] = $this->escola->getCompCurricular(array('t.CodTurma' => $codTurma));
 
-					$data['professor'] = $this->usuario->getUser(array('Nome NOT LIKE "led" AND CodTipoUsuario =' => 2),'obj');
+					$data['professor'] = $this->usuario->getUser(array('Status <> 0 AND CodTipoUsuario =' => 4),'obj');
 		    	}
 				else{
 					$data['msg'] = '<div class="well">Turma inexistente :/</div>';
@@ -640,6 +665,42 @@ class Ambiente extends CI_Controller {
 				$data['msg'] = '<div class="well">Não há turmas cadastradas...</div>';
 			}
 		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function cadProfessor(){
+		//verificando se a sessão existe, caso exista mando para o painel 
+		$this->load->library('session');
+		if($this->session->has_userdata('login')){
+			$usuario = $this->session->login;
+			//chamando a model com cadastro
+			$this->load->model('usuario');
+			
+			$qtd = $this->input->post('nbProfessores');
+			
+			$this->cadastraUsuario(4,null,$qtd,null);
+			
+		}else{
+			//se não houver sessão, então mando de volta pois não existiu um login
+			redirect(base_url());
+		}
+	}
+
+	public function cadAdmin(){
+		//verificando se a sessão existe, caso exista mando para o painel 
+		$this->load->library('session');
+		if($this->session->has_userdata('login')){
+			$usuario = $this->session->login;
+			//chamando a model com cadastro
+			$this->load->model('usuario');
+			
+			$qtd = $this->input->post('nbAdmin');
+
+			$this->cadastraUsuario(5,array('admin' => 'admin'),$qtd,null);
+			
+		}else{
+			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
 		}
 	}

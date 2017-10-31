@@ -28,7 +28,7 @@
                                                     <img src="<?php echo base_url('users/profile/sid.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                             </span>
                                             <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("E aí povo,<br/>  B)  B)  B)  B)", base_url('assets/smileys/'))?></p>
+                                                <p><?php echo parse_smileys("E aí povo,<br/>  B)  B)  B)  B)", base_url('assets/img/smileys/'))?></p>
                                                 <div class="chat_time pull-right">09:39PM</div>
                                             </div>
                                         </li>
@@ -39,7 +39,7 @@
                                                     <img src="<?php echo base_url('users/profile/IMG_1054.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                             </span>
                                             <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("Oii,<br/>  :uni:", base_url('assets/smileys/'))?></p>
+                                                <p><?php echo parse_smileys("Oii,<br/>  :uni:", base_url('assets/img/smileys/'))?></p>
                                                 <div class="chat_time pull-right">09:39PM</div>
                                             </div>
                                         </li>
@@ -49,7 +49,7 @@
                                                     <img src="<?php echo base_url('users/profile/marino.JPG');?>" alt="Ketlyn" class="img-circle"/>
                                             </span>
                                             <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("Shazam :v >.<", base_url('assets/smileys/'))?></p>
+                                                <p><?php echo parse_smileys("Shazam :v >.<", base_url('assets/img/smileys/'))?></p>
                                                 <div class="chat_time pull-right">09:41PM</div>
                                             </div>
                                         </li>
@@ -57,7 +57,7 @@
                                         <li class="right clearfix row">
 
                                             <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p><?php echo parse_smileys("Fala galera,<br/>Tudo bem? :?", base_url('assets/smileys/'))?></p>
+                                                <p><?php echo parse_smileys("Fala galera,<br/>Tudo bem? :?", base_url('assets/img/smileys/'))?></p>
 
                                                 <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:42PM</div>
                                             </div>

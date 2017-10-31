@@ -63,9 +63,9 @@
                     </li>
                 </ul>
                 <div class="col-sm-4 col-md-4">
-                    <form class="navbar-form" role="search" method="get" id="search-form" name="search-form">
+                    <form class="navbar-form" action="/busca" role="search" method="get" id="search-form" name="search-form">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Pesquise por pessoas que você talvez conheça" id="query" name="query" value="">
+                            <input type="text" class="form-control" placeholder="Pesquise por pessoas que você talvez conheça" id="busca" name="q" required>
                             <div class="input-group-btn">
                                 <button type="submit" value="Search" class="btn btn-default btn-pesquisa"><span class="glyphicon glyphicon-search"></span></button>
                             </div>

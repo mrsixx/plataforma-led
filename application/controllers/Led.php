@@ -116,7 +116,7 @@ class Led extends CI_Controller {
 
 
 			//depois chamo a model install com os métodos para tentar efetuar uma conexão com o banco indicado
-			$this->load->model('install');
+			$this->load->model('Install');
 			//verifico se os dados retornam uma conexão válida
 			$con = $this->install->verificaConexao($data);
 			if($con){

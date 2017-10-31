@@ -93,8 +93,57 @@
         </form>
 
         <!--FUNCIONÁRIOS -->
-
-        <!-- CADASTRAR -->
+        <!-- CADASTRAR ADMINISTRADORES-->
+        <form class="modal fade modalcad" id="admCad" role="dialog" data-controller="ambiente/cadAdmin">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close att" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="glyphicon glyphicon-remove" data-dismiss="close"></span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Quadro de Administradores</h4>
+                    </div>
+                    <div class="modal-body wrapper">
+                      <div id="msg"></div>
+                      <div class="row"> 
+                            <div class="form-group col-md-12">
+                              <small for="nbAdmin" class="control-label pull-left">Nº administradores <span class="required">*</span></small><br/>
+                              <input id="nbAdmin" name="nbAdmin" class="form-control" type="number" placeholder="Insira o número de professores que deseja adicionar" min="1" value="1" required />                              
+                            </div>
+                      </div>
+                      <div class="modal-footer">
+                          <input class="btn btn-primary" type="submit" value="Salvar" />
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </form>
+        <!-- CADASTRAR PROFESSOR-->
+        <form class="modal fade modalcad" id="profCad" role="dialog" data-controller="ambiente/cadProfessor">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close att" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" class="glyphicon glyphicon-remove" data-dismiss="close"></span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Quadro de Professores</h4>
+                    </div>
+                    <div class="modal-body wrapper">
+                      <div id="msg"></div>
+                      <div class="row"> 
+                            <div class="form-group col-md-12">
+                              <small for="nbProfessores" class="control-label pull-left">Nº professores <span class="required">*</span></small><br/>
+                              <input id="nbProfessores" name="nbProfessores" class="form-control" type="number" placeholder="Insira o número de professores que deseja adicionar" min="1" value="1" required />                              
+                            </div>
+                      </div>
+                      <div class="modal-footer">
+                        <input class="btn btn-primary" type="submit" value="Salvar" />
+                      </div>  
+                    </div>
+                  </div>
+            </div>
+        </form>
+        <!-- CADASTRAR FUNCIONÁRIO-->
         <form class="modal fade modalcad" id="funcCad" role="dialog" data-controller="ambiente/cadHierarquia">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

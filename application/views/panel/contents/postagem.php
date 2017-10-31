@@ -7,75 +7,49 @@
                                     <h3>Publicação</h3>
                                 </div>
                                 <?php foreach ($publicacao as $post):?>
-                                    <!-- <div class="panel panel-primary">
-                                        <span class="mural-img pull-left">
-                                                <?php 
-                                                    $s = ($post->Sexo == 'f') ? 'f' : 'm';
-                                                    $foto = (isset($post->Foto))? "users/profile/$post->Foto.jpg" : "assets/img/user-$s.png" ;
-                                                ?>
-                                                <img src="<?= base_url($foto); ?>" class="img-circle">
-                                        </span>
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title"><a href="/perfil/<?php echo $post->Token;?>"><?php echo utf8_encode($post->Nome."&nbsp;".$post->Sobrenome);?></a><small> <?php echo "em ".date("d/m/Y à\s H:i", strtotime($post->DataHora));?></small></h3>
-
-                                        </div>
-                                        <div class="panel-body">
-                                            <p> <?php 
-                                                    $str = utf8_encode($post->Conteudo);
-                                                    $str = parse_smileys($str, base_url('assets/smileys/'));
-                                                    echo $str;
-                                                ?>
-                                                
-                                            </p>
-                                            <?php 
-                                                if(isset($post->Imagem)):?>
-                                                    <center>
-                                                        <img src="<?= base_url($post->Imagem); ?>" class="img  img-responsive">
-                                                    </center>
-                                                <?php endif;
-                                            ?>
-                                        </div>
-                                        <div class="panel-footer post">
-
-                                            <div class="dropup">
-                                                <button class="btn-opinar dropdown-toggle pull-left" id="op" type="button" data-toggle="dropdown">
-                                                    <div id="opiniao" class="fa fa-lightbulb-o fa-2x">&nbsp;</div>
-                                                </button>
-                                                <div class="dropdown-menu opiniaoBox">
-                                                    <a class="boa">
-                                                        <img class="opiniao img-responsive" data-toggle="tooltip" data-placement="top" src="<?= base_url('assets/img/opiniaoIntS.png'); ?>" aria-hidden="true" title="Boa Ideia!" />
-                                                    </a>
-                                                    <a class="nada">
-                                                        <img class="opiniao img-responsive" data-toggle="tooltip" data-placement="top" src="<?= base_url('assets/img/opiniaoBrokeS.png'); ?>" aria-hidden="true" title="Nada a ver!" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn btn-default btnComentario" data-toogle="tooltip" title="Comentar" data-post="<?php echo $post->CodPost;?>">
-                                                  <span class="fa fa-quote-left"></span>
-                                                <span class="fa fa-quote-right"></span>
-                                                </button>
-                                            <button class="btn btn-default pull-right dropdown-toggle" type="button" data-toggle="modal" data-target="#report">
-                                                <span class="fa fa-flag"></span>
-                                            </button>
-                                        </div>
-                                    </div> -->
 
                                     <div class="panel panel-primary">
                                         <span class="mural-img pull-left">
                                                 <?php 
-                                                    $s = ($post->Sexo == 'f') ? 'f' : 'm';
-                                                    $foto = (isset($post->Foto))? "users/profile/$post->Foto.jpg" : "assets/img/user-$s.png" ;
+                                                    $CI =& get_instance();
+                                                    $CI->load->helper('interface');
+                                                    $foto = fotoPerfil($post->Foto,$post->Sexo);
+                                                    // $s = ($post->Sexo == 'f') ? 'f' : 'm';
+                                                    // $foto = (isset($post->Foto))? "users/profile/$post->Foto.jpg"."?".time() : "assets/img/user-$s.png"."?".time() ;
                                                 ?>
-                                                <img src="<?= base_url($foto); ?>" class="img-circle">
+                                                <img src="<?= $foto; ?>" class="img-circle">
+
                                         </span>
                                         <div class="panel-heading">
                                             <h3 class="panel-title"><a href="/perfil/<?php echo $post->Token;?>"><?php echo utf8_encode($post->Nome."&nbsp;".$post->Sobrenome);?></a><small> <?php echo "em ".date("d/m/Y à\s H:i", strtotime($post->DataHora));?></small></h3>
 
                                         </div>
                                         <div class="panel-body">
+                                            <!-- <p> <?php 
+                                                    $str = utf8_encode($post->Conteudo);
+                                                    $str = parse_smileys($str, base_url('assets/img/smileys/'));
+                                                    echo $str;
+                                                ?>
+                                                
+                                            </p> -->
                                             <p> <?php 
                                                     $str = utf8_encode($post->Conteudo);
-                                                    $str = parse_smileys($str, base_url('assets/smileys/'));
+                                                    $str = parse_smileys($str, base_url('assets/img/smileys/'));
+
+                                                    $pub = explode(" ", $str);
+
+                                                    $this->load->helper('http'); 
+                                                    if(verificaUrl($str)){
+                                                        $link = explode(".", $str);
+                                                        if(in_array("youtube", $link)){
+                                                            $video = explode("=", $str);
+                                                            $str = '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$video[1].'" frameborder="0" allowfullscreen></iframe></div>';
+                                                        }
+                                                        else{
+                                                            $str = '<a href="'.$str.'" target="_blank">'.$str.'</a>';
+                                                        }
+                                                    }
+                                                    
                                                     echo $str;
                                                 ?>
                                                 
@@ -83,7 +57,7 @@
                                             <?php 
                                                 if(isset($post->Imagem)):?>
                                                     <center>
-                                                        <img src="<?= base_url($post->Imagem); ?>" class="img  img-responsive">
+                                                        <img src="<?= base_url('data/posts/'); echo "$post->Imagem?".time();?>" class="img img-responsive" style="max-width: 80%;height: auto" >
                                                     </center>
                                                 <?php endif;
                                             ?>

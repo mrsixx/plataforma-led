@@ -76,7 +76,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="img-container">
-                                <img src="<?php echo $foto;?>" width="100%" alt="Foto">
+                                <img src="<?php echo $foto;echo "?".time();?>" width="100%" alt="Foto">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -464,8 +464,8 @@
                         <div class="tab_con tab-pane active" id="corpoavatar">
                             <p>
                                 <?php foreach ($corpo as $corpo): ?>
-                                <a class="btn btnavatar" data-nome='<?= base_url("/assets/avatar/$corpo->Link.png"); ?>' data-id='<?php $id = explode("/",$corpo->Link); echo $id[0]; ?>' ' data-cod='<?php echo $corpo->CodCorpo; ?>' type="button">
-                                                        <img class="corpo"  src='<?= base_url("assets/avatar/$corpo->Link.png"); ?>'>
+                                <a class="btn btnavatar" data-nome='<?= base_url("/assets/img/avatar/$corpo->Link.png"); ?>' data-id='<?php $id = explode("/",$corpo->Link); echo $id[0]; ?>' ' data-cod='<?php echo $corpo->CodCorpo; ?>' type="button">
+                                                        <img class="corpo"  src='<?= base_url("assets/img/avatar/$corpo->Link.png"); ?>'>
                                                     </a>
                                 <?php endforeach; ?>
                             </p>
@@ -473,8 +473,8 @@
                         <div class="tab_con tab-pane" id="rostoavatar">
                             <p>
                                 <?php foreach ($rosto as $rosto): ?>
-                                <a style="color:red;" class="btn btnavatar" data-nome='<?= base_url("assets/avatar/$rosto->Link.png"); ?>' data-id='<?php $id = explode("/",$rosto->Link); echo $id[0]; ?>' ' data-cod='<?php echo $rosto->CodRosto; ?>' type="button">
-                                                        <img class="rosto"  src='<?= base_url("assets/avatar/$rosto->Link.png"); ?>'>
+                                <a style="color:red;" class="btn btnavatar" data-nome='<?= base_url("assets/img/avatar/$rosto->Link.png"); ?>' data-id='<?php $id = explode("/",$rosto->Link); echo $id[0]; ?>' ' data-cod='<?php echo $rosto->CodRosto; ?>' type="button">
+                                                        <img class="rosto"  src='<?= base_url("assets/img/avatar/$rosto->Link.png"); ?>'>
                                                     </a>
                                 <?php endforeach; ?>
                                 <a class="btn btnavatar fa fa-trash fa-2x" data-nome='' data-id='rosto' ' data-cod='' type="button"></a>
@@ -483,8 +483,8 @@
                         <div class="tab_con tab-pane" id="roupaavatar">
                             <p>
                                 <?php foreach ($roupa as $roupa): ?>
-                                <a class="btn btnavatar" data-nome='<?= base_url("assets/avatar/$roupa->Link.png"); ?>' data-id='<?php $id = explode("/",$roupa->Link); echo $id[0]; ?>' ' data-cod='<?php echo $roupa->CodRoupa; ?>' type="button">
-                                                        <img class="rosto"  src='<?= base_url("assets/avatar/$roupa->Link.png"); ?>'>
+                                <a class="btn btnavatar" data-nome='<?= base_url("assets/img/avatar/$roupa->Link.png"); ?>' data-id='<?php $id = explode("/",$roupa->Link); echo $id[0]; ?>' ' data-cod='<?php echo $roupa->CodRoupa; ?>' type="button">
+                                                        <img class="rosto"  src='<?= base_url("assets/img/avatar/$roupa->Link.png"); ?>'>
                                                     </a>
                                 <?php endforeach; ?>
                                 <a class="btn btnavatar fa fa-trash fa-2x" data-nome='' data-id='roupa' ' data-cod='' type="button"></a>
@@ -493,8 +493,8 @@
                         <div class="tab_con tab-pane" id="cabeloavatar">
                             <p>
                                 <?php foreach ($cabelo as $cabelo): ?>
-                                <a class="btn btnavatar" data-nome='<?= base_url("assets/avatar/$cabelo->Link.png"); ?>' data-id='<?php $id = explode("/",$cabelo->Link); echo $id[0]; ?>' ' data-cod='<?php echo $cabelo->CodCabelo; ?>' type="button">
-                                                        <img class="cabelo"  src='<?= base_url("assets/avatar/$cabelo->Link.png"); ?>'>
+                                <a class="btn btnavatar" data-nome='<?= base_url("assets/img/avatar/$cabelo->Link.png"); ?>' data-id='<?php $id = explode("/",$cabelo->Link); echo $id[0]; ?>' ' data-cod='<?php echo $cabelo->CodCabelo; ?>' type="button">
+                                                        <img class="cabelo"  src='<?= base_url("assets/img/avatar/$cabelo->Link.png"); ?>'>
                                                     </a>
                                 <?php endforeach; ?>
                                 <a class="btn btnavatar fa fa-trash fa-2x" data-nome='' data-id='cabelo' ' data-cod='' type="button"></a>
@@ -503,8 +503,8 @@
                         <div class="tab_con tab-pane" id="itemavatar">
                             <p>
                                 <?php foreach ($item as $item): ?>
-                                <a class="btn btnavatar" data-nome='<?= base_url("assets/avatar/$item->Link.png"); ?>' data-id='<?php $id = explode("/",$item->Link); echo $id[0]; ?>' ' data-cod='<?php echo $item->CodItem; ?>' type="button">
-                                                        <img src='<?= base_url("assets/avatar/$item->Link.png"); ?>'>
+                                <a class="btn btnavatar" data-nome='<?= base_url("assets/img/avatar/$item->Link.png"); ?>' data-id='<?php $id = explode("/",$item->Link); echo $id[0]; ?>' ' data-cod='<?php echo $item->CodItem; ?>' type="button">
+                                                        <img src='<?= base_url("assets/img/avatar/$item->Link.png");echo "?".time(); ?>'>
                                                     </a>
                                 <?php endforeach; ?>
                                 <a class="btn btnavatar fa fa-trash fa-2x" data-nome='' data-id='item' ' data-cod='' type="button"></a>
@@ -514,23 +514,23 @@
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xs-2">
                         <div class="avatar">
                             <input type="hidden" value="<?php echo $avatar['CodAvatar'];?>" name="codavatar">
-                            <img src="<?= base_url('assets/avatar/'.$avatar['corpo'].".png ");?>" id="corpo">
+                            <img src="<?= base_url('assets/img/avatar/'.$avatar['corpo'].".png");echo "?".time();?>" id="corpo">
                             <input type="hidden" value="<?php echo $avatar['CodCorpo'];?>" name="codcorpo">
                         </div>
                         <div class="avatar">
-                            <img src="<?= base_url('assets/avatar/'.$avatar['roupa'].".png ");?>" id="roupa">
+                            <img src="<?= base_url('assets/img/avatar/'.$avatar['roupa'].".png");echo "?".time();?>" id="roupa">
                             <input type="hidden" value="<?php echo $avatar['CodRoupa'];?>" name="codroupa">
                         </div>
                         <div class="avatar">
-                            <img src="<?= base_url('assets/avatar/'.$avatar['item'].".png ");?>" id="item">
+                            <img src="<?= base_url('assets/img/avatar/'.$avatar['item'].".png");echo "?".time();?>" id="item">
                             <input type="hidden" value="<?php echo $avatar['CodItem'];?>" name="coditem">
                         </div>
                         <div class="avatar">
-                            <img src="<?= base_url('assets/avatar/'.$avatar['rosto'].".png ");?>" id="rosto">
+                            <img src="<?= base_url('assets/img/avatar/'.$avatar['rosto'].".png");echo "?".time();?>" id="rosto">
                             <input type="hidden" value="<?php echo $avatar['CodRosto'];?>" name="codrosto">
                         </div>
                         <div class="avatar">
-                            <img src="<?= base_url('assets/avatar/'.$avatar['cabelo'].".png ");?>" id="cabelo">
+                            <img src="<?= base_url('assets/img/avatar/'.$avatar['cabelo'].".png");echo "?".time();?>" id="cabelo">
                             <input type="hidden" value="<?php echo $avatar['CodCabelo'];?>" name="codcabelo">
                         </div>
                     </div>
@@ -576,7 +576,7 @@
                                         
                                     ?>
                                 <div class="col-xs-12 col-sm-3 col-md-2" align="center">
-                                    <img src="<?php echo base_url("$usuario.jpg"); ?>" alt="<?php echo utf8_encode($infoUser['Nome']); ?>" class="img-circle thumbnail" />
+                                    <img src="<?php echo base_url("$usuario.jpg");echo "?".time(); ?>" alt="<?php echo utf8_encode($infoUser['Nome']); ?>" class="img-circle thumbnail" />
                                 </div>
                                 <div class="col-xs-8 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2">
                                     <h4><?php echo utf8_encode($infoUser['Nome'])." ".utf8_encode($infoUser['Sobrenome'])." - ".$idade; ?></h4>

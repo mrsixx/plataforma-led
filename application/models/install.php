@@ -44,6 +44,7 @@ class Install extends CI_Model
 				foreach ($cmdCria as $tabela => $comando) {
 					$stm = $con->prepare($comando);
 					if(!$stm->execute()){
+						var_dump($stm);
 						return false;
 					}
 				}
@@ -52,6 +53,7 @@ class Install extends CI_Model
 				foreach ($cmdRelaciona as $tabela => $comando) {
 					$stm = $con->prepare($comando);
 					if(!$stm->execute()){
+						var_dump($stm);
 						return false;
 					}
 				}
@@ -60,6 +62,7 @@ class Install extends CI_Model
 				foreach ($cmdInsere as $tabela => $comando) {
 					$stm = $con->prepare($comando);
 					if(!$stm->execute()){
+						var_dump($stm);
 						return false;
 					}
 				}
@@ -69,6 +72,7 @@ class Install extends CI_Model
 				foreach ($cadAvatar as $tabela => $comando) {
 					$stm = $con->prepare($comando);
 					if(!$stm->execute()){
+						var_dump($stm);
 						return false;
 					}
 				}

@@ -26,69 +26,73 @@ class Posts extends CI_Controller {
 
 			//se ele passar daqui, ele tem permissão para visualizar esse mural, portanto seguimos em frente pegando as informações 
 			$mr = $this->escola->getMural(array('CodMural' => $codmural));
-			$post = $this->mural->retornaPostagens(array('CodMural' => $codmural));
+			if(!empty($mr)){
+				$post = $this->mural->retornaPostagens(array('CodMural' => $codmural));
 
-			//chamo a helper pra preencher a interface
-			$this->load->helper('interface');
-			$data = preencheInterface($usuario,'mural');
-			//carregando a view enquanto passo as informações
-			$data['title'] = utf8_encode($mr['Nome']);
-			$data['content'] = "posts";
-			$data['sidebar'] = "mural";
-			$data['codUsuario'] = $usuario['cod'];
+				//chamo a helper pra preencher a interface
+				$this->load->helper('interface');
+				$data = preencheInterface($usuario,'mural');
+				//carregando a view enquanto passo as informações
+				$data['title'] = utf8_encode($mr['Nome']);
+				$data['content'] = "posts";
+				$data['sidebar'] = "mural";
+				$data['codUsuario'] = $usuario['cod'];
 
-			//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
-			$this->load->helper('sidebar');
+				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
+				$this->load->helper('sidebar');
 
-			//por fim passo as informações importantes para exibir naquele determinado mural
-			$data['nomeMural'] = utf8_encode($mr['Nome']);
-			$data['descricao'] = utf8_encode($mr['Descricao']);
-			$data['codMural'] = $mr['CodMural'];
-			$data['publicacao'] = $post;
+				//por fim passo as informações importantes para exibir naquele determinado mural
+				$data['nomeMural'] = utf8_encode($mr['Nome']);
+				$data['descricao'] = utf8_encode($mr['Descricao']);
+				$data['codMural'] = $mr['CodMural'];
+				$data['publicacao'] = $post;
 
 
 
-			//passo os comandos necessários para renderizar os emoticons
-			$this->load->helper('smiley');
-			$data['files'] = array('mural' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">', 'js para os smileys' => smiley_js());
+				//passo os comandos necessários para renderizar os emoticons
+				$this->load->helper('smiley');
+				$data['files'] = array('mural' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">', 'js para os smileys' => smiley_js());
 
-			$data['filesfooter'] = array('envio ajax' => '<script type="text/javascript" src="'.base_url("assets/js/scripts/mural.js").'"></script>');
-			$this->load->library('table');
-            $template = array(
-			        'table_open'            => '<table border="0" width="100%" cellpadding="4" cellspacing="0" class="emoticon-lista table-responsive">',
+				$data['filesfooter'] = array('envio ajax' => '<script type="text/javascript" src="'.base_url("assets/js/scripts/mural.js").'"></script>');
+				$this->load->library('table');
+	            $template = array(
+				        'table_open'            => '<table border="0" width="100%" cellpadding="4" cellspacing="0" class="emoticon-lista table-responsive">',
 
-			        'thead_open'            => '<thead>',
-			        'thead_close'           => '</thead>',
+				        'thead_open'            => '<thead>',
+				        'thead_close'           => '</thead>',
 
-			        'heading_row_start'     => '<tr>',
-			        'heading_row_end'       => '</tr>',
-			        'heading_cell_start'    => '<th>',
-			        'heading_cell_end'      => '</th>',
+				        'heading_row_start'     => '<tr>',
+				        'heading_row_end'       => '</tr>',
+				        'heading_cell_start'    => '<th>',
+				        'heading_cell_end'      => '</th>',
 
-			        'tbody_open'            => '<tbody>',
-			        'tbody_close'           => '</tbody>',
+				        'tbody_open'            => '<tbody>',
+				        'tbody_close'           => '</tbody>',
 
-			        'row_start'             => '<tr>',
-			        'row_end'               => '</tr>',
-			        'cell_start'            => '<td>',
-			        'cell_end'              => '</td>',
+				        'row_start'             => '<tr>',
+				        'row_end'               => '</tr>',
+				        'cell_start'            => '<td>',
+				        'cell_end'              => '</td>',
 
-			        'row_alt_start'         => '<tr>',
-			        'row_alt_end'           => '</tr>',
-			        'cell_alt_start'        => '<td>',
-			        'cell_alt_end'          => '</td>',
+				        'row_alt_start'         => '<tr>',
+				        'row_alt_end'           => '</tr>',
+				        'cell_alt_start'        => '<td>',
+				        'cell_alt_end'          => '</td>',
 
-			        'table_close'           => '</table>'
-			);
+				        'table_close'           => '</table>'
+				);
 
-			$this->table->set_template($template);
-            $image_array = get_clickable_smileys(base_url('assets/smileys/'), 'txtPost');
-            $col_array = $this->table->make_columns($image_array, 4);
+				$this->table->set_template($template);
+	            $image_array = get_clickable_smileys(base_url('assets/img/smileys/'), 'txtPost');
+	            $col_array = $this->table->make_columns($image_array, 4);
 
-            $data['smiley_table'] = $this->table->generate($col_array);
+	            $data['smiley_table'] = $this->table->generate($col_array);
 
-			$this->load->view('panel/layout',$data);
-
+				$this->load->view('panel/layout',$data);
+			}
+			else{
+				redirect(base_url('mural'));
+			}
 			//parei aqui
 		}
 		else{
@@ -121,6 +125,8 @@ class Posts extends CI_Controller {
 			$data['CodMural'] = $this->input->post('codMural');
 			$data['CodUsuario'] = $usuario['cod'];
 
+			$mural = $this->mural->retornaMural(array('CodMural' => $data['CodMural']));
+			$nomeMural = md5(utf8_encode($mural[0]->Nome));
 			//verifico se aquele usuário tem permissão para efetuar uma postagem naquele mural 
 
 			if($this->mural->retornaUsuarioMural(array('CodMural' => $data['CodMural'], 'usuario-mural.CodUsuario' => $usuario['cod']),'num') == 0 && $usuario['tipo'] != 1)
@@ -135,9 +141,11 @@ class Posts extends CI_Controller {
 
 
 					// definimos um nome aleatório para o diretório 
-			        $folder = random_string('alpha');
+			        // $folder = random_string('alpha');
+			        $folder = $nomeMural;
 			        // definimos o path onde o arquivo será gravado
-			        $path = "./assets_mural/".$folder;
+			        // $path = "./assets_mural/".$folder;
+			        $path = "./data/posts/".$folder;
 			        // verificamos se o diretório existe
 			        // se não existe criamos com permissão de leitura e escrita
 			        if (!is_dir($path)) {
@@ -164,7 +172,8 @@ class Posts extends CI_Controller {
 			       	 	//se correu tudo bem, recuperamos os dados do arquivo
 			            $dadosArquivo = $this->upload->data();
 			            // definimos o path original do arquivo
-			            $arquivoPath = 'assets_mural/'.$folder."/".$dadosArquivo['file_name'];
+			            // $arquivoPath = 'assets_mural/'.$folder."/".$dadosArquivo['file_name'];
+			            $arquivoPath = $folder."/".$dadosArquivo['file_name'];
 			            // passando para o array '$data'
 			            $data['Imagem'] = $arquivoPath;
 		       	 	}
@@ -231,17 +240,17 @@ class Posts extends CI_Controller {
 					foreach ($comentarios as $comentario) {
 						//faço a verificação da foto 
 						if(isset($comentario->Foto)) 
-							$foto = base_url("users/profile/$comentario->Foto.jpg");
+							$foto = base_url("users/profile/$comentario->Foto.jpg")."?".time();
 						else{
 							if($comentario->Sexo == 'M')
-								$foto = base_url("assets/img/user-m.png");
+								$foto = base_url("assets/img/user-m.png")."?".time();
 							else
-								$foto = base_url("assets/img/user-f.png");
+								$foto = base_url("assets/img/user-f.png")."?".time();
 						}
 
 						//faço a conversão dos emoticons
 						$str = utf8_encode($comentario->Comentario);
-						$str = parse_smileys($str, base_url('assets/smileys/'));
+						$str = parse_smileys($str, base_url('assets/img/smileys/'));
 
 						//faço a verificação do tempo
 						// $agora = date("Y-m-d H:i");
@@ -376,7 +385,7 @@ class Posts extends CI_Controller {
 			if(!empty($post))
 				$this->load->view('panel/layout',$data);
 			else
-				show_404();
+				redirect(base_url('mural'));
 		}
 	}
 
@@ -384,7 +393,7 @@ class Posts extends CI_Controller {
 		$this->load->helper('smiley');
 		$str = utf8_encode($this->input->get('txtMsg'));
 
-		$str = parse_smileys($str, base_url('assets/smileys/'));
+		$str = parse_smileys($str, base_url('assets/img/smileys/'));
 		$str = array('msg' => $str);
 		return $this->output 
 	        		-> set_content_type('application/json') 

@@ -74,6 +74,7 @@ $route['cadastro/step-3/:any'] = 'panel/avatar';
 //links navbar
 $route['painel'] = 'panel';
 $route['perfil/:any'] = 'perfil';
+$route['busca'] = 'panel/busca';
 	$route['alteraAvatar'] = 'perfil/alteraAvatar';
 	$route['atualizaPerfil'] = 'perfil/alteraPerfil';
 	$route['attFoto'] = 'perfil/alteraFoto';
@@ -86,10 +87,19 @@ $route['mural'] = 'panel/mural';
 	$route['post/:num'] = 'posts/chamaPostagem/:num';
 $route['chat'] = 'chat';
 $route['tasks'] = 'task';
+	$route['tasks/:num'] = 'task';
+	$route['tasks/enviar/:num'] = 'task/enviar';
+
 $route['biblioteca'] = 'biblioteca';
+$route['relacao'] = 'relacao';
+	$route['relacao/:any'] = 'relacao/listas';
+	$route['relacao/alunos/:num'] = 'relacao/turmas';
 $route['calendario'] = 'calendario';
 $route['ferramentas'] = 'ferramenta';
 $route['ferramentas/cadastro'] = 'ferramenta/cadLink';
 $route['ferramentas/editar/:num'] = 'ferramenta/edtLink';
 $route['ferramentas/:num'] = 'ferramenta/exibeLink';
 $route['denuncias'] = 'panel/reports';
+$route['componentes'] = 'componente';
+	$route['componentes/:num'] = 'componente/carregaComponente';
+	$componentes = 'componente/attCriterio';

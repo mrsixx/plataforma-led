@@ -15,8 +15,8 @@ if(!function_exists('verificaAmbiente')){
 			$turma = $CI->escola->getTurma();
 			$hierarquia = $CI->escola->getHierarquia();
 			$compcurricular = $CI->escola->getCompCurricular();
-
-			if(!empty($curso) && !empty($hierarquia) && !empty($turma) && !empty($compcurricular)){
+ // && !empty($hierarquia)
+			if(!empty($curso) && !empty($turma) && !empty($compcurricular)){
 				return true;
 			}
 			return false;

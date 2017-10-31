@@ -92,20 +92,6 @@ CREATE TABLE `cabeloavatar` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `campo`
---
-
-CREATE TABLE `campo` (
-  `CodCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Questao` longtext NOT NULL,
-  `RespostaCerta` longtext,
-  `Peso` decimal(10,0) NOT NULL DEFAULT '1',
-  `CodTipoCampo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `comentario`
 --
 
@@ -137,7 +123,6 @@ CREATE TABLE `compcurricular` (
 
 CREATE TABLE `componente-professor` (
   `CodCompProfessor` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `CodUsuario` bigint(20) NOT NULL,
   `CodComponente` bigint(20) NOT NULL,
   `CriteriosAvaliacao` text,
   `CodProfessor` bigint(20)
@@ -254,8 +239,23 @@ CREATE TABLE `curso` (
 CREATE TABLE `desempenha-task` (
   `CodDesempenho` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `DataInicio` datetime NOT NULL,
+  `CaminhoArquivo` text NOT NULL,
+  `Status` tinyint(1) DEFAULT '0',
   `CodTask` bigint(20) NOT NULL,
   `CodUsuario` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `dica`
+--
+
+CREATE TABLE `dica` (
+  `CodDica` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `Dica` text NOT NULL,
+  `Painel` text NOT NULL,
+  `TipoUsuario` tinyint(1)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -271,19 +271,6 @@ CREATE TABLE `duvida` (
   `Conteudo` text NOT NULL,
   `CodCompCurricular` bigint(20) NOT NULL,
   `CodCriador` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `equipe`
---
-
-CREATE TABLE `equipe` (
-  `CodEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Nome` varchar(200) DEFAULT NULL,
-  `CaminhoArquivo` text,
-  `CodTask` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -329,6 +316,7 @@ CREATE TABLE `evento` (
 
 CREATE TABLE `experiencia` (
   `CodUsuario` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `PontosXP` bigint(20) NOT NULL DEFAULT '0',
   `QtdCinestesica` bigint(20) NOT NULL DEFAULT '0',
   `QtdEspacial` bigint(20) NOT NULL DEFAULT '0',
   `QtdExistencial` bigint(20) NOT NULL DEFAULT '0',
@@ -339,29 +327,6 @@ CREATE TABLE `experiencia` (
   `QtdMusical` bigint(20) NOT NULL DEFAULT '0',
   `QtdNaturalista` bigint(20) NOT NULL DEFAULT '0',
   `QtdPratica` bigint(20) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `form-campo`
---
-
-CREATE TABLE `form-campo` (
-  `CodFormCampo` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `CodForm` bigint(20) NOT NULL,
-  `CodCampo` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `formulario`
---
-
-CREATE TABLE `formulario` (
-  `CodForm` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Duracao` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -414,7 +379,10 @@ CREATE TABLE `insignia` (
 CREATE TABLE `inteligencia` (
   `CodInteligencia` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Nome` varchar(20) NOT NULL,
-  `Descricao` text NOT NULL
+  `Descricao` text NOT NULL,
+  `Icon` varchar(200) NOT NULL,
+  `Classe` varchar(200) NOT NULL,
+  `ProgressBar` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -518,19 +486,6 @@ CREATE TABLE `postagem` (
   `CodUsuario` bigint(20)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `resposta-campo`
---
-
-CREATE TABLE `resposta-campo` (
-  `CodResposta` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Resposta` longtext NOT NULL,
-  `CodCampo` bigint(20) NOT NULL,
-  `CodUsuario` bigint(20) DEFAULT NULL,
-  `CodGrupo` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -563,26 +518,14 @@ CREATE TABLE `roupaavatar` (
 --
 
 CREATE TABLE `task` (
-  `CodTask` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Descricao` text NOT NULL,
-  `QtdExperiencia` bigint(20) NOT NULL,
-  `Prazo` datetime NOT NULL,
-  `Realizada` enum('Individual','Grupo') NOT NULL,
-  `CodCriador` bigint(20),
-  `CodForm`bigint(20),
-  `CodTipoTask` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tipocampo`
---
-
-CREATE TABLE `tipocampo` (
-  `CodTipoCampo` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `Nome` varchar(200) NOT NULL,
-  `TipoCampo` enum('inputText','optionGroup','textArea','cxSelecao') NOT NULL
+    `CodTask` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `Nome` varchar(50) NOT NULL,
+    `Descricao` text NOT NULL,
+    `CaminhoArquivo` text,
+    `Prazo` datetime NOT NULL,
+    `Data` datetime NOT NULL,
+    `CodCriador` bigint(20),
+    `CodTipoTask` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -654,6 +597,19 @@ CREATE TABLE `turma` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `turma-task`
+--
+
+CREATE TABLE `turma-task` (
+  `CodTurmaTask` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `CodTurma` bigint(20) NOT NULL,
+    `CodTask` bigint(20) NOT NULL,
+    `CodComponente` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `usuario`
 --
 
@@ -670,26 +626,14 @@ CREATE TABLE `usuario` (
   `Sexo` enum('F','M','?') NOT NULL DEFAULT '?',
   `Cidade` varchar(50),
   `Status` tinyint(1) NOT NULL DEFAULT '0',
+  `UltimoLogin` datetime,
   `HorarioLimite` datetime, 
   `Token` varchar(8) NOT NULL,
   `TokenPai` varchar(8),
   `QtdConsultorias` int(11) NOT NULL DEFAULT '0',
-  `UltimoLogin` datetime,
   `CodTipoUsuario` int(11) NOT NULL,
   `CodAvatar` bigint(20),
   `CodHierarquia` int(11)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `usuario-equipe`
---
-
-CREATE TABLE `usuario-equipe` (
-  `CodUsuarioEquipe` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `CodUsuario` bigint(20) NOT NULL,
-  `CodEquipe` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -754,12 +698,6 @@ ALTER TABLE `avatar`
   ADD CONSTRAINT `fk-roupa` FOREIGN KEY (`CodRoupa`) REFERENCES `roupaavatar` (`CodRoupa`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `campo`
---
-ALTER TABLE `campo`
-  ADD CONSTRAINT `fk-tipocampo` FOREIGN KEY (`CodTipoCampo`) REFERENCES `tipocampo` (`CodTipoCampo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limitadores para a tabela `comentario`
 --
 ALTER TABLE `comentario`
@@ -816,12 +754,6 @@ ALTER TABLE `duvida`
   ADD CONSTRAINT `fk-criadorduvida` FOREIGN KEY (`CodCriador`) REFERENCES `usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `equipe`
---
-ALTER TABLE `equipe`
-  ADD CONSTRAINT `fk-equipetask` FOREIGN KEY (`CodTask`) REFERENCES `task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limitadores para a tabela `evento`
 --
 ALTER TABLE `evento`
@@ -834,12 +766,6 @@ ALTER TABLE `evento`
 ALTER TABLE `experiencia`
   ADD CONSTRAINT `fk-xp` FOREIGN KEY (`CodUsuario`) REFERENCES `usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Limitadores para a tabela `form-campo`
---
-ALTER TABLE `form-campo`
-  ADD CONSTRAINT `fk-campoform` FOREIGN KEY (`CodCampo`) REFERENCES `campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-formcampo` FOREIGN KEY (`CodForm`) REFERENCES `formulario` (`CodForm`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limitadores para a tabela `grupo`
@@ -887,19 +813,10 @@ ALTER TABLE `postagem`
   ADD CONSTRAINT `fk-mural` FOREIGN KEY (`CodMural`) REFERENCES `mural` (`CodMural`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `resposta-campo`
---
-ALTER TABLE `resposta-campo`
-  ADD CONSTRAINT `fk-responderamcampo` FOREIGN KEY (`CodGrupo`) REFERENCES `equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-respondeucampo` FOREIGN KEY (`CodUsuario`) REFERENCES `usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-respostacampo` FOREIGN KEY (`CodCampo`) REFERENCES `campo` (`CodCampo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limitadores para a tabela `task`
 --
 ALTER TABLE `task`
   ADD CONSTRAINT `fk-criadortask` FOREIGN KEY (`CodCriador`) REFERENCES `usuario` (`CodUsuario`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-formulario` FOREIGN KEY (`CodForm`) REFERENCES `formulario` (`CodForm`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-tipotask` FOREIGN KEY (`CodTipoTask`) REFERENCES `tipotask` (`CodTipoTask`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -913,22 +830,24 @@ ALTER TABLE `turma`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `fk-avatar` FOREIGN KEY (`CodAvatar`) REFERENCES `avatar` (`CodAvatar`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-hierarquia` FOREIGN KEY (`CodHierarquia`) REFERENCES `hierarquia` (`CodHierarquia`),
+  ADD CONSTRAINT `fk-hierarquia` FOREIGN KEY (`CodHierarquia`) REFERENCES `hierarquia` (`CodHierarquia`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk-tipousuario` FOREIGN KEY (`CodTipoUsuario`) REFERENCES `tipousuario` (`CodTipoUsuario`) ON UPDATE CASCADE;
 
---
--- Limitadores para a tabela `usuario-equipe`
---
-ALTER TABLE `usuario-equipe`
-  ADD CONSTRAINT `fk-equipeusuario` FOREIGN KEY (`CodEquipe`) REFERENCES `equipe` (`CodEquipe`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-usuarioequipe` FOREIGN KEY (`CodUsuario`) REFERENCES `usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
 --
 -- Limitadores para a tabela `usuario-mural`
 --
 ALTER TABLE `usuario-mural`
   ADD CONSTRAINT `fk-mural-usuario` FOREIGN KEY (`CodMural`) REFERENCES `mural` (`CodMural`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-usuario-mural` FOREIGN KEY (`CodUsuario`) REFERENCES `usuario` (`CodUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  
+--
+-- Limitadores para a tabela `turma-task`
+--
+ALTER TABLE `turma-task`
+  ADD CONSTRAINT `fk-turma-task` FOREIGN KEY (`CodTurma`) REFERENCES `turma` (`CodTurma`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-task-turma` FOREIGN KEY (`CodTask`) REFERENCES `task` (`CodTask`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-task-componente` FOREIGN KEY (`CodComponente`) REFERENCES `compcurricular` (`CodComponente`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

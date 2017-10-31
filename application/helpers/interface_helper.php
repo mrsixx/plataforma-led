@@ -21,19 +21,16 @@ if(!function_exists('preencheInterface')){
 		// verificando notificações
 		$dados['qtdnotificacoes'] = notificacao($dadosSessao, "qtd");
 		$dados['notificacoes'] = notificacao($dadosSessao);
-		//verificando lvl 
-		$dados['lvl'] = round($CI->interface_led->retornaLvl($dadosSessao));
-		$dados['xp'] = 89;
+
+
+		//verificando lvl - CHAMANDO FUNÇÃO
+		$CI->load->helper('xp');
+		$dados += calculaLvl($CI->interface_led->retornaXp($dadosSessao));
+
+
+
 		//pegando foto do perfil
-		if(isset($dados['foto'])){
-			$dados['foto'] = base_url('users/profile/'.$dados['foto'].'.jpg');
-		}else{
-			if($dados['sexo'] == "M"){
-				$dados['foto'] = base_url('assets/img/user-m.png');
-			}else if($dados['sexo'] == "F"){
-				$dados['foto'] = base_url('assets/img/user-f.png');
-			}
-		}
+		$dados['foto'] = fotoPerfil($dados['foto'],$dados['sexo']);
 		//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário e de acordo com a sidebar
 		$CI->load->helper('sidebar');
 		switch ($pagina) {
@@ -61,9 +58,27 @@ if(!function_exists('preencheInterface')){
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
 				break;
 
-			case 'task':
-				$CI->load->model('task');
-				$link['dados'] = $CI->link->retornaLink();
+			case 'tasks':
+				$CI->load->model('missoes');
+				$CI->load->model('escola');
+				$turma = $CI->escola->getAlunoTurma(array('at.CodUsuario' => $dadosSessao['cod']));	
+				foreach ($turma as $t) {
+					$codTurma = $t->CodTurma;
+				}
+				$link['dados'] = ($dadosSessao['tipo'] == 3)? $CI->missoes->retornaTask(array('turma.CodTurma' => $codTurma, 'Prazo >=' => date('Y-m-d H:i')),null) : $CI->missoes->retornaTask(array('CodCriador' => $dadosSessao['cod']),null);
+				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
+				break;
+
+			case 'compcurricular':
+				$CI->load->model('escola');
+				if($dadosSessao['tipo'] == 3){
+					$alunoTurma = $CI->escola->getAlunoTurma(array('CodAluno' => $dadosSessao['cod']),'array');
+					$turma = $alunoTurma['CodTurma'];
+					$link['dados'] = $CI->escola->getCompCurricular(array('t.CodTurma' => $turma));
+				}
+				else if($dadosSessao['tipo'] == 4){
+					$link['dados'] = $CI->escola->getCompCurricular(array('CodProfessor' => $dadosSessao['cod']));
+				}
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
 				break;
 
@@ -110,5 +125,21 @@ if(!function_exists('notificacao')){
 				return $CI->interface_led->notificacoes($dados);
 			break;
 		}
+	}
+}
+
+if(!function_exists('fotoPerfil')){
+	function fotoPerfil($nmFoto,$sexo){
+		if(isset($nmFoto)){
+			$foto = base_url('users/profile/'.$nmFoto.'.jpg')."?".time();
+		}else{
+			if($sexo == "M"){
+				$foto = base_url('assets/img/user-m.png')."?".time();
+			}else if($sexo == "F"){
+				$foto = base_url('assets/img/user-f.png')."?".time();
+			}
+		}
+
+		return $foto;
 	}
 }

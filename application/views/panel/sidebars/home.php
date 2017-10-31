@@ -9,6 +9,10 @@
             <img class="img-circle" src="<?php echo $foto;?>">
 
             <div class="rank-label-container">
+
+
+
+    <?php if($tipo == 3 || $tipo == 4):?>
                 <span class="label label-default rank-label">
                     <?php 
                         // echo utf8_encode($nickname);
@@ -20,9 +24,35 @@
         </div>
     </div>
     <div class="progress" style="margin-top:-30px;">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $xp;?>%;" ></div>
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="<?php echo $min; ?>" aria-valuemax="<?php echo $max; ?>" style="width:<?php echo $porcentagem;?>%;" ></div>
     </div>
-    <div align="center" style="margin-top: -22px;font-size:1em"><?php echo $xp;?>%</div>
+    <div align="center" style="margin-top: -22px;font-size:1em;color:#000;"><?php echo $porcentagem;?>%</div>
+
+
+
+
+
+
+
+    <?php else:?>
+
+        <span class="label label-default rank-label">
+                    <?php 
+                        // echo utf8_encode($nickname);
+                        echo utf8_encode("$nome $sobrenome");
+                    ?>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <?php endif;?>
+
+
+
+
+
+
     <!--aqui acaba-->
     </span>
     <div id="sidebarled">

@@ -22,7 +22,15 @@
     //     # code...
     //     break;
     // }
-    $this->load->view('links/modais/profile');
+    switch ($modal) {
+      case 'profile':
+        $this->load->view('links/modais/profile');
+        break;
+      
+      default:
+        # code...
+        break;
+    }
   ?>
       </div>
     </div>
