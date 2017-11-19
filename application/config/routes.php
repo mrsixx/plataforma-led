@@ -86,15 +86,20 @@ $route['mural'] = 'panel/mural';
 	$route['mural/:num'] = 'posts';
 	$route['post/:num'] = 'posts/chamaPostagem/:num';
 $route['chat'] = 'chat';
+	$route['chat/messages'] = 'chat/iniciaChat';
 $route['tasks'] = 'task';
 	$route['tasks/:num'] = 'task';
 	$route['tasks/enviar/:num'] = 'task/enviar';
 
 $route['biblioteca'] = 'biblioteca';
+	$route['biblioteca/cadastro'] = 'biblioteca/cadLivro';
+	$route['biblioteca/:num'] = 'biblioteca/exibeLivro';
+
 $route['relacao'] = 'relacao';
 	$route['relacao/:any'] = 'relacao/listas';
 	$route['relacao/alunos/:num'] = 'relacao/turmas';
-$route['calendario'] = 'calendario';
+$route['calendario/'] = 'calendario';
+$route['calendario/:num/:num'] = 'calendario';
 $route['ferramentas'] = 'ferramenta';
 $route['ferramentas/cadastro'] = 'ferramenta/cadLink';
 $route['ferramentas/editar/:num'] = 'ferramenta/edtLink';

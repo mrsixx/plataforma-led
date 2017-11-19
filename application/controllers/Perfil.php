@@ -25,25 +25,28 @@ class Perfil extends CI_Controller {
 				//recebo o array com as informações da interface
 
 				//passando dados do banco pra view 
-				$this->load->model('escola');
-				$this->load->model('usuario');
-				$this->load->model('interface_led');
-				$this->load->model('avatar');
-				$this->load->model('missoes');
-				// $this->load->model('consultoria');
-				$user = $this->usuario->getUser(array('Token' => $codperfil));
+				$this->load->model('Escola');
+				$this->load->model('Usuario');
+				$this->load->model('Interface_led');
+				$this->load->model('Avatar');
+				$this->load->model('Missoes');
+				$user = $this->Usuario->getUser(array('Token' => $codperfil));
 				if($user){
 					$this->load->helper('interface');
-					$data = preencheInterface(array('cod'=>$user['CodUsuario'], 'tipo'=> $user['CodTipoUsuario']));
+					$data = preencheInterface(array('cod'=> $cod, 'tipo'=> $tipo));
+					// $data = preencheInterface(array('cod'=> $user['CodUsuario'], 'tipo'=> $user['CodTipoUsuario']));
+
+
 
 					$nome = utf8_encode($user['Nome'])." ".utf8_encode($user['Sobrenome']);
 					$data['infoUser'] = $user;
+					$data['codUsuario'] = $cod;
 					//passando as informações do painel de inteligências
-					$data['inteligencia'] = $this->missoes->retornaInteligencia();
+					$data['inteligencia'] = $this->Missoes->retornaInteligencia();
 
 					// $this->load->helper('xp');
 
-					$qtdXp =$this->missoes->retornaLvl(array('CodUsuario'=>$user['CodUsuario']));
+					$qtdXp =$this->Missoes->retornaLvl(array('CodUsuario'=>$user['CodUsuario']));
 					
 					//puxando em qual inteligência o usuário é melhor
 					foreach ($qtdXp as $int) {
@@ -67,8 +70,8 @@ class Perfil extends CI_Controller {
 
 
 					//retornando avatar daquele usuário
-					$data['avatar'] = $this->avatar->retornaAvatar(array('Token' => $codperfil));
-					$data['avatares'] = $this->avatar->retornaAvatar(null);
+					$data['avatar'] = $this->Avatar->retornaAvatar(array('Token' => $codperfil));
+					$data['avatares'] = $this->Avatar->retornaAvatar(null);
 
 					$data['title'] = $nome;
 					$data['content'] = "profile";
@@ -76,7 +79,8 @@ class Perfil extends CI_Controller {
 						'script avatar' => '<script type="text/javascript" src="'.base_url("assets/js/scripts/cadastro.js").'"></script>',
 						'scripts para ajax do perfil' => '<script type="text/javascript" src="'.base_url("assets/js/scripts/perfil.js").'"></script>'
 					);
-					$this->load->view('links/layout',$data);
+					if(atualizaStatus($cod))
+						$this->load->view('links/layout',$data);
 				}
 				else{
 					redirect(base_url('/panel'));
@@ -103,8 +107,8 @@ class Perfil extends CI_Controller {
 			//verificando se a configuração de ambiente já foi feita
 			$this->load->helper('inicia');
 			if(verificaAmbiente()){
-				$this->load->model('usuario');
-				$nickname = $this->usuario->atualizaCadastro(array('Nickname'=>utf8_decode($this->input->post('txtNick'))),array('CodUsuario' => $cod));
+				$this->load->model('Usuario');
+				$nickname = $this->Usuario->atualizaCadastro(array('Nickname'=>utf8_decode($this->input->post('txtNick'))),array('CodUsuario' => $cod));
 				$codavatar = $this->input->post('codavatar');
 				$avatar = array(
 						'CodCorpo' => ($this->input->post('codcorpo') != 0) ? $this->input->post('codcorpo') : null,
@@ -113,14 +117,14 @@ class Perfil extends CI_Controller {
 						'CodRosto' => ($this->input->post('codrosto') != 0) ? $this->input->post('codrosto') : null,
 						'CodItem' => ($this->input->post('coditem') != 0) ? $this->input->post('coditem') : null
 					);
-					$this->load->model('avatar');
+					$this->load->model('Avatar');
 
 				if(!empty($codavatar)){		
-					$avatar = $this->avatar->updAvatar($avatar,array('CodAvatar' => $codavatar));
+					$avatar = $this->Avatar->updAvatar($avatar,array('CodAvatar' => $codavatar));
 				}else{
-					$avatar = $this->avatar->cadastraAvatar($avatar,array('CodUsuario' => $cod));
-					$this->load->model('usuario');
-					$avatar = $this->usuario->atualizaCadastro(array('CodAvatar' => $avatar),array('CodUsuario' => $cod));
+					$avatar = $this->Avatar->cadastraAvatar($avatar,array('CodUsuario' => $cod));
+					$this->load->model('Usuario');
+					$avatar = $this->Usuario->atualizaCadastro(array('CodAvatar' => $avatar),array('CodUsuario' => $cod));
 				}
 
 				if($avatar && $nickname)
@@ -156,8 +160,8 @@ class Perfil extends CI_Controller {
 				);
 
 				//carrego a model 
-				$this->load->model('usuario');
-				return $this->usuario->atualizaCadastro($data, array('CodUsuario' => $cod));	 
+				$this->load->model('Usuario');
+				return $this->Usuario->atualizaCadastro($data, array('CodUsuario' => $cod));	 
 			}
 			else{
 				return false;
@@ -169,32 +173,109 @@ class Perfil extends CI_Controller {
 	}
 
 	public function alteraFoto(){
-		// processa arquivo
-		$imagem	= isset( $_FILES['file'] ) ? $_FILES['file'] : NULL;
-		$img = '';
-		// verifica se arquivo foi enviado para o servidor
-		if( $imagem['tmp_name'] )
-		{
-			// move arquivo para o servidor
-			if( move_uploaded_file( $imagem['tmp_name'], $imagem['name'] ) )
-			{
-				// include( 'm2brimagem.class.php' );
-				$this->load->helper('m2brimagem');
-				$oImg = new m2brimagem( $imagem['name'] );
-				if( $oImg->valida() == 'OK' )
-				{
-					$oImg->posicaoCrop( $_POST['x'], $_POST['y'] );
-					$oImg->redimensiona( $_POST['w'], $_POST['h'], 'crop' );
-					$oImg->grava(base_url("users/profile/$imagem"));
-				}
-				else
-				{
-					// imagem inválida, exclui do servidor
-					unlink( $imagem['name'] );
-				}
-			}
-		}
+		// var_dump($_FILES);
+		// var_dump($this->input->post());
+        // break;
+		if(!empty($_FILES)){
+			$this->load->library('session');
+			if($this->session->has_userdata('login')){
+				$usuario = $this->session->login;
+				$cod = $usuario['cod'];
+				$tipo = $usuario['tipo'];
 
+				$this->load->library('upload');
+				$this->load->model('Usuario','usuario');
+				$us = $this->usuario->getUser(array('CodUsuario' => $cod),'array');
+				// var_dump($us);
+				// break;
 
+				// Configurações para o upload da imagem
+		        // Diretório para gravar a imagem
+		        $folder = $us['Token'];
+		        $path = "./data/profile/".$folder;
+
+		        if(!is_dir($path)) {
+		       		mkdir($path, 0777, $recursive = true);
+		    	}
+
+		        $configUpload['upload_path']   = $path;
+		        // Tipos de imagem permitidos
+		        $configUpload['allowed_types'] = 'jpg|png';
+		        // Usar nome de arquivo aleatório, ignorando o nome original do arquivo
+		        $configUpload['encrypt_name']  = TRUE;
+
+		        // Aplica as configurações para a library upload
+		        $this->upload->initialize($configUpload);
+				
+		        // Verifica se o upload foi efetuado ou não
+		        // Em caso de erro carrega a home exibindo as mensagens
+		        // Em caso de sucesso faz o processo de recorte
+		        if($this->upload->do_upload('imagem')){
+		            // Recupera os dados da imagem
+		            $dadosImagem = $this->upload->data();
+		            
+		            // Calcula os tamanhos de ponto de corte e posição
+		            // de forma proporcional em relação ao tamanho da
+		            // imagem original
+		            $tamanhos = $this->CalculaPercetual($this->input->post());
+
+		            // Define as configurações para o recorte da imagem
+		            // Biblioteca a ser utilizada
+		            $this->load->library('image_lib');
+		            $configCrop['image_library'] = 'gd2';
+		            //Path da imagem a ser recortada
+		            $configCrop['source_image']  = $dadosImagem['full_path'];
+		            // Diretório onde a imagem recortada será gravada
+		            $configCrop['new_image']     = $path;
+		            // Proporção
+		            $configCrop['maintain_ratio']= FALSE;
+		            // Qualidade da imagem
+		            $configCrop['quality']             = 100;
+		            // Tamanho do recorte
+		            $configCrop['width']         = $tamanhos['wcrop'];
+					$configCrop['height']        = $tamanhos['hcrop'];
+					// Ponto de corte (eixos x e y)
+					$configCrop['x_axis']        = $tamanhos['x'];
+					$configCrop['y_axis']        = $tamanhos['y'];
+
+		            // Aplica as configurações para a library image_lib
+		            $this->image_lib->initialize($configCrop);
+
+		            // Verifica se o recorte foi efetuado ou não
+		            // Em caso de erro carrega a home exibindo as mensagens
+		            // Em caso de sucesso envia o usuário para a tela
+		            // de visualização do recorte
+		            if ($this->image_lib->crop()){
+		                // Define a URL da imagem gerada após o recorte
+		                $urlImagem = $folder."/".$dadosImagem['file_name'];
+
+		                $this->usuario->atualizaCadastro(array('Foto' => $urlImagem),array('CodUsuario' => $cod));
+		                redirect(base_url("/perfil/$folder"));
+		            }
+		            return false;
+		        }
+		        return false;
+		    }
+		    return false;
+	    }
+	    return false;
+    }
+
+    // Método privado responsável por calcular os tamanhos de forma proporcional
+	private function CalculaPercetual($dimensoes){
+		// Verifica se a largura da imagem original é
+		// maior que a da área de recorte, se for calcula o tamanho proporcional
+		// if($dimensoes['woriginal'] > $dimensoes['wvisualizacao']){
+			// $percentual = $dimensoes['woriginal'] / $dimensoes['wvisualizacao'];
+			$percentual = 1;
+
+			$dimensoes['x'] = round($dimensoes['x'] * $percentual);
+			$dimensoes['y'] = round($dimensoes['y'] * $percentual);
+			$dimensoes['wcrop'] = round($dimensoes['wcrop'] * $percentual);
+			$dimensoes['hcrop'] = round($dimensoes['hcrop'] * $percentual);
+		// }
+
+		// Retorna os valores a serem utilizados no processo de recorte da imagem
+		return $dimensoes;
 	}
 }

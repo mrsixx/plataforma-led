@@ -64,9 +64,22 @@
                                         </div>
                                         <div class="panel-footer post">
                                             <form id="frmOp<?php echo $post->CodPost;?>" class="frmOp">
+                                                <?php 
+                                                    switch ($post->CodTipoOpiniao) {
+                                                        case 1:
+                                                            $class = "op1";
+                                                            break;
+                                                        case 2:
+                                                            $class = "op2";
+                                                            break;
+                                                        default:
+                                                            $class = "fa fa-lightbulb-o fa-2x";
+                                                            break;
+                                                    }
+                                                ?>
                                             <div class="dropup">
                                                 <button class="btn-opinar dropdown-toggle pull-left" id="op" type="button" data-toggle="dropdown" onLoad="verificaOp(<?php echo $post->CodPost;?>,<?php echo $codusuario;?>)">
-                                                    <div id="opiniao<?php echo $post->CodPost;?>" class="fa fa-lightbulb-o fa-2x">&nbsp;</div>
+                                                    <div id="opiniao<?php echo $post->CodPost;?>" class="<?= $class ?>">&nbsp;</div>
                                                 </button>
 
                                                 <!-- <input type="hidden" name="codPost" id="codPost" value="<?php echo $post->CodPost;?>" />

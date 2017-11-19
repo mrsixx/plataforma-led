@@ -8,10 +8,10 @@
     <title>
         <?php echo "Plataforma LED | $title";?>
     </title>
-    <link rel="shortcut icon" href="<?= base_url("assets/img/favicon.ico"); ?>">
-    <link href="<?= base_url("assets/css/bootstrap.css");?>" rel="stylesheet">
-    <link href="<?= base_url("assets/css/style.css");?>" rel="stylesheet">
-    <link href="<?= base_url("assets/css/style.scss");?>" rel="stylesheet">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style.scss" rel="stylesheet">
 
     <?php if(isset($files)){
         foreach ($files as $key => $value) {
@@ -40,15 +40,15 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                <a class="navbar-brand" href="<?php echo base_url('painel');?>">
-                    <img src="<?= base_url("assets/img/logo-header.png");?>" class="img img-responsive logo">
+                <a class="navbar-brand" href="/painel">
+                    <img src="/assets/img/logo-header.png" class="img img-responsive logo">
                 </a>
             </div>
             <nav class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="<?php echo base_url('painel');?>"><span class="glyphicon glyphicon-home"></span> Home</a>
+                        <a href="/painel"><span class="glyphicon glyphicon-home"></span> Home</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#modalNotificacoes"><span class="glyphicon glyphicon-bell"></span>
@@ -59,7 +59,7 @@
                              } ?>Notificações</a>
                     </li>
                     <li>
-                       <a href="<?php echo base_url("perfil/$token");?>"><span class="glyphicon glyphicon-user"></span> Perfil</a>
+                       <a href="/perfil/<?= $token; ?>"><span class="glyphicon glyphicon-user"></span> Perfil</a>
                     </li>
                 </ul>
                 <div class="col-sm-4 col-md-4">
@@ -77,9 +77,9 @@
                     <li class="dropdown">
                         <a href="#" id="nbAcctDD" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i><i class="glyphicon glyphicon-chevron-down"></i></a>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="<?php echo base_url("ajuda");?>"><span class="fa fa-question"></span> Ajuda</a></li>
-                            <li><a href="<?php echo base_url("configuracoes");?>"><span class="glyphicon glyphicon-cog"></span> Configurações</a></li>
-                            <li><a href="<?php echo base_url("logout");?>"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
+                            <li><a href="/ajuda"><span class="fa fa-question"></span> Ajuda</a></li>
+                            <li><a href="/configuracoes"><span class="glyphicon glyphicon-cog"></span> Configurações</a></li>
+                            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Sair</a></li>
                         </ul>
                     </li>
                 </ul>

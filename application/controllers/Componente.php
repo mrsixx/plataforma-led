@@ -57,10 +57,10 @@ class Componente extends CI_Controller {
 
 			if(verificaAmbiente()){
 				//recebo o array com as informações da interface
-				$this->load->model('escola');
+				$this->load->model('Escola');
 				$set = array('CriteriosAvaliacao' => nl2br(utf8_decode($this->input->post('txtCriterio'))));
 				$where = array('CodCompProfessor' => $this->input->post('CodCompProfessor'));
-				if($this->escola->updateComponente($set,$where,'compprof')){
+				if($this->Escola->updateComponente($set,$where,'compprof')){
 					$msg = '<div class="alert alert-success alert-dismissable">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>Sucesso!</strong> Informações atualizadas com sucesso :D
@@ -100,8 +100,8 @@ class Componente extends CI_Controller {
 				$data = preencheInterface($usuario,'compcurricular');
 
 				$codComp = $this->uri->segment(2);
-				$this->load->model('escola');
-				$data['componente'] = $this->escola->getCompCurricular(array('comp.CodComponente' => $codComp));
+				$this->load->model('Escola');
+				$data['componente'] = $this->Escola->getCompCurricular(array('comp.CodComponente' => $codComp));
 				if(!empty($data['componente'])){
 					foreach ($data['componente'] as $comp) {
 						$data['title'] = utf8_encode("$comp->Nome")." - $comp->Modulo"."º ".utf8_encode("$comp->NomeTurma");

@@ -18,7 +18,7 @@
                     $this->load->view("panel/sidebars/$sidebar", $data);
                  ?>
             </div>
-            <div id="main-wrapper" class="col-xs-12 col-sm-12 col-md-9 pull-right">
+            <div id="main-wrapper" class="col-xs-12 col-sm-12 col-md-9">  <!--pull-right-->
                 <?php
                     $this->load->view("panel/contents/$content", $data);
                 ?>

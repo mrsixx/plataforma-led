@@ -5,7 +5,13 @@
                                 <i  class="glyphicon glyphicon-remove-circle"></i>
                             </span>
                         
-                            <a class="list-group-item pull-left" href="javascript:window.history.go(-1)">
+                            <?php 
+                            $CI =& get_instance();
+                            if(!empty($CI->uri->segment(2))): ?>
+                            <a class="list-group-item pull-left" href="/mural">
+                            <?php else: ?>
+                            <a class="list-group-item pull-left" href="/panel">
+                            <?php endif; ?>
                                 <i class="glyphicon glyphicon-chevron-left"></i> Página anterior
                             </a><br/>
                         </span>

@@ -64,5 +64,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <br/>
                         </form>
                         <!--\FORMULARIO-->
-                    </div>
+                        <br/>
 <?php $this->load->view('install/commons/footer_install'); 

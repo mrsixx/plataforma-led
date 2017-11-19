@@ -17,13 +17,18 @@ class Relacao extends CI_Controller {
 			if($tipo != 1)
 				redirect(base_url('panel'));
 			
-			//verificando se a configuração de ambiente já foi feita
-			$this->load->helper('inicia');
-
-			if(verificaAmbiente()){
 				//recebo o array com as informações da interface
 				$this->load->helper('interface');
-				$data = preencheInterface($usuario,'principal',false);
+				//verificando se a configuração de ambiente já foi feita
+					$this->load->helper('inicia');
+
+
+					if(verificaAmbiente())
+						$tranca = FALSE;
+					else
+						$tranca = TRUE;
+
+				$data = preencheInterface($usuario,'principal',$tranca);
 
 				//carregando a view enquanto passo as informações
 				$data['title'] = "Relação de usuários";
@@ -32,13 +37,13 @@ class Relacao extends CI_Controller {
 				$data['lista'] = null;
 				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
 				$this->load->helper('sidebar');
-				// $this->load->helper('smiley');
-				// $data['files'] = array('textarea' => '<style>#main{overflow-y: hidden !important;}</style>');	
-				// $data['filesfooter'] = array('comandos para excluir link' => "<script type='text/javascript' src='".base_url('assets/js/scripts/links.js')."'></script>");
+				$data['files'] = array(
+				'css textearea'=> '<style>textarea{resize:none;}
+										.list-group-item.disabled{background-color:#0a5372;}
+										.list-group-item.disabled:hover, .list-group-item.disabled:focus{background-color:#030e1b;}</style>'
+    		);
 				$this->load->view('panel/layout', $data);
-			}else{
-				redirect(base_url('configuracao-ambiente'));
-			}
+			
 		}	
 	}
 
@@ -50,13 +55,18 @@ class Relacao extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//verificando se a configuração de ambiente já foi feita
-			$this->load->helper('inicia');
-
-			if(verificaAmbiente()){
+			
 				//recebo o array com as informações da interface
+			//verificando se a configuração de ambiente já foi feita
+					$this->load->helper('inicia');
+
+
+					if(verificaAmbiente())
+						$tranca = FALSE;
+					else
+						$tranca = TRUE;
 				$this->load->helper('interface');
-				$data = preencheInterface($usuario,'principal',false);
+				$data = preencheInterface($usuario,'principal',$tranca);
 
 				//carregando a view enquanto passo as informações
 				$data['content'] = "relacao";
@@ -95,12 +105,11 @@ class Relacao extends CI_Controller {
 				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
 				$this->load->helper('sidebar');
 				// $this->load->helper('smiley');
-				$data['files'] = array('impressão das páginas' => '<link href="'.base_url('assets/css/print.css').'" rel="stylesheet" media="print">');	
-				// $data['filesfooter'] = array('comandos para excluir link' => "<script type='text/javascript' src='".base_url('assets/js/scripts/links.js')."'></script>");
+				$data['files'] = array('impressão das páginas' => '<link href="'.base_url('assets/css/print.css').'" rel="stylesheet" media="print">','css textearea'=> '<style>textarea{resize:none;}
+										.list-group-item.disabled{background-color:#0a5372;}
+										.list-group-item.disabled:hover, .list-group-item.disabled:focus{background-color:#030e1b;}</style>');	
 				$this->load->view('panel/layout', $data);
-			}else{
-				redirect(base_url('configuracao-ambiente'));
-			}
+			
 		}	
 	}
 
@@ -112,10 +121,6 @@ class Relacao extends CI_Controller {
 			$cod = $usuario['cod'];
 			$tipo = $usuario['tipo'];
 
-			//verificando se a configuração de ambiente já foi feita
-			$this->load->helper('inicia');
-
-			if(verificaAmbiente()){
 				//recebo o array com as informações da interface
 				$this->load->helper('interface');
 				$data = preencheInterface($usuario,'principal',false);
@@ -137,9 +142,6 @@ class Relacao extends CI_Controller {
 				$data['alunos'] = $this->escola->getAlunoTurma(array('CodTurma' => $this->uri->segment(3)));
 				$data['turma'] = $this->escola->getTurma(array('CodTurma' => $this->uri->segment(3)));
 				$this->load->view('panel/layout', $data);
-			}else{
-				redirect(base_url('configuracao-ambiente'));
-			}
 		}	
 	}
 }

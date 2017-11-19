@@ -28,20 +28,20 @@ class Ambiente extends CI_Controller {
 			
 			//preencho a interface 
 			$this->load->helper('interface');
-				$data = preencheInterface($usuario,'principal', $tranca);
+			$data = preencheInterface($usuario,'principal', $tranca);
 			//se existir eu mando pra view com as informações
 
-			$this->load->model("escola");
-			$this->load->model('usuario');
-			$data['escola'] = $this->escola->getEscola();
-			$data['cursos'] = $this->escola->getCursos();
-			$data['cursosativos'] = $this->escola->getCursos(array('Status'=>1));
-			$data['turmas'] = $this->escola->getTurma();
-			$data['compcurricular'] = $this->escola->getCompCurricular();
-			$data['hierarquia'] = $this->escola->getHierarquia();
-			$data['teachers'] = $this->usuario->getUser(array('CodTipoUsuario' => 4),'count');
-			$data['adm'] = $this->usuario->getUser(array('CodTipoUsuario' => 1),'count');
-			$data['maiorNivel'] = $this->escola->getHierarquia();
+			$this->load->model("Escola");
+			$this->load->model('Usuario');
+			$data['escola'] = $this->Escola->getEscola();
+			$data['cursos'] = $this->Escola->getCursos();
+			$data['cursosativos'] = $this->Escola->getCursos(array('Status'=>1));
+			$data['turmas'] = $this->Escola->getTurma();
+			$data['compcurricular'] = $this->Escola->getCompCurricular();
+			$data['hierarquia'] = $this->Escola->getHierarquia();
+			$data['teachers'] = $this->Usuario->getUser(array('CodTipoUsuario' => 4),'count');
+			$data['adm'] = $this->Usuario->getUser(array('CodTipoUsuario' => 1),'count');
+			$data['maiorNivel'] = $this->Escola->getHierarquia();
 
 			$data['title'] = "Configuração de ambiente";
 			$data['content'] = "ambiente";
@@ -77,9 +77,9 @@ class Ambiente extends CI_Controller {
 			$data['CodEscola'] = utf8_decode($this->input->post('cod'));
 
 			//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 			//atualizo
-			$retorno = $this->escola->updateEscola($data);
+			$retorno = $this->Escola->updateEscola($data);
 
 			//passo o retorno
 			return $retorno;
@@ -98,8 +98,8 @@ class Ambiente extends CI_Controller {
 		else
 			$data = null;
 
-		$this->load->model('escola');
-		$retorno = $this->escola->getCursos($data);
+		$this->load->model('Escola');
+		$retorno = $this->Escola->getCursos($data);
 		foreach ($retorno as $retorno) {
 			$return = array(
 				'CodCurso' => $retorno->CodCurso,
@@ -128,10 +128,10 @@ class Ambiente extends CI_Controller {
 		else
 			$tabela = null;
 
-		$this->load->model('escola');
+		$this->load->model('Escola');
 		$data['where'] = $where;
 		$data['tabela'] = $tabela;
-		if($this->escola->excluir($data))
+		if($this->Escola->excluir($data))
 			return true;
 		else
 			return false;
@@ -150,10 +150,10 @@ class Ambiente extends CI_Controller {
 			$data['Descricao'] = utf8_decode($this->input->post('txtDescricao'));
 
 			//carrego a model com o insert
-			$this->load->model("escola");
+			$this->load->model("Escola");
 
 			//cadastro o curso com as informações inseridas
-			return $this->escola->cadastraCurso($data);
+			return $this->Escola->cadastraCurso($data);
 		}else{
 			//se não houver sessão, então mando de volta pois não existiu um login
 			redirect(base_url());
@@ -170,16 +170,16 @@ class Ambiente extends CI_Controller {
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['SerieInicial'] = $this->input->post('nbInicial');
 			$data['SerieFinal'] = $this->input->post('nbFinal');
-			$data['Status'] = (bool)$this->input->post('cmbStatus');
+			$data['Status'] = $this->input->post('cmbStatus');
 			$data['Descricao'] = utf8_decode($this->input->post('txtDescricao'));
 
 			//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 			//atualizo
-			$retorno = $this->escola->updateCurso($data);
+			$retorno = $this->Escola->updateCurso($data);
 			if($retorno){
-				$attmural = $this->escola->updateMural(array('Nome' => $data['Nome']),array('CodCurso' => $data['CodCurso']));
-				$attgrupo = $this->escola->updateGrupo(array('Nome' => $data['Nome']),array('CodCurso' => $data['CodCurso']));
+				$attmural = $this->Escola->updateMural(array('Nome' => $data['Nome']),array('CodCurso' => $data['CodCurso']));
+				$attgrupo = $this->Escola->updateGrupo(array('Nome' => $data['Nome']),array('CodCurso' => $data['CodCurso']));
 				if($attgrupo && $attmural)
 					return true;
 				else
@@ -201,8 +201,8 @@ class Ambiente extends CI_Controller {
 			$usuario = $this->session->login;
 
 			//verificando se existem cursos
-			$this->load->model('escola');
-			$cursos = $this->escola->getCursos();
+			$this->load->model('Escola');
+			$cursos = $this->Escola->getCursos();
 			if(!empty($cursos)){
 				$data['NomeTurma'] = utf8_decode($this->input->post('txtNome'));
 				$data['Modulo'] = $this->input->post('cmbModulo');
@@ -212,16 +212,16 @@ class Ambiente extends CI_Controller {
 				$data['QtdAlunos'] = $this->input->post('nbQtd');
 				$data['CodCurso'] = $this->input->post('cmbCurso');
 				$qtd = $data['QtdAlunos'];
-				//carrego a model com o insert
-				$this->load->model("escola");
-				$t = $this->escola->cadastraTurma($data);
+
+
+				$t = $this->Escola->cadastraTurma($data);
 				if($t[0]){
 					//ao cadastrar uma turma, irei reservar registros no banco para cada um dos alunos dela
-					$turma = $this->escola->getTurma(array('NomeTurma '=> $data['NomeTurma'], 'Modulo' => $data['Modulo']),'array');
-					$grupo = $this->escola->getGrupo(array('CodTurma' => $turma['CodTurma']));
+					$turma = $this->Escola->getTurma(array('NomeTurma '=> $data['NomeTurma'], 'Modulo' => $data['Modulo']),'array');
+					$grupo = $this->Escola->getGrupo(array('CodTurma' => $turma['CodTurma']));
 
 					//pego o mural correspondente ao curso daquele usuário
-					$mCurso = $this->escola->getMural(array('CodCurso' => $data['CodCurso']));
+					$mCurso = $this->Escola->getMural(array('CodCurso' => $data['CodCurso']));
 
 				
 					$modules = array(
@@ -251,8 +251,8 @@ class Ambiente extends CI_Controller {
 		else
 			$data = null;
 
-		$this->load->model('escola');
-		$retorno = $this->escola->getTurma($data);
+		$this->load->model('Escola');
+		$retorno = $this->Escola->getTurma($data);
 		foreach ($retorno as $retorno) {
 			$return = array(
 				'CodTurma' => $retorno->CodTurma,
@@ -285,10 +285,10 @@ class Ambiente extends CI_Controller {
 		else
 			$tabela = null;
 
-		$this->load->model('escola');
+		$this->load->model('Escola');
 		$data['where'] = $where;
 		$data['tabela'] = $tabela;
-		if($this->escola->excluir($data))
+		if($this->Escola->excluir($data))
 			return true;
 		else
 			return false;
@@ -312,9 +312,9 @@ class Ambiente extends CI_Controller {
 
 
 			//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 			//atualizo
-			$retorno = $this->escola->updateTurma($data);
+			$retorno = $this->Escola->updateTurma($data);
 			//passo o retorno 
 			return $retorno;
 		}else{
@@ -330,12 +330,12 @@ class Ambiente extends CI_Controller {
 		//verificando se a sessão existe, caso exista mando para o painel 
 		$this->load->library('session');
 		//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
 
 			$compturma = $this->input->post('cod');
-			$componente = $this->escola->getCompCurricular(array('CodCompTurma' => $compturma));
+			$componente = $this->Escola->getCompCurricular(array('CodCompTurma' => $compturma));
 			foreach ($componente as $comp) {
 				$cod = $comp->CodComponente;
 			}
@@ -348,7 +348,7 @@ class Ambiente extends CI_Controller {
 
 			
 			//atualizo
-			$retorno = $this->escola->updateComponente($data,$prof);
+			$retorno = $this->Escola->updateComponente($data,$prof);
 			//passo o retorno 
 			return $retorno;
 		}else{
@@ -365,8 +365,8 @@ class Ambiente extends CI_Controller {
 		else
 			$data = null;
 
-		$this->load->model('escola');
-		$retorno = $this->escola->getCompCurricular($data);
+		$this->load->model('Escola');
+		$retorno = $this->Escola->getCompCurricular($data);
 			foreach ($retorno as $retorno) {
 			$array = array(
 				'CodCompTurma' => $retorno->CodCompTurma,
@@ -395,10 +395,10 @@ class Ambiente extends CI_Controller {
 		else
 			$tabela = null;
 
-		$this->load->model('escola');
+		$this->load->model('Escola');
 		$data['where'] = $where;
 		$data['tabela'] = $tabela;
-		if($this->escola->excluir($data))
+		if($this->Escola->excluir($data))
 			return true;
 		else
 			return false;
@@ -416,9 +416,9 @@ class Ambiente extends CI_Controller {
 			$data['CodProfessor'] = (isset($prof)) ? $prof :  null;
 
 			//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 			//atualizo
-			$retorno = $this->escola->cadComponente($data, $turma);
+			$retorno = $this->Escola->cadComponente($data, $turma);
 			//passo o retorno 
 			return $retorno;
 		}else{
@@ -433,7 +433,7 @@ class Ambiente extends CI_Controller {
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
 			//chamando a model com cadastro
-			$this->load->model('escola');
+			$this->load->model('Escola');
 			
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['Nivel'] = $this->input->post('cmbNivel');
@@ -443,9 +443,9 @@ class Ambiente extends CI_Controller {
 
 			
 			//cadastrando a hierarquia na tabela
-			if($this->escola->cadHierarquia($data)){
+			if($this->Escola->cadHierarquia($data)){
 				$data['CodHierarquia'] = $this->db->insert_id();
-				$this->load->model('usuario');
+				$this->load->model('Usuario');
 				$this->cadastraUsuario(2,$data,$qtd,null);
 			}
 			
@@ -459,21 +459,17 @@ class Ambiente extends CI_Controller {
 		//verificando se a sessão existe, caso exista mando para o painel 
 		$this->load->library('session');
 		//carrego a model com o update
-			$this->load->model("escola");
+			$this->load->model("Escola");
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
 
 			$data['CodHierarquia'] = $this->input->post('hiddenCod');
-			// $componente = $this->escola->getCompCurricular(array('CodCompTurma' => $compturma));
-			// foreach ($componente as $comp) {
-			// 	$cod = $comp->CodComponente;
-			// }
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['Nivel'] = $this->input->post('cmbNivel');
 			$data['Descricao'] = utf8_decode($this->input->post('txtDescricao'));
 			
 			//atualizo
-			$retorno = $this->escola->updateHierarquia($data);
+			$retorno = $this->Escola->updateHierarquia($data);
 			//passo o retorno 
 			return $retorno;
 		}else{
@@ -490,8 +486,8 @@ class Ambiente extends CI_Controller {
 		else
 			$data = null;
 
-		$this->load->model('escola');
-		$retorno = $this->escola->getHierarquia($data);
+		$this->load->model('Escola');
+		$retorno = $this->Escola->getHierarquia($data);
 			foreach ($retorno as $retorno) {
 			$array = array(
 				'CodHierarquia' => $retorno->CodHierarquia,
@@ -518,10 +514,10 @@ class Ambiente extends CI_Controller {
 		else
 			$tabela = null;
 
-		$this->load->model('escola');
+		$this->load->model('Escola');
 		$data['where'] = $where;
 		$data['tabela'] = $tabela;
-		if($this->escola->excluir($data))
+		if($this->Escola->excluir($data))
 			return true;
 		else
 			return false;
@@ -530,18 +526,19 @@ class Ambiente extends CI_Controller {
 
 	//função para cadastrar usuários no banco
 	public function cadastraUsuario($tipo, $data = null, $qtd = null, $modules = null){
+		//carrego a model do usuário para começar a cadastrar os funcionarios
+		$this->load->model('Usuario');
+		$this->load->model('Escola');
+		$this->load->helper('token');
 		switch ($tipo) {
 			case 2:
 				if(isset($qtd)){
 					
-					//carrego a model do usuário para começar a cadastrar os alunos
-					$this->load->model('usuario');
-					$this->load->helper('token');
 					for ($i=0; $i < $qtd; $i++) { 
 						
 						$token = strUnique();
 						$array = array('Token' => $token, 'CodTipoUsuario' => $tipo, 'CodHierarquia' => $data['CodHierarquia']);
-						if($this->usuario->cadastra(2,$array)){
+						if($this->Usuario->cadastra(2,$array)){
 							return true;
 						}
 						else{
@@ -555,15 +552,12 @@ class Ambiente extends CI_Controller {
 			case 3:
 				if(isset($qtd)){
 					
-					//carrego a model do usuário para começar a cadastrar os alunos
-					$this->load->model('usuario');
-					$this->load->helper('token');
 					for ($i = 0; $i < $qtd; $i++) { 
 						
 						$token = strUnique();
 						$array = array('Token' => $token, 'CodTipoUsuario' => 3);
-						if($this->usuario->cadastra(3,$array)){
-							$this->escola->matricula($this->db->insert_id(), $modules);
+						if($this->Usuario->cadastra(3,$array)){
+							$this->Escola->matricula($this->db->insert_id(), $modules);
 						}
 						else{
 							return false;
@@ -575,9 +569,6 @@ class Ambiente extends CI_Controller {
 			
 			default:
 				if(isset($qtd)){
-					//carrego a model do usuário para começar a cadastrar os alunos
-					$this->load->model('usuario');
-					$this->load->helper('token');
 					for ($i = 0; $i < $qtd; $i++) { 
 						$return = array();
 						$token = strUnique();
@@ -590,7 +581,7 @@ class Ambiente extends CI_Controller {
 						if(isset($data))
 							$tipo = 5;
 
-						if($this->usuario->cadastra($tipo,$array)){
+						if($this->Usuario->cadastra($tipo,$array)){
 							$return[] = true;
 						}
 						else{
@@ -631,16 +622,16 @@ class Ambiente extends CI_Controller {
 			$data = preencheInterface($usuario,'principal',$tranca);
 			//se existir eu mando pra view com as informações
 
-			$this->load->model("escola");
-			$this->load->model('usuario');
-			$data['cursosativos'] = $this->escola->getCursos(array('Status'=>1));
-			if(!empty($this->escola->getTurma())){
+			$this->load->model("Escola");
+			$this->load->model('Usuario');
+			$data['cursosativos'] = $this->Escola->getCursos(array('Status'=>1));
+			if(!empty($this->Escola->getTurma())){
 				$codTurma = $this->uri->segment(3);
-				$data['turmas'] = $this->escola->getTurma(array('turma.CodTurma' => $codTurma));
+				$data['turmas'] = $this->Escola->getTurma(array('turma.CodTurma' => $codTurma));
 				if(!empty($data['turmas'])){
-					$data['compcurricular'] = $this->escola->getCompCurricular(array('t.CodTurma' => $codTurma));
+					$data['compcurricular'] = $this->Escola->getCompCurricular(array('t.CodTurma' => $codTurma));
 
-					$data['professor'] = $this->usuario->getUser(array('Status <> 0 AND CodTipoUsuario =' => 4),'obj');
+					$data['professor'] = $this->Usuario->getUser(array('Status <> 0 AND CodTipoUsuario =' => 4),'obj');
 		    	}
 				else{
 					$data['msg'] = '<div class="well">Turma inexistente :/</div>';
@@ -675,7 +666,7 @@ class Ambiente extends CI_Controller {
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
 			//chamando a model com cadastro
-			$this->load->model('usuario');
+			$this->load->model('Usuario');
 			
 			$qtd = $this->input->post('nbProfessores');
 			
@@ -693,7 +684,7 @@ class Ambiente extends CI_Controller {
 		if($this->session->has_userdata('login')){
 			$usuario = $this->session->login;
 			//chamando a model com cadastro
-			$this->load->model('usuario');
+			$this->load->model('Usuario');
 			
 			$qtd = $this->input->post('nbAdmin');
 

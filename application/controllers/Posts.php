@@ -20,7 +20,7 @@ class Posts extends CI_Controller {
 			$this->load->model('escola');
 
 			//verificarei se o usuário tem acesso aquele mural, se não tiver eu mando ele pra fora ;)
-			if($this->mural->retornaUsuarioMural(array('CodMural' => $codmural, 'usuario-mural.CodUsuario' => $cod),'num') == 0 && $tipo != 1){
+			if($this->mural->retornaUsuarioMural(array('CodMural' => $codmural, 'usuario-mural.CodUsuario' => $cod),'num') == 0 && $tipo != 1 && $tipo != 4){
 				redirect(base_url('mural'));
 			}
 
@@ -28,7 +28,10 @@ class Posts extends CI_Controller {
 			$mr = $this->escola->getMural(array('CodMural' => $codmural));
 			if(!empty($mr)){
 				$post = $this->mural->retornaPostagens(array('CodMural' => $codmural));
-
+				for ($i=0; $i < sizeof($post); $i++) { 
+					$op = $this->mural->retornaOp(array('CodPost' => $post[$i]->CodPost,'CodUsuario'=> $cod));
+					$post[$i]->CodTipoOpiniao = (!empty($op))? $op['CodTipoOpiniao'] : null;
+				}
 				//chamo a helper pra preencher a interface
 				$this->load->helper('interface');
 				$data = preencheInterface($usuario,'mural');
@@ -87,8 +90,9 @@ class Posts extends CI_Controller {
 	            $col_array = $this->table->make_columns($image_array, 4);
 
 	            $data['smiley_table'] = $this->table->generate($col_array);
-
-				$this->load->view('panel/layout',$data);
+	            $this->load->helper('inicia');
+	            if(atualizaStatus($cod))
+					$this->load->view('panel/layout',$data);
 			}
 			else{
 				redirect(base_url('mural'));
@@ -129,7 +133,7 @@ class Posts extends CI_Controller {
 			$nomeMural = md5(utf8_encode($mural[0]->Nome));
 			//verifico se aquele usuário tem permissão para efetuar uma postagem naquele mural 
 
-			if($this->mural->retornaUsuarioMural(array('CodMural' => $data['CodMural'], 'usuario-mural.CodUsuario' => $usuario['cod']),'num') == 0 && $usuario['tipo'] != 1)
+			if($this->mural->retornaUsuarioMural(array('CodMural' => $data['CodMural'], 'usuario-mural.CodUsuario' => $usuario['cod']),'num') == 0 && $usuario['tipo'] != 1 && $usuario['tipo'] != 4)
 				return false;
 
 				//caso ele tenha permissão, verifico se ele está postando alguma foto
@@ -238,15 +242,9 @@ class Posts extends CI_Controller {
 				if(isset($comentarios)){
 					$retorno = array();
 					foreach ($comentarios as $comentario) {
-						//faço a verificação da foto 
-						if(isset($comentario->Foto)) 
-							$foto = base_url("users/profile/$comentario->Foto.jpg")."?".time();
-						else{
-							if($comentario->Sexo == 'M')
-								$foto = base_url("assets/img/user-m.png")."?".time();
-							else
-								$foto = base_url("assets/img/user-f.png")."?".time();
-						}
+						$this->load->helper('interface');
+
+						$foto = fotoPerfil($comentario->Foto,$comentario->Sexo);
 
 						//faço a conversão dos emoticons
 						$str = utf8_encode($comentario->Comentario);
@@ -307,9 +305,28 @@ class Posts extends CI_Controller {
 				'CodPostagem' => $postagem,
 				'CodUsuario' => $usuario['cod']
 			);
-			$this->load->model('mural');
-			if($this->mural->cadComment($data))
+			$this->load->model('Mural','mural');
+			if($this->mural->cadComment($data)){
+				$this->load->model('Interface_led','interface_led');
+				$this->load->model('Usuario','usuario');
+				$us = $this->usuario->getUser(array('CodUsuario' => $usuario['cod']),'array');
+				$post = $this->mural->retornaPostagens(array('CodPost' => $postagem));
+				$destinatario = $post[0]->CodUsuario;
+
+				if($destinatario != $usuario['cod']){
+					$nome = utf8_encode($us['Nome']." ".$us['Sobrenome']);
+					$data = array(
+						'Titulo' => utf8_decode("Novo comentário"), 
+						'Texto' => utf8_decode("$nome comentou sua publicação."),
+						'DataHora' => date("Y-m-d H:i:s"), 
+						'Link' => base_url("post/$postagem"), 
+						'CodRemetente' => $usuario['cod'], 
+						'CodDestinatario' => $destinatario
+					);
+					$this->interface_led->enviaNotificacao($data);
+				}
 				return true;
+			}
 			else
 				return false;
 
@@ -352,17 +369,29 @@ class Posts extends CI_Controller {
 			$codpost = $this->uri->segment(2);
 
 			//carrego as models mural e escola para puxar as postagens
-			$this->load->model('mural');
-			$this->load->model('escola');
+			$this->load->model('Mural','mural');
+			$this->load->model('Escola','escola');
+
+
+			//verifico se a postagem existe ...
+			if($this->mural->retornaPostagens(array('CodPost' => $codpost),'num') == 0){
+				redirect(base_url('mural'));
+			}else{
+				$post = $this->mural->retornaPostagens(array('CodPost' => $codpost));
+			}
 
 			//verificarei se o usuário tem acesso aquele mural, se não tiver eu mando ele pra fora ;)
-			if($this->mural->retornaPostagens(array('CodPost' => $codpost),'num') == 0 && $tipo != 1){
+			if($this->mural->retornaUsuarioMural(array('usuario.CodUsuario' => $cod,'CodMural' => $post[0]->CodMural),'num') == 0 || $tipo != 1 && $post[0]->CodMural != 1 && $post[0]->CodMural != 2){
 				redirect(base_url('mural'));
+			}else{
+				if($tipo != 3 && $post[0]->CodMural == 1)
+					redirect(base_url('mural'));
 			}
 
 			//se ele passar daqui, ele tem permissão para visualizar esse mural, portanto seguimos em frente pegando as informações
 			$post = $this->mural->retornaPostagens(array('CodPost' => $codpost));
-			
+			$op = $this->mural->retornaOp(array('CodPost' => $post[0]->CodPost,'CodUsuario'=> $cod));
+			$post[0]->CodTipoOpiniao = (!empty($op))? $op['CodTipoOpiniao']: null;
 
 			//chamo a helper pra preencher a interface
 			$this->load->helper('interface');
@@ -474,6 +503,8 @@ class Posts extends CI_Controller {
 			
 
 			$post = $this->mural->retornaPostagens(array('CodPost'=> $this->input->post('codPost')));
+			// $op = $this->mural->retornaOp(array('CodPost' => $post[0]->CodPost,'CodUsuario'=> $cod));
+			// $post[0]->CodTipoOpiniao = (!empty($op))? $op['CodTipoOpiniao']: null;
 
 			foreach ($post as $postagem) {
 				$codmural = $postagem->CodMural;

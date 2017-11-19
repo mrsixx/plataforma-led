@@ -29,7 +29,7 @@ class Missoes extends CI_Model
 	
 	function retornaTask($where,$return = 'array'){
 		try{
-				$this->db->select("task.*, usuario.CodUsuario, usuario.Nome NomeUser, usuario.Sobrenome, usuario.Sexo, usuario.Foto, tipotask.CodTipoTask, tipotask.Premio, tipotask.Dificuldade,turma-task.*, turma.NomeTurma, turma.Modulo");
+				$this->db->select("task.*, usuario.CodUsuario, usuario.Nome NomeUser, usuario.Sobrenome, usuario.Sexo, usuario.Foto, usuario.Token, tipotask.CodTipoTask, tipotask.Premio, tipotask.Dificuldade,turma-task.*, turma.NomeTurma, turma.Modulo");
 				$this->db->from('task');
 				$this->db->join('usuario', 'usuario.CodUsuario = task.CodCriador');
 				$this->db->join('tipotask', 'tipotask.CodTipoTask = task.CodTipoTask');
@@ -101,7 +101,76 @@ class Missoes extends CI_Model
 
 
 
-	function premiaXp($where,$qtd){
+	function premiaXp($where,$qtd,$int = null){
+		if(isset($int)){
+			foreach ($int as $inteligencia) {
+				switch ($inteligencia->CodInteligencia) {
+					case 1:
+						$this->db->set('QtdLogicoMat',"QtdLogicoMat + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 2:
+						$this->db->set('QtdLinguistica',"QtdLinguistica + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 3:
+						$this->db->set('QtdEspacial',"QtdEspacial + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 4:
+						$this->db->set('QtdCinestesica',"QtdCinestesica + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 5:
+						$this->db->set('QtdMusical',"QtdMusical + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 6:
+						$this->db->set('QtdNaturalista',"QtdNaturalista + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 7:
+						$this->db->set('QtdExistencial',"QtdExistencial + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 8:
+						$this->db->set('QtdInterpessoal',"QtdInterpessoal + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 9:
+						$this->db->set('QtdIntrapessoal',"QtdIntrapessoal + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+					case 10:
+						$this->db->set('QtdPratica',"QtdPratica + $qtd", FALSE);
+						$this->db->where($where);
+						$this->db->update('experiencia');
+						break;
+					
+				}
+			}
+		}
+
+
+
 		$this->db->set('PontosXP',"PontosXP + $qtd", FALSE);
 		$this->db->where($where);
 		return $this->db->update('experiencia');

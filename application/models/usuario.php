@@ -256,4 +256,11 @@ class Usuario extends CI_Model
 		else
 			return false;
 	}
+
+	function contaUser($where){
+		$this->db->select('CodUsuario');
+		$this->db->from('usuario');
+		$this->db->where($where);
+		return $this->db->get()->num_rows();
+	}
 };

@@ -66,7 +66,7 @@ $visualizar = true;
                                         <a class="btn btn-primary" href="<?php echo $perfil; ?>">
                                         <i class="glyphicon glyphicon-user"></i>&nbsp;Visitar perfil
                                         </a>
-                                        <a class="btn btn-primary" href="/chat">
+                                        <a class="btn btn-primary" href="/chat/messages?t=ind&id=<?php echo $comp->Token;?>">
                                         <i class="glyphicon glyphicon-comment"></i>&nbsp;Enviar mensagem
                                         </a><br/>
                                     </p>

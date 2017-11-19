@@ -7,18 +7,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if(!function_exists('envia')){
 	function envia($data){
-		$email_config = Array(
+		$email =& get_instance();
+		$email->load->library('email');
+
+		$email_config = array(
 			            'protocol'  => 'smtp',
 			            'smtp_host' => 'ssl://smtp.googlemail.com',
 			            'smtp_port' => '465',
-			            'smtp_user' => 'tcc.3etim1@gmail.com',
-			            'smtp_pass' => '!falsebandarrasa',
+			            'smtp_user' => 'ketlyn.choice@gmail.com',
+			            'smtp_pass' => '',
+			            'wordwrap' => TRUE,
+			            'validate' => TRUE,
 			            'mailtype'  => 'html',
 			            'starttls'  => true,
 			            'newline'   => "\r\n"
 			        );
-		$email =& get_instance();
-		$email->load->library('email',$email_config);
+
+
+        $email->email->initialize($email_config);
 		$email->email->from($data['de']);
 		$email->email->to($data['para']);
 		$email->email->subject($data['assunto']);

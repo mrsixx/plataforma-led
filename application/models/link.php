@@ -51,7 +51,7 @@ class Link extends CI_Model
 	    return $this->db->delete("linkexterno");
   	}
   
-	function retornaLink($data = null){
+	function retornaLink($data = null,$num = false){
 		try{
 			if(isset($data)){
 				$link = $this->db->get_where("linkexterno",$data);
@@ -60,6 +60,9 @@ class Link extends CI_Model
 				$link = $this->db->get("linkexterno");
 			}
 			
+			if($num)
+				return $link->num_rows();
+
 		 	return $link->result();
 		}
 		catch(PDOException $e){

@@ -17,18 +17,12 @@
                                                     <div class="row">
                                                         <div class="col-xs-4 col-md-2 col-sm-2">
                                                             <?php
-                                                                //pegando foto do perfil
-                                                                if(isset($result->Foto)){
-                                                                    $result->Foto = base_url('users/profile/'.$dados['foto'].'.jpg')."?".time();
-                                                                }else{
-                                                                    if($result->Sexo == "M"){
-                                                                        $result->Foto = base_url('assets/img/user-m.png')."?".time();
-                                                                    }else if($result->Sexo == "F"){
-                                                                        $result->Foto = base_url('assets/img/user-f.png')."?".time();
-                                                                    }
-                                                                }
+                                                                $CI =& get_instance();
+                                                                    $CI->load->helper('interface');
+
+                                                                    $foto = fotoPerfil($result->Foto,$result->Sexo);
                                                             ?>
-                                                            <img src="<?php echo $result->Foto;?>" class="img img-responsive" alt="Foto de perfil de <?php echo utf8_encode("$result->Nome $result->Sobrenome");?>"> 
+                                                            <img src="<?php echo $foto;?>" class="img img-responsive" alt="Foto de perfil de <?php echo utf8_encode("$result->Nome $result->Sobrenome");?>"> 
                                                         </div>
                                                         <div class="col-xs-8 col-md-10 col-sm-9" style="color: #000;">
                                                             <div>

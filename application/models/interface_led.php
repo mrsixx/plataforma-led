@@ -46,11 +46,14 @@ class Interface_led extends CI_Model
 	function notificacoes($data){
 		$this->db->select('DataCadastro');
 		$dt = $this->db->get_where('usuario',array('CodUsuario'=>$data['cod']))->row_array();
-		$dt = $dt['DataCadastro'];
+		$dt = date('Y-m-d H:i:s', strtotime($dt['DataCadastro']));
+		$now = date('Y-m-d H:i:s');
+
 		$where = array('CodDestinatario' => $data['cod']);
-		$this->db->where(array('DataHora >=' => $dt));
+		$this->db->where("DataHora BETWEEN '$dt' AND '$now'", NULL, FALSE);
 		$this->db->where($where)->or_where('CodDestinatario', null);
 		$this->db->order_by('DataHora', 'DESC');
+		$this->db->limit(10); 
 		$query = $this->db->get("notificacao");
 		return $query->result();
 	}
@@ -80,6 +83,10 @@ class Interface_led extends CI_Model
 		catch(PDOException $e){
 			return $e;
 		}
+	}
+
+	function attStatus($set,$where){
+		
 	}
 
 

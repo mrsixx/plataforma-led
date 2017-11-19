@@ -27,7 +27,63 @@ class Panel extends CI_Controller {
 				$data['title'] = "Painel";
 				$data['content'] = "home";
 				$data['sidebar'] = "home";
-				$this->load->view('panel/layout', $data);
+
+
+				switch ($tipo) {
+					case 1:
+						$this->load->model('Usuario','usuario');
+						$this->load->model('BatePapo','chat');
+						$this->load->model('Mural','mural');
+						$this->load->model('Link','links');
+						$this->load->model('Library','lib');
+						$data['infoHome'] = array(
+							'msgEnviadas' => $this->chat->contaMsg(array('CodRemetente' => $cod)),
+							'msgRecebidas' => $this->chat->contaMsg(array('CodDestino' => $cod)),
+							'postsFeitos' => $this->mural->retornaPostagens(array('postagem.CodUsuario' => $cod)),
+							'livrosEnviados' => $this->lib->retornaLivro(array('us.CodUsuario'=> $cod)),
+
+							'usuariosAtivos' => $this->usuario->contaUser(array('Status'=>1)),
+							'usuariosCadastrados' => $this->usuario->contaUser("`CodUsuario` IS NOT NULL"),
+							'qtdAlunos' => $this->usuario->contaUser(array('CodTipoUsuario'=>3,'Status'=> 1)),
+							'qtdFuncionarios' => $this->usuario->contaUser(array('CodTipoUsuario'=>2,'Status'=> 1)),
+							'qtdProfessores' => $this->usuario->contaUser(array('CodTipoUsuario'=>4,'Status'=> 1)),
+							'qtdAdmin' => $this->usuario->contaUser(array('CodTipoUsuario'=>1,'Status'=> 1)),
+							'qtdMsg' => $this->chat->contaMsg(),
+							'qtdPost' => $this->mural->retornaPostagens(null,'num'),
+							'qtdFerramenta' => $this->links->retornaLink(null,true),
+							'qtdArquivo' => $this->lib->retornaLivro(null,true)
+						);
+						break;
+					
+					case 3:
+						$this->load->model('Usuario','usuario');
+						$this->load->model('BatePapo','chat');
+						$this->load->model('Mural','mural');
+						$this->load->model('Link','links');
+						$this->load->model('Library','lib');
+						$this->load->model('Escola','escola');
+
+						$turma = $this->escola->getAlunoTurma(array('at.CodUsuario' => $cod),'array');
+						$turma = $this->escola->getTurma(array('CodTurma' => $turma['CodTurma']),'array');
+						// $curso = $this->escola->getCurso(array('Cod'));
+						$data['infoHome'] = array(
+							'curso' => utf8_encode($turma['Nome']),
+							'turma' => $turma['Modulo']."º ".utf8_encode($turma['NomeTurma']),
+							'publicacoes' => $this->mural->retornaPostagens(array('usuario.CodUsuario' => $cod)),
+							'arquivos' =>1,
+							'taskExe' =>1,
+							'taskPendente' =>1,
+
+						);
+						break;
+				}
+
+
+
+
+
+				if(atualizaStatus($cod))
+					$this->load->view('panel/layout', $data);
 			}else{
 				if($tipo == 1)
 					redirect(base_url('configuracao-ambiente'));
@@ -60,8 +116,8 @@ class Panel extends CI_Controller {
 				if(isset($_GET['q']) && $_GET['q'] != null){
 					$busca = $this->input->get('q');
 
-					$this->load->model('usuario');
-					$data['resultado'] = $this->usuario->getUser("`Nome` LIKE '$busca%' ESCAPE '!' OR  `Sobrenome` LIKE '$busca%' ESCAPE '!' OR  `Nickname` LIKE '$busca%' ESCAPE '!'",'obj');
+					$this->load->model('Usuario');
+					$data['resultado'] = $this->Usuario->getUser("`Nome` LIKE '$busca%' ESCAPE '!' OR  `Sobrenome` LIKE '$busca%' ESCAPE '!' OR  `Nickname` LIKE '$busca%' ESCAPE '!'",'obj');
 					$data['pageHeader'] = (!empty($data['resultado']))? "Resultados para "."<i>''$busca''</i>" : "Não há resultados para "."<i>''$busca''</i>";
 				}
 				else{
@@ -104,6 +160,8 @@ class Panel extends CI_Controller {
 				$data['content'] = "mural";
 				$data['sidebar'] = "mural";
 				//definindo os valores que serão exibidos dinamicamente na sidebar de acordo com o tipo de usuário
+				$this->load->model('Mural','mural');
+				$this->load->model('Escola','escola');
 				$this->load->helper('sidebar');
 				$data['files'] = array('mural' => '<link href="'.base_url("assets/css/mural.css").'" rel="stylesheet">');	
 
@@ -115,6 +173,12 @@ class Panel extends CI_Controller {
 							'Murais existentes' => $this->escola->getMural(null,TRUE)
 						);
 						break;
+					case 4:
+						$data['murais'] = array(
+							'Seus murais' => $this->mural->retornaMural(array('CodUsuario' => $cod)),
+							'Turmas' => $this->mural->retornaMural(array('cp.CodProfessor'=> $cod),'prof')
+						);
+						break;
 					default:
 						$data['murais'] = array(
 							'Seus murais' => $this->mural->retornaMural(array('CodUsuario' => $cod))
@@ -122,8 +186,8 @@ class Panel extends CI_Controller {
 						break;
 				}
 
-
-				$this->load->view('panel/layout', $data);
+				if(atualizaStatus($cod))
+					$this->load->view('panel/layout', $data);
 			}else{
 				redirect(base_url('configuracao-ambiente'));
 			}
@@ -180,6 +244,7 @@ class Panel extends CI_Controller {
 		$usuario = $this->input->get('s');
 		$this->load->library('session');
 		//dar um unset aqui dps
+		unset($this->session->login);
 		$this->session->sess_destroy($usuario);
 		// $this->session->sess_destroy();
 		redirect(base_url());
@@ -198,8 +263,8 @@ class Panel extends CI_Controller {
 	public function avatar(){
 		$token = $this->uri->segment(3);
 
-		$this->load->model('usuario');
-		$usuario = $this->usuario->getUser(array('Token' => $token));
+		$this->load->model('Usuario');
+		$usuario = $this->Usuario->getUser(array('Token' => $token));
 		if(!isset($usuario) || empty($usuario))
 			return false;
 
@@ -214,8 +279,8 @@ class Panel extends CI_Controller {
 
 		// 						</script>'
 		// );
-		$this->load->model('avatar');
-		$data['avatar'] = $this->avatar->retornaAvatar();
+		$this->load->model('Avatar');
+		$data['avatar'] = $this->Avatar->retornaAvatar();
 		$data['filesfooter'] = array(
 			'avatar' => '<script type="text/javascript" src="'.base_url('assets/js/scripts/cadastro.js').'"></script>'
 		);

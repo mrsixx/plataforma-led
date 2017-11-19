@@ -61,13 +61,13 @@
 
 <!--Modal para alterar foto perfil-->
 <div class="modal fade" id="fotoPerfil" name="fotoPerfil" role="dialog">
-<form name="frm-jcrop" id="frm-jcrop" method="post" action="/attFoto" enctype="multipart/form-data">
+<form name="frm-jcrop" id="frm-jcrop" method="POST" action="/attFoto" enctype="multipart/form-data">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
-                                </button>
+                  <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+                </button>
                 <h4 class="modal-title">Foto de perfil</h4>
             </div>
             <div class="modal-body">
@@ -76,7 +76,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="img-container">
-                                <img src="<?php echo $foto;echo "?".time();?>" width="100%" alt="Foto">
+                                <img src="<?php echo $foto;echo "?".time();?>" width="100%" alt="Foto" id="visualizacao_imagem"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -92,10 +92,16 @@
                             <div class="docs-data">
                                 <div class="input-group">
                                     <label class="input-group-addon" for="dataX">X</label> -->
-                                    <input class="form-control" id="dataX" type="hidden">
-                                    <input class="form-control" id="dataY" type="hidden">
-                                    <input class="form-control" id="dataWidth" type="hidden">
-                                    <input class="form-control" id="dataHeight" type="hidden">
+                                    <input class="form-control" id="dataX" name="x" type="hidden">
+                                    <input class="form-control" id="dataY" name="y" type="hidden">
+                                    <input class="form-control" id="dataWidth" name="wcrop" type="hidden">
+                                    <input class="form-control" id="dataHeight" name="hcrop" type="hidden">
+                                    <input class="form-control" id="dataRotate" placeholder="rotate" type="hidden">
+                                   <!--  <input class="sr-only form-control" id="inputImage" name="inputImage" type="file" accept="image/*"/> -->
+
+
+                                   <input type="file" name="imagem" class="sr-only form-control" id="inputImage" accept="image/*"/>
+                                    <input type="hidden" name="MAX_FILE_SIZE" id="MAX_FILE_SIZE" value="30000" />
                                     <!-- <input class="form-control" id="dataRotate" type="text" placeholder="rotate"> -->
                                    <!-- <span class="input-group-addon">px</span>
                                 </div>
@@ -183,7 +189,7 @@
                                           <span class="glyphicon glyphicon-refresh"></span>
                                         </span>
                                       </button>
-                                        <input class="sr-only" id="inputImage" name="file" type="file" accept="image/*">
+
                                 <label class="btn btn-warning btn-upload" for="inputImage" title="Envie a imagem">
                                         <span class="docs-tooltip" data-toggle="tooltip" title="ESCOLHER IMAGEM">
                                           <span class="fa fa-folder-open"></span>
@@ -563,20 +569,13 @@
                                         $idade = date("Y-m-d") - $infoUser['DataNascimento'];
                                         $idade .=  $idade > 1 ? "&nbsp;anos" : "&nbsp;ano";
 
-
-                                        if(!isset($infoUser['Foto'])){
-                                            if($infoUser['Sexo'] == "M")
-                                                $usuario = "assets/img/user-m.png";
-                                            else
-                                                $usuario = "assets/img/user-f.png";
-                                        }
-                                        else{
-                                            $usuario = "users/profile/".$infoUser['Foto'];
-                                        }
+                                        $CI =& get_instance();
+                                        $CI->load->helper('interface');
+                                        $fotoUsuario = fotoPerfil($infoUser['Foto'],$infoUser['Sexo']);
                                         
                                     ?>
                                 <div class="col-xs-12 col-sm-3 col-md-2" align="center">
-                                    <img src="<?php echo base_url("$usuario.jpg");echo "?".time(); ?>" alt="<?php echo utf8_encode($infoUser['Nome']); ?>" class="img-circle thumbnail" />
+                                    <img src="<?php echo $fotoUsuario; ?>" alt="<?php echo utf8_encode($infoUser['Nome']); ?>" class="img-circle thumbnail" />
                                 </div>
                                 <div class="col-xs-8 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2">
                                     <h4><?php echo utf8_encode($infoUser['Nome'])." ".utf8_encode($infoUser['Sobrenome'])." - ".$idade; ?></h4>

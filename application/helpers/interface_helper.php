@@ -9,8 +9,8 @@ if(!function_exists('preencheInterface')){
 	function preencheInterface($dadosSessao, $pagina = null, $tranca = false){
 		$CI =& get_instance();
 		//pegando informações do usuário para preencher a interface
-		$CI->load->model('interface_led');
-		$info = $CI->interface_led->pegaInformacoes($dadosSessao);
+		$CI->load->model('Interface_led');
+		$info = $CI->Interface_led->pegaInformacoes($dadosSessao);
 		//formatando os índices do array da consulta para utilizá-los como variavel nas views
 		foreach ($info as $indice => $valor) {
 			$indice = strtolower($indice);
@@ -19,13 +19,18 @@ if(!function_exists('preencheInterface')){
 		//passando o código do usuário
 		$dados['codUsuario'] = $dadosSessao['cod'];
 		// verificando notificações
-		$dados['qtdnotificacoes'] = notificacao($dadosSessao, "qtd");
-		$dados['notificacoes'] = notificacao($dadosSessao);
+
+
+		$CI->load->library('session');
+		$buscador = $CI->session->login;
+
+		$dados['qtdnotificacoes'] = notificacao($buscador, "qtd");
+		$dados['notificacoes'] = notificacao($buscador);
 
 
 		//verificando lvl - CHAMANDO FUNÇÃO
 		$CI->load->helper('xp');
-		$dados += calculaLvl($CI->interface_led->retornaXp($dadosSessao));
+		$dados += calculaLvl($CI->Interface_led->retornaXp($dadosSessao));
 
 
 
@@ -36,48 +41,62 @@ if(!function_exists('preencheInterface')){
 		switch ($pagina) {
 			case 'principal':
 				//puxo a quantidade de publicações novas, mensagens não vistas e eventos próximos para aquele usuário e jogo na sidebar
-				$CI->load->model('chat');
-				$CI->load->model('mural');
+				$CI->load->model('BatePapo','chat');
+				$CI->load->model('Mural');
 				$badges['msg']  = $CI->chat->msgNvista(array('CodDestino' => $dadosSessao['cod'], 'Status' => 0));
-				$badges['mural'] = $CI->mural->retornaBadge($dadosSessao['cod'],'soma');
+				$badges['mural'] = $CI->Mural->retornaBadge($dadosSessao['cod'],'soma');
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$badges,$tranca);
 				break;
-			
+
 			case 'mural':
-				$CI->load->model('mural');
-				$mural['dados'] = $CI->mural->retornaMural(array('CodUsuario' => $dadosSessao['cod']));
+				$CI->load->model('Mural');
+				$mural['dados'] = $CI->Mural->retornaMural(array('CodUsuario' => $dadosSessao['cod']));
 				foreach ($mural['dados'] as $m) {
-					$qtd[] = $CI->mural->retornaBadge($m->CodMural, null);
+					$qtd[] = $CI->Mural->retornaBadge($m->CodMural, null);
 				}
 				$mural['qtd'] = $qtd;
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$mural,$tranca);
 				break;
+			
+			case 'chat':
+				$CI->load->model('BatePapo','chat');
+				$cod = $dadosSessao['cod'];
+				$chat['dados'] = $CI->chat->retornaMsgSidebar("`CodDestino` = $cod OR `CodRemetente` = $cod",TRUE,null);
+				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$chat);
+				break;
+
 			case 'tools':
-				$CI->load->model('link');
-				$link['dados'] = $CI->link->retornaLink();
+				$CI->load->model('Link');
+				$link['dados'] = $CI->Link->retornaLink();
+				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
+				break;
+
+			case 'library':
+				$CI->load->model('Library','library');
+				$link['dados'] = $CI->library->retornaLivro();
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
 				break;
 
 			case 'tasks':
-				$CI->load->model('missoes');
-				$CI->load->model('escola');
-				$turma = $CI->escola->getAlunoTurma(array('at.CodUsuario' => $dadosSessao['cod']));	
+				$CI->load->model('Missoes');
+				$CI->load->model('Escola');
+				$turma = $CI->Escola->getAlunoTurma(array('at.CodUsuario' => $dadosSessao['cod']));	
 				foreach ($turma as $t) {
 					$codTurma = $t->CodTurma;
 				}
-				$link['dados'] = ($dadosSessao['tipo'] == 3)? $CI->missoes->retornaTask(array('turma.CodTurma' => $codTurma, 'Prazo >=' => date('Y-m-d H:i')),null) : $CI->missoes->retornaTask(array('CodCriador' => $dadosSessao['cod']),null);
+				$link['dados'] = ($dadosSessao['tipo'] == 3)? $CI->Missoes->retornaTask(array('turma.CodTurma' => $codTurma, 'Prazo >=' => date('Y-m-d H:i')),null) : $CI->Missoes->retornaTask(array('CodCriador' => $dadosSessao['cod']),null);
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
 				break;
 
 			case 'compcurricular':
-				$CI->load->model('escola');
+				$CI->load->model('Escola');
 				if($dadosSessao['tipo'] == 3){
-					$alunoTurma = $CI->escola->getAlunoTurma(array('CodAluno' => $dadosSessao['cod']),'array');
+					$alunoTurma = $CI->Escola->getAlunoTurma(array('CodAluno' => $dadosSessao['cod']),'array');
 					$turma = $alunoTurma['CodTurma'];
-					$link['dados'] = $CI->escola->getCompCurricular(array('t.CodTurma' => $turma));
+					$link['dados'] = $CI->Escola->getCompCurricular(array('t.CodTurma' => $turma));
 				}
 				else if($dadosSessao['tipo'] == 4){
-					$link['dados'] = $CI->escola->getCompCurricular(array('CodProfessor' => $dadosSessao['cod']));
+					$link['dados'] = $CI->Escola->getCompCurricular(array('CodProfessor' => $dadosSessao['cod']));
 				}
 				$dados['menulateral'] = retornaSidebar($dadosSessao['tipo'],$pagina,$link,null);
 				break;
@@ -98,8 +117,8 @@ if(!function_exists('attNotificacao')){
 		// $data['CodDestinatario'] = $CI->input->post('user');
 		// $data['CodNotificacao'] = $CI->input->post('notificacao');
 		$data = array('CodNotificacao' => $CI->input->post('notificacao'));
-		$CI->load->model('interface_led');
-		$result = $CI->interface_led->statusNotificacao($data);
+		$CI->load->model('Interface_led');
+		$result = $CI->Interface_led->statusNotificacao($data);
 		return $result;
 	}
 }
@@ -117,12 +136,12 @@ if(!function_exists('notificacao')){
 		}
 		switch ($acao) {
 			case 'qtd':
-				$CI->load->model('interface_led');
-				return $CI->interface_led->contadorNotificacoes($dados);
+				$CI->load->model('Interface_led');
+				return $CI->Interface_led->contadorNotificacoes($dados);
 			break;
 			default:
-				$CI->load->model('interface_led');
-				return $CI->interface_led->notificacoes($dados);
+				$CI->load->model('Interface_led');
+				return $CI->Interface_led->notificacoes($dados);
 			break;
 		}
 	}
@@ -131,7 +150,7 @@ if(!function_exists('notificacao')){
 if(!function_exists('fotoPerfil')){
 	function fotoPerfil($nmFoto,$sexo){
 		if(isset($nmFoto)){
-			$foto = base_url('users/profile/'.$nmFoto.'.jpg')."?".time();
+			$foto = base_url('data/profile/'.$nmFoto)."?".time();
 		}else{
 			if($sexo == "M"){
 				$foto = base_url('assets/img/user-m.png')."?".time();

@@ -1,295 +1,109 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-    // $this->load->view('panel/commons/led_header');
-    
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); 
+	// var_dump($tipo);
 ?>
-<!--cabeçalho do chat-->
-                                <div class="new_message_head">
-                                    <div class="pull-left ">
-                                        <div class="dropdown">
-                                            <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
-                                              </button>
-                                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                                                <li><a href="#"><i class="glyphicon glyphicon-trash">&nbsp;</i>Limpar conversa</a></li>
-                                                <li><a href="#"><i class="glyphicon glyphicon-folder-open">&nbsp;</i>Imagens compart.</a></li>
-                                                <li><a href="#"><i class="glyphicon glyphicon-user">&nbsp;</i>Ir ao perfil</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="pull-left"><button>3 º ETIM</button></div>
-                                </div>
-                                <!--aqui acaba cabeçalho -->
+<div id="main">
+	<div class="container-fluid">
+		<div class="row">
+			
+		<?php if(!$home):?>
+			<div class="panel">
+				<!-- Início cabeçalho -->
+				<div class="panel-heading new_message_head">
+				   <div class="pull-left">
+						<div class="dropdown">
+							<button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu1">
+								<li><a href="#"><i class="glyphicon glyphicon-trash">&nbsp;</i>Limpar conversa</a></li>
+								<li><a href="#"><i class="glyphicon glyphicon-folder-open">&nbsp;</i>Imagens compart.</a></li>
+								<li><i class="glyphicon glyphicon-user">&nbsp;</i>Ir ao perfil</li>
+							</ul>
+						</div>
+					</div>
+					<div class="pull-left"><button><?php if($_GET['t'] == 'ind'){?><span style="vertical-align:middle;font-size:1.3em ;color: <?php echo ($interfaceChat['Status'] == 'online') ? '#00FF00' :'#FF0000'; ?>;">•</span>&nbsp;<?php } echo $interfaceChat['Nome']?></button></div>
+				</div>
+				<!-- fim cabeçalho-->
 
-                                <!--aqui vai a area de mensagens-->
-                                <div class="chat_area">
-                                    <ul class="list-unstyled container-fluid">
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="<?php echo base_url('users/profile/sid.JPG');?>" alt="Ketlyn" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("E aí povo,<br/>  B)  B)  B)  B)", base_url('assets/img/smileys/'))?></p>
-                                                <div class="chat_time pull-right">09:39PM</div>
-                                            </div>
-                                        </li>
+				<!-- Início container -->
+				<div class="panel-body scroll" id="chat_area">
+					<ul class="list-unstyled container-fluid" id="chat" data-id="<?php echo $interfaceChat['Id'].':'.$meuCod;?>" data-ultima="<?php echo (!empty($last->CodMensagem))?(int)$last->CodMensagem:1;?>">
+						<?php if(!empty($mensagens)): 
+								$CI =& get_instance();
+                                $CI->load->library('encrypt');
+						?>
+								<input type="hidden" id="existeMsg" value="s">
+								<?php foreach ($mensagens as $msg): 
+									if($msg->CodRemetente == $meuCod): ?>
+									   <li class="right clearfix row"  id="<?= $msg->CodMensagem;?>">
+											<div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
+												<p><?php echo parse_smileys(utf8_encode($CI->encrypt->decode($msg->Texto)), base_url('assets/img/smileys/'))?></p>
 
+												<div class="chat_time pull-left"><!--<i class="fa fa-<?php //echo ($msg->Status)?'eye':'eye-slash';?>" aria-hidden="true"></i>--> <?php echo date("d/m/Y à\s H:i",strtotime($msg->DataHoraEnvio));?></div>
+											</div>
+										</li>
+									<?php else: ?>
+										<li class="left clearfix row"  id="<?= $msg->CodMensagem;?>">
+											<span class="chat-img1 pul-left col-xs-1">
+													<img src="<?php echo fotoPerfil($msg->FotoR,$msg->SexoR);?>" alt="Foto de <?= utf8_encode($msg->NomeRemetente)?>" class="img-circle"/>
+											</span>
+											<div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
+												<p><?php echo parse_smileys(utf8_encode($CI->encrypt->decode($msg->Texto)), base_url('assets/img/smileys/'))?></p>
+												<div class="chat_time pull-right"><?php echo date("d/m/Y à\s H:i",strtotime($msg->DataHoraEnvio));?></div>
+											</div>
+										</li>
+									<?php endif;?>
+																	
+								<?php endforeach;?>
 
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="<?php echo base_url('users/profile/IMG_1054.JPG');?>" alt="Ketlyn" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("Oii,<br/>  :uni:", base_url('assets/img/smileys/'))?></p>
-                                                <div class="chat_time pull-right">09:39PM</div>
-                                            </div>
-                                        </li>
+						<?php else:?>
+							<input type="hidden" id="existeMsg" value="n">
+							<p class="nd">Vocês ainda não trocaram nenhuma mensagem.<br/> Envie uma agora :D...</p>
+						<?php endif;?>
+					</ul>
+				</div>
+				<!-- Fim do container  -->
 
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="<?php echo base_url('users/profile/marino.JPG');?>" alt="Ketlyn" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p><?php echo parse_smileys("Shazam :v >.<", base_url('assets/img/smileys/'))?></p>
-                                                <div class="chat_time pull-right">09:41PM</div>
-                                            </div>
-                                        </li>
+				<!-- Início footer -->
+				<div class="panel-footer message_write fixed-bottom" id="text_area">
+					<form method="POST" action="" class="form-group popup-messages-footer row" id="frmMsg" data-id="<?php echo $interfaceChat['Id'].':'.$meuCod;?>">
+						<?php echo ($grp)?'<input type="hidden" name="grp" id="grp" value="1">':'';?>
 
-                                        <li class="right clearfix row">
+						<!-- Textearea para o envio de mensagem -->
+						<textarea class="form-control" id="status_message" placeholder="Escreva uma menssagem..." name="message"></textarea>
+						<!-- Fim textarea -->
 
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p><?php echo parse_smileys("Fala galera,<br/>Tudo bem? :?", base_url('assets/img/smileys/'))?></p>
+						<!-- AQUI VAI O CONTAINER COM OS BOTÕES -->
+						<div class="botoes">
+							<!--aqui vai o botão de anexo de arquivos-->
+							<!--<div class="fileUpload btn pull-left">
+								<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+								<input type="file" class="upload" />
+							</div>-->
+							<!--aqui acaba ao botão de anexo-->
 
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:42PM</div>
-                                            </div>
-                                        </li>
-                                        <!-- <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
+							<!--aqui vai o botão de emoticon-->
+							<div class="dropdown-menu drop-up col-xs-12 col-sm-5 col-md-4" style="position: absolute; z-index: 499;">
+								<?php echo $smiley_table; ?>
+							</div>
+							<button class="btn_chat dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-smile-o" aria-hidden="true"></i>
+							</button>
 
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-                                        <li class="left clearfix row">
-                                            <span class="chat-img1 pull-left col-xs-1">
-                                                    <img src="http://www.esmart-vision.com/uploads/posts/304e25390c0cb1f2abbf79123003f6b9.png" alt="User Avatar" class="img-circle"/>
-                                            </span>
-                                            <div class="chat-body1 clearfix col-xs-9 col-sm-8 col-md-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right">09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? </p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye-slash" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li>
-
-                                        <li class="right clearfix row">
-
-                                            <div class="chat-body2 clearfix col-xs-9 col-xs-offset-2 col-sm-8 col-sm-offset-4 col-md-6 col-md-offset-6">
-                                                <p>Olá, está tudo bem? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker includin</p>
-                                                <div class="chat_time pull-right"><i class="fa fa-eye" aria-hidden="true"></i> 09:40PM</div>
-                                            </div>
-                                        </li> -->
-
-                                    </ul>
-                                </div>
-                                <!--aqui acaba a area de mensagens-->
-
-                                <!--aqui vai a caixa para escrever e enviar as mensagens-->
-                                <form class="message_write">
-                                    <!--aqui vai a area de envio-->
-                                    <div class="chat_bottom container-fluid">
-
-                                        <!--aqui vai a area de escrever-->
-                                        <div class="form-group popup-messages-footer row">
-                                            <textarea class="form-control" id="status_message" placeholder="Escreva uma menssagem..." name="message"></textarea>
-                                            <!-- AQUI VAI O CONTAINER COM OS BOTÕES -->
-                                            <div class="botoes">
-                                            <!--aqui vai a anexação de arquivos-->
-                                                <!-- <button class="btn_chat btnfile">
-                                                    <i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
-                                                </button>
-                                                    <input type="file" name="arquivo" id="arquivo" class="arquivo"> -->
-
-                                                    <!-- <div class="btn_chat">
-                                                        <input type="file" name="arquivo" id="arquivo" class="arquivo">
-                                                    </div> -->
-
-                                                    <div class="fileUpload btn pull-left">
-                                                        <i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
-                                                        <input type="file" class="upload" />
-                                                    </div>
-                                            <!--aqui acaba a anexação-->
-
-                                            <!--aqui vai o botão de emoticon-->
-                                                
-                                                <div class="dropdown-menu drop-up col-xs-12 col-sm-8 col-md-3" role="menu">
-                                                    <?php echo $smiley_table; ?>
-                                                </div>
-                                                <button class="btn_chat dropdown-toggle col-md-1 col-xs-1 col-sm-1" data-toggle="dropdown">
-                                                    <i class="fa fa-smile-o" aria-hidden="true"></i>
-                                                </button>
-                                            <!--aqui acaba o botão-->
-                                            <!--aqui vai o botão de enviar-->
-                                                <button type="button" href="#" class="btn_chat col-md-1 col-xs-1 col-sm-1 pull-right">
-                                                    <i class="glyphicon glyphicon-send" aria-hidden="true"></i>
-                                                </button>
-                                            <!--aqui acaba o botão-->       
-                                            </div>                           
-                                        </div>
-                                        <!--aqui acaba a area de escrver-->
-                                    </div>
-                                    <!--aqui acaba a area de envio-->
-
-                                </form>
-                                <!--aqui acaba a caixa-->
-<?php 
-
-    // $this->load->view('panel/commons/led_footer');
+							<!--aqui acaba o botão-->
+									
+							<!--aqui vai o botão de enviar-->
+							<button type="submit" id="enviaMsg" class="btn_chat col-md-1 col-xs-1 col-sm-1 pull-right">
+								<i class="glyphicon glyphicon-send" aria-hidden="true"></i>
+							</button>
+							<!--aqui acaba o botão-->       
+						
+						</div>                           
+					</form>
+				</div>
+			</div>
+		<?php else: ?>     
+		<?php endif; ?>
+				</div>
+		</div>
+	</div>

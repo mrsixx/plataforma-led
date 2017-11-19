@@ -8,5 +8,5 @@
 									$config["dbname"] = "etecmorato";
 									$config["dbuser"] = "mrsixx";
 									$config["dbpass"] = "Led1968/80";
-									$config["prefix"] = "led_";
+									$config["prefix"] = "efm_";
 					

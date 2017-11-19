@@ -31,7 +31,9 @@ class Ferramenta extends CI_Controller {
 				// $this->load->helper('smiley');
 				$data['files'] = array('textarea' => '<style>#main{overflow-y: hidden !important;}</style>');	
 				$data['filesfooter'] = array('comandos para excluir link' => "<script type='text/javascript' src='".base_url('assets/js/scripts/links.js')."'></script>");
-				$this->load->view('panel/layout', $data);
+				
+				if(atualizaStatus($cod))
+					$this->load->view('panel/layout', $data);
 			}else{
 				redirect(base_url('configuracao-ambiente'));
 			}
@@ -52,10 +54,10 @@ class Ferramenta extends CI_Controller {
 			$data['Link'] = utf8_decode($this->input->post('txtLink'));
 			
 			//carrego a model 
-			$this->load->model('link');
+			$this->load->model('Link');
 			
 			//atualizo
-			$retorno = $this->link->cadastraLink($data);
+			$retorno = $this->Link->cadastraLink($data);
 			
 			//passo o retorno
 			if($retorno){
@@ -83,10 +85,10 @@ class Ferramenta extends CI_Controller {
 			$data['Descricao'] = utf8_decode($this->input->post('txtDescricao'));
 			$data['Link'] = utf8_decode($this->input->post('txtLink'));
 			//carrego a model 
-			$this->load->model("link");
+			$this->load->model("Link");
 			// Recupera os contatos através do model
 			$where = array('CodLink'=>$codLink);
-			if($this->link->salvarLink($data,$where)){
+			if($this->Link->salvarLink($data,$where)){
 				echo "<script type='text/javascript'>confirm('Link alterado com sucesso :D'); window.location.replace(".base_url("/ferramentas/$codLink").")</script>";
 				// redirect(base_url("/ferramentas/$codLink"));
 			}
@@ -112,8 +114,8 @@ class Ferramenta extends CI_Controller {
 			if(is_null($id))
 			redirect();
 			// Remove o registro do banco de dados recuperando o status dessa operação
-			$this->load->model('link');
-			$status = $this->link->deleteLink($id);
+			$this->load->model('Link');
+			$status = $this->Link->deleteLink($id);
 			if($status)
 				redirect(base_url('/ferramentas'));
 			
@@ -146,8 +148,8 @@ class Ferramenta extends CI_Controller {
 				// $this->load->helper('smiley');
 				$data['files'] = array('chat' => '<style>#main{overflow-y: hidden !important;}</style>');		
 				$data['filesfooter'] = array('comandos para excluir link' => "<script type='text/javascript' src='".base_url('assets/js/scripts/links.js')."'></script>");
-				$this->load->model('link');
-				$data['link'] = $this->link->retornaLink(array('CodLink'=> $link));
+				$this->load->model('Link');
+				$data['link'] = $this->Link->retornaLink(array('CodLink'=> $link));
 				$this->load->view('panel/layout', $data);
 			}else{
 				redirect(base_url('configuracao-ambiente'));
@@ -168,11 +170,11 @@ class Ferramenta extends CI_Controller {
 			$tipo = $usuario['tipo'];
 
 			//verificando se existem cursos cadastrados e o quadro de funcionários 
-			$this->load->model('escola');
-			$curso = $this->escola->getCursos();
-			$turma = $this->escola->getTurma();
-			$hierarquia = $this->escola->getHierarquia();
-			$compcurricular = $this->escola->getCompCurricular();
+			$this->load->model('Escola');
+			$curso = $this->Escola->getCursos();
+			$turma = $this->Escola->getTurma();
+			$hierarquia = $this->Escola->getHierarquia();
+			$compcurricular = $this->Escola->getCompCurricular();
 
 				if(empty($curso) && empty($hierarquia) && empty($turma) && empty($compcurricular)){
 					redirect(base_url('configuracao-ambiente'));
@@ -196,8 +198,8 @@ class Ferramenta extends CI_Controller {
 				if(!isset($codLink))
 					redirect(base_url('/ferramentas'));
 
-				$this->load->model('link');
-				$data['infoLink'] = $this->link->retornaLink(array('CodLink' => $codLink));
+				$this->load->model('Link');
+				$data['infoLink'] = $this->Link->retornaLink(array('CodLink' => $codLink));
 				$this->load->view('panel/layout', $data);
 			}else{
 			//se não houver sessão, então mando de volta pois não existiu um login

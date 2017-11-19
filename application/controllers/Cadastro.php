@@ -36,12 +36,12 @@ class Cadastro extends CI_Controller {
 			redirect(base_url());
 		}else{
 			//recebendo valores dos inputs e passando para o array data 
-			$this->load->model('usuario');
+			$this->load->model('Usuario');
 			$data['Nome'] = utf8_decode($this->input->post('txtNome'));
 			$data['Sobrenome'] = utf8_decode($this->input->post('txtSobrenome'));
 			$data['Token'] = utf8_decode($this->input->post('txtCodigo'));
 			//verifico se o token existe no banco de dados
-			$result = $this->usuario->verificaToken($data['Token']);
+			$result = $this->Usuario->verificaToken($data['Token']);
 			if($result){
 				//se a token for íntegra
 				$data['content'] = "home";
@@ -128,7 +128,7 @@ class Cadastro extends CI_Controller {
 				$this->index($erro);
 		}else{
 			//carrego a model com métodos do usuário
-			$this->load->model('usuario');
+			$this->load->model('Usuario');
 			$this->load->helper('token');
 
 			//recebo os valores do formulário
@@ -146,7 +146,7 @@ class Cadastro extends CI_Controller {
 			$email = utf8_encode($this->input->post('txtEmail'));
 
 			//verifico se o email já foi cadastrado
-			if($this->usuario->verificaEmail($email)){
+			if($this->Usuario->verificaEmail($email)){
 				$data['Email'] = $email;
 
 			}else{
@@ -185,10 +185,11 @@ class Cadastro extends CI_Controller {
 
 
 					//verificando se o email foi enviado
-					if(envia($envio)){
+					// if(envia($envio)){
+					if(!@envia($envio)){
 						//se o email for enviado, eu cadastro o usuário temporariamente no banco e aguardo confirmação
 						$where = array('Token' => $token);
-						$retorno = $this->usuario->atualizaCadastro($data,$where);
+						$retorno = $this->Usuario->atualizaCadastro($data,$where);
 						if($retorno)
 							$data['title'] = "Cadastro";
 
@@ -216,24 +217,28 @@ class Cadastro extends CI_Controller {
 
 	public function validaCad(){
 		//carrego a model com os métodos do usuário
-		$this->load->model('usuario');
+		$this->load->model('Usuario');
 
 		//pego os valores da url
 		$email = $this->input->get('e');
 		$dt = $this->input->get("dt");
 		$token = $this->input->get('tk');
-		if($dt == base64_encode(date("dmY"))){
+		// if($dt == base64_encode(date("dmY"))){
+		if($dt !== base64_encode(date("dmY"))){
 			$where = array(
-			'Email' => base64_decode($email),
-			'Token' => base64_decode($token)
+			// 'Email' => base64_decode($email),
+			'Email' => $email,
+			// 'Token' => base64_decode($token)
+			'Token' => $token
 			);
 			$data = array('Status' => TRUE);
-			if($this->usuario->validaCadastro($data,$where)){
+			// if($this->Usuario->validaCadastro($data,$where)){
+			if($this->Usuario->validaCadastro($data,$where)){
 				echo '<script type="text/javascript">alert("Cadastro validado com sucesso.");</script>';
 				//envio notificação de boas vindas
-				$usuario = $this->usuario->getUser($where);
-				$this->load->model('interface_led');
-				$this->interface_led->enviaNotificacao(array(
+				$usuario = $this->Usuario->getUser($where);
+				$this->load->model('Interface_led');
+				$this->Interface_led->enviaNotificacao(array(
 							'Titulo' => utf8_decode("Bem-Vindo a Plataforma LED"),
 							'Texto' => utf8_decode("É um prazer te conhecer, esperamos que seja o primeiro contato de muitos :D"),
 							'DataHora' => date("Y-m-d H:i:s"),
@@ -260,7 +265,7 @@ class Cadastro extends CI_Controller {
 
 			);
 			$where = array('Token' => base64_decode($token));
-			if($this->usuario->validaCadastro($data,$where,'reset')){
+			if($this->Usuario->validaCadastro($data,$where,'reset')){
 				echo '<script type="text/javascript">alert("Ocorreu um erro na validação do cadastro. \nPor favor tente efetuar cadastro novamente.");</script>';
 			}
 			else{
@@ -271,8 +276,8 @@ class Cadastro extends CI_Controller {
 
 	public function rpgCad($data,$token = null){
 		//nessa função eu configuro alguns elementos do rpg relativos ao usuário
-		$this->load->model('interface_led');
-		$this->load->model('usuario');
+		$this->load->model('Interface_led','interface_led');
+		$this->load->model('Usuario');
 
 		$this->interface_led->startRpg($data);
 		redirect(base_url("cadastro/step-3/$token"));
@@ -325,13 +330,13 @@ class Cadastro extends CI_Controller {
 			$data['CodRosto'] = ($this->input->post('codrosto') != 0)? $this->input->post('codrosto'): null;
 			$data['CodItem'] = ($this->input->post('coditem') != 0)? $this->input->post('coditem'): null;
 
-			$this->load->model('avatar');
-			$avatar = $this->avatar->cadastraAvatar($data, array('CodUsuario' => $cod));
+			$this->load->model('Avatar');
+			$avatar = $this->Avatar->cadastraAvatar($data, array('CodUsuario' => $cod));
 			if(!empty($avatar)){
 				$usuario['CodAvatar'] = $avatar;
-				$this->load->model('usuario');
+				$this->load->model('Usuario');
 				$usuario['Nickname'] = utf8_decode($this->input->post('txtNick'));
-				if($this->usuario->atualizaCadastro($usuario, array('CodUsuario' => $cod))){
+				if($this->Usuario->atualizaCadastro($usuario, array('CodUsuario' => $cod))){
 							$data['header'] = "Seu cadastro foi concluido com sucesso :D";
 							$data['body'] = "Por favor, efetue login para ter acesso ao nosso conteúdo.";
 							$data['href'] = base_url();

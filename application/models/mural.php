@@ -12,14 +12,34 @@ class Mural extends CI_Model
 
 
 	//função para retornar os murais em que o usuário está
-	function retornaMural($data = null){
+	function retornaMural($data = null,$tipo = null){
 		if(isset($data)){
-			$usuariomural = $this->db->get_where('usuario-mural',$data)->result();
-			foreach ($usuariomural as $obj) {
-				$murais[] = $this->db->get_where('mural',array('CodMural' => $obj->CodMural))->row();
-				@natcasesort($murais);
+			if(isset($tipo)){
+				switch ($tipo) {
+					case 'prof':
+						$this->db->select('*');
+						$this->db->from('componente-turma ct');
+						$this->db->join('componente-professor cp','ct.CodComponente = cp.CodComponente');
+						$this->db->group_by('ct.CodTurma');
+						$this->db->where($data);
+						$usuariomural = $this->db->get()->result();
+						foreach ($usuariomural as $obj) {
+							$murais[] = $this->db->get_where('mural',array('CodTurma' => $obj->CodTurma))->row();
+							@natcasesort($murais);
+						}
+						break;
+					
+					default:
+						# code...
+						break;
+				}
+			}else{
+				$usuariomural = $this->db->get_where('usuario-mural',$data)->result();
+				foreach ($usuariomural as $obj) {
+					$murais[] = $this->db->get_where('mural',array('CodMural' => $obj->CodMural))->row();
+					@natcasesort($murais);
+				}
 			}
-			//se der ban é só tirar a linha de código acima
 			return $murais;
 		}
 	}
@@ -63,7 +83,7 @@ class Mural extends CI_Model
 		}
 	}
 
-	function retornaPostagens($data = null){
+	function retornaPostagens($data = null,$tipo = null){
 		if(isset($data)){
 			$this->db->select('*');
 			$this->db->from('postagem');
@@ -71,8 +91,15 @@ class Mural extends CI_Model
 			$this->db->where($data);
 			$this->db->order_by('DataHora', 'DESC');
 			$retorno = $this->db->get();
-
-			return $retorno->result();
+			switch ($tipo) {
+				case 'num':
+					return $retorno->num_rows();
+					break;
+				
+				default:
+					return $retorno->result();
+					break;
+			}
 		}
 	}
 

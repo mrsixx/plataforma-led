@@ -21,14 +21,14 @@ class Led extends CI_Controller {
 			$this->load->view('install/home',$data);
 		}else{
 			//se existir, verificamos se o banco tem a estrutura criada
-			$this->load->model('install');
-			$qtdtables = $this->install->verificaDatabase();
+			$this->load->model('Install');
+			$qtdtables = $this->Install->verificaDatabase();
 			$this->load->helper('sqlcommand');
 			$sizearray = sizeof(cria());
 			if($qtdtables >= $sizearray){
 				//se sim, verifico se o ambiente está criado mandamos para a configuração de ambiente
-				$this->load->model('install');
-				$escola = $this->install->verficaEscola();
+				$this->load->model('Install');
+				$escola = $this->Install->verficaEscola();
 				if($escola){
 					//se sim mandamos para a home
 					$nm = $escola['Nome'];
@@ -118,7 +118,7 @@ class Led extends CI_Controller {
 			//depois chamo a model install com os métodos para tentar efetuar uma conexão com o banco indicado
 			$this->load->model('Install');
 			//verifico se os dados retornam uma conexão válida
-			$con = $this->install->verificaConexao($data);
+			$con = $this->Install->verificaConexao($data);
 			if($con){
 				//se sim, eu crio o arquivo com as informações de conexão
 				$config = "application/config/config-database.php";
@@ -144,7 +144,7 @@ class Led extends CI_Controller {
 					//após criar o arquivo, crio a estrutura básica do banco de dados e mostro uma mensagem ao usuário
 					$data['title'] = "Instalação";
 
-					$return = $this->install->criaEstrutura($data);
+					$return = $this->Install->criaEstrutura($data);
 					if($return){
 						$data['header'] = "Sucesso !";
 						$data['body'] = "Parabéns!\n A configuração inicial da plataforma LED foi um sucesso :D";
@@ -205,8 +205,8 @@ class Led extends CI_Controller {
 			$data['email'] = $this->input->post('txtEmail');
 			$data['senha'] = $this->input->post('txtSenha');
 			// $data['senha'] = password_hash($data['senha'], PASSWORD_DEFAULT);
-			$this->load->model('usuario');
-			$user = $this->usuario->validaLogin($data);
+			$this->load->model('Usuario');
+			$user = $this->Usuario->validaLogin($data);
 			if(isset($user)){
 				//se houver algum registro no banco onde o email do usuário esteja ativado
 				//verifico se a senha bate
@@ -215,7 +215,8 @@ class Led extends CI_Controller {
 					$this->load->library('session');
 					$sessao = array(
 						'cod' => $user['CodUsuario'], 
-						'tipo' => $user['CodTipoUsuario']
+						'tipo' => $user['CodTipoUsuario'],
+						'token' => $user['Token']
 					);
 					$this->session->set_userdata('login', $sessao);
 					redirect(base_url('painel'));

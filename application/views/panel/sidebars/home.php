@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="progress" style="margin-top:-30px;">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="<?php echo $min; ?>" aria-valuemax="<?php echo $max; ?>" style="width:<?php echo $porcentagem;?>%;" ></div>
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $xp;?>" aria-valuemin="<?php echo $min; ?>" aria-valuemax="<?php echo $max; ?>" style="width:<?php echo $porcentagem;?>%;transition-timing-function: step-start;" ></div>
     </div>
     <div align="center" style="margin-top: -22px;font-size:1em;color:#000;"><?php echo $porcentagem;?>%</div>
 
